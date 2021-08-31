@@ -16,7 +16,7 @@ namespace Manege_of_AutoDiscrimation
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            Application.Run(new FormAutoDiscrimation());
         }
     }
 }
