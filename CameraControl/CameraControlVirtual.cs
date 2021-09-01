@@ -5,7 +5,7 @@ using System.Drawing;
 namespace CameraControl
 {
 	/// <summary>
-	/// Matrox制御クラス
+	/// Matrox制御クラス(仮想)
 	/// </summary>
 	public class CCameraControlVirtual : CCameraControlBase
 	{
@@ -52,7 +52,7 @@ namespace CameraControl
 
 			try
 			{
-				// Open済みでないばあいもtrueで返しちゃう
+				// Open済みでない場合もtrueで返しちゃう
 				if( true == is_open() )
 				{
 					str_log			= "Close.";
