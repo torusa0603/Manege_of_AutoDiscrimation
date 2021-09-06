@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // アセンブリに関する一般情報は以下の属性セットをとおして制御されます。
 // アセンブリに関連付けられている情報を変更するには、
 // これらの属性値を変更してください。
-[assembly: AssemblyTitle("LogBase")]
+[assembly: AssemblyTitle("ParamBase")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("LogBase")]
+[assembly: AssemblyCompany("SINTO S-PRECISION, LTD.")]
+[assembly: AssemblyProduct("ParamBase")]
 [assembly: AssemblyCopyright("(C) 2021 SINTO S-PRECISION, LTD.  All rights reserved.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // このプロジェクトが COM に公開される場合、次の GUID が typelib の ID になります
-[assembly: Guid("7e9972c6-76c2-42d5-9203-77c6e4b24608")]
+[assembly: Guid("0a0271b2-ed36-4acf-a8e8-a9611ae595a0")]
 
 // アセンブリのバージョン情報は次の 4 つの値で構成されています:
 //

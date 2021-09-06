@@ -106,8 +106,7 @@ namespace LogBase
 			ImmediateWrite = true;			// 即時書き込み
 			NoDateTime = false;				// ログ文字列に日時を含むか(true=含まない)
 			StringSize = 1024;				// 書き込みを実施する文字サイズ1Kbyte
-			//FileSize = 65536;               // ファイル最大文字サイズ64Kbyte
-			FileSize = 1000000;               // ファイル最大文字サイズ1Mbyte
+			FileSize = 65536;				// ファイル最大文字サイズ64Kbyte
 			FileCount = 50;					// 最大ファイル数 50個
 			ExecFolderName = "";			// アプリケーションフォルダ名
 			FolderName = "log";				// フォルダ名
@@ -251,29 +250,26 @@ namespace LogBase
 			string str_now_hour = System.DateTime.Now.ToString( "HHmm" );
 			string str_now_seco = System.DateTime.Now.ToString( "ss.fff" );
 
-			//if( m_strDate == str_now_date )
-			//{
-			//	// 同じ場合tabに圧縮
-			//	str_now_date = "\t\t";
-			//}
-			//else
-			//{
-			//	m_strDate = str_now_date;
-			//}
-			m_strDate = str_now_date;
+			if( m_strDate == str_now_date )
+			{
+				// 同じ場合tabに圧縮
+				str_now_date = "\t\t";
+			}
+			else
+			{
+				m_strDate = str_now_date;
+			}
 
-			//if ( m_strHour == str_now_hour )
-			//{
-			//	// 同じ場合tabに圧縮
-			//	str_now_hour = "\t";
-			//}
-			//else
-			//{
-			//	m_strHour = str_now_hour;
-			//}
-			m_strHour = str_now_hour;
-			
-			return str_now_hour + str_now_seco + " " + nstrLog;
+			if( m_strHour == str_now_hour )
+			{
+				// 同じ場合tabに圧縮
+				str_now_hour = "\t";
+			}
+			else
+			{
+				m_strHour = str_now_hour;
+			}
+			return str_now_date + str_now_hour + str_now_seco + " " + nstrLog;
 		}
 
 

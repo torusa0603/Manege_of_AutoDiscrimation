@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogBase", "LogBase\LogBase.
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ImageMatrox", "ImageMatrox\ImageMatrox.vcxproj", "{59FE8796-C205-4BA3-8504-2DE5C94593DD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MilControl", "MilControl\MilControl.csproj", "{E22BC9D4-901E-4A9A-AD37-29FC946A5887}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParamBase", "ParamBase\ParamBase.csproj", "{0A0271B2-ED36-4ACF-A8E8-A9611AE595A0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +67,22 @@ Global
 		{59FE8796-C205-4BA3-8504-2DE5C94593DD}.Release|x64.Build.0 = Release|x64
 		{59FE8796-C205-4BA3-8504-2DE5C94593DD}.Release|x86.ActiveCfg = Release|Win32
 		{59FE8796-C205-4BA3-8504-2DE5C94593DD}.Release|x86.Build.0 = Release|Win32
+		{E22BC9D4-901E-4A9A-AD37-29FC946A5887}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{E22BC9D4-901E-4A9A-AD37-29FC946A5887}.Debug|x64.ActiveCfg = Debug|x64
+		{E22BC9D4-901E-4A9A-AD37-29FC946A5887}.Debug|x64.Build.0 = Debug|x64
+		{E22BC9D4-901E-4A9A-AD37-29FC946A5887}.Debug|x86.ActiveCfg = Debug|x64
+		{E22BC9D4-901E-4A9A-AD37-29FC946A5887}.Release|Any CPU.ActiveCfg = Release|x64
+		{E22BC9D4-901E-4A9A-AD37-29FC946A5887}.Release|x64.ActiveCfg = Release|x64
+		{E22BC9D4-901E-4A9A-AD37-29FC946A5887}.Release|x64.Build.0 = Release|x64
+		{E22BC9D4-901E-4A9A-AD37-29FC946A5887}.Release|x86.ActiveCfg = Release|x64
+		{0A0271B2-ED36-4ACF-A8E8-A9611AE595A0}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{0A0271B2-ED36-4ACF-A8E8-A9611AE595A0}.Debug|x64.ActiveCfg = Debug|x64
+		{0A0271B2-ED36-4ACF-A8E8-A9611AE595A0}.Debug|x64.Build.0 = Debug|x64
+		{0A0271B2-ED36-4ACF-A8E8-A9611AE595A0}.Debug|x86.ActiveCfg = Debug|x64
+		{0A0271B2-ED36-4ACF-A8E8-A9611AE595A0}.Release|Any CPU.ActiveCfg = Release|x64
+		{0A0271B2-ED36-4ACF-A8E8-A9611AE595A0}.Release|x64.ActiveCfg = Release|x64
+		{0A0271B2-ED36-4ACF-A8E8-A9611AE595A0}.Release|x64.Build.0 = Release|x64
+		{0A0271B2-ED36-4ACF-A8E8-A9611AE595A0}.Release|x86.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
