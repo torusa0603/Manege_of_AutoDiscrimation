@@ -7,3 +7,10 @@ C:\Users\S150231.SINTOKOGIO\source\repos\ImageMatrox\ImageMatrox\bin\Debug\Matro
 C:\Users\S150231.SINTOKOGIO\source\repos\ImageMatrox\ImageMatrox\obj\Debug\ImageMatrox.csproj.CopyComplete
 C:\Users\S150231.SINTOKOGIO\source\repos\ImageMatrox\ImageMatrox\obj\Debug\ImageMatrox.dll
 C:\Users\S150231.SINTOKOGIO\source\repos\ImageMatrox\ImageMatrox\obj\Debug\ImageMatrox.pdb
+C:\Users\S150231.SINTOKOGIO\source\repos\Manege_of_AutoDiscrimation\Manege_of_AutoDiscrimation\bin\Debug\ImageMatrox.dll
+C:\Users\S150231.SINTOKOGIO\source\repos\Manege_of_AutoDiscrimation\Manege_of_AutoDiscrimation\bin\Debug\ImageMatrox.pdb
+C:\Users\S150231.SINTOKOGIO\source\repos\Manege_of_AutoDiscrimation\ImageMatrox\obj\Debug\ImageMatrox.csprojAssemblyReference.cache
+C:\Users\S150231.SINTOKOGIO\source\repos\Manege_of_AutoDiscrimation\ImageMatrox\obj\Debug\ImageMatrox.csproj.CoreCompileInputs.cache
+C:\Users\S150231.SINTOKOGIO\source\repos\Manege_of_AutoDiscrimation\ImageMatrox\obj\Debug\ImageMatrox.csproj.CopyComplete
+C:\Users\S150231.SINTOKOGIO\source\repos\Manege_of_AutoDiscrimation\ImageMatrox\obj\Debug\ImageMatrox.dll
+C:\Users\S150231.SINTOKOGIO\source\repos\Manege_of_AutoDiscrimation\ImageMatrox\obj\Debug\ImageMatrox.pdb
