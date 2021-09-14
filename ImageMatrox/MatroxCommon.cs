@@ -1544,6 +1544,17 @@ namespace ImageMatrox
             writer.WriteLine(str_log_data);
             writer.Close();
         }
+        public void OutputDebugString(string nstrDebugLog)
+        {
+            string str_file_name = "MILDebugLog.log";       //	ログファイルパス
+            string str_file_path = $"{setFolderName(m_strExePath, "Log")}{str_file_name}";
+            string str_log_data;
+            DateTime time_now = System.DateTime.Now;
+            str_log_data = $"{time_now.ToString("yyyyMMdd")}{time_now.ToString("HHmm")}{time_now.ToString("ssfff")}_error_{nstrDebugLog}";
+            var writer = new StreamWriter(str_file_path, true, m_Encoding);
+            writer.WriteLine(str_log_data);
+            writer.Close();
+        }
 
         private string setFolderName(string nstrExecFolderName, string nstrFolderName)
         {

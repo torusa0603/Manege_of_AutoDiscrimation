@@ -1203,28 +1203,28 @@ namespace ImageMatrox
         {
             int i_ret = -1;
 
-            //while (true)
-            //{
-            //    // ソフトトリガ設定
-            //    if (0 != pMatroxCamera.executeSoftwareTrigger())
-            //    {
-            //        break;
-            //    }
+            while (true)
+            {
+                // ソフトトリガ設定
+                if (0 != pMatroxCamera.executeSoftwareTrigger())
+                {
+                    break;
+                }
 
-            //    // サンプル動作
-            //    CSampleInspection cSampleInspection = new CSampleInspection();
-            //    if (0 != cSampleInspection.execInspection(nszFoldeName))
-            //    {
-            //        break;
-            //    }
+                // サンプル動作
+                CSampleInspection cSampleInspection = new CSampleInspection();
+                if (0 != cSampleInspection.execInspection(nszFoldeName))
+                {
+                    break;
+                }
 
-            //    // トリガオフ設定
-            //    if (0 != pMatroxCamera.setTriggerModeOff())
-            //    {
-            //        break;
-            //    }
-            //    break;
-            //}
+                // トリガオフ設定
+                if (0 != pMatroxCamera.setTriggerModeOff())
+                {
+                    break;
+                }
+                break;
+            }
 
             return i_ret;
         }
