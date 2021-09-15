@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.IO;
 
-namespace ColorAnalysis
+namespace Manege_of_AutoDiscrimation
 {
 	class CParaFormMain : ParamBase.CParaBase
 	{
