@@ -328,7 +328,7 @@ namespace ParamBase
 			string	str_log	= "";
 			try
 			{
-				string			str_filename	= m_strFolderName + "\\" + m_strFileName;
+				string			str_filename	= System.IO.Path.GetDirectoryName(m_strComment) + "\\" + m_strFolderName + "\\" + m_strFileName;
 				XElement		xroot			= null;
 				if( true == File.Exists( str_filename ) )
 				{

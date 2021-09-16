@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 using System.Drawing;
 
+
+using System.Reflection;
+
+
 namespace CameraControl
 {
 	/// <summary>
@@ -13,45 +17,55 @@ namespace CameraControl
 	/// </summary>
 	public class CImageMatrox
 	{
-		#region DLLインポート
-		[ DllImport( "ImageMatrox.dll" ) ]
-		public static extern int sifInitializeImageProcess( IntPtr nhDispHandle, string nstrSettingPath = null );
+        public Module module;
+        public dynamic ImageMatroxDllMethod;
+        public CImageMatrox()
+        {
+            var asm = Assembly.LoadFrom("ImageMatrox.dll");       // アセンブリの読み込み
+            module = asm.GetModule("ImageMatrox.dll");        // アセンブリからモジュールを取得
+            var ImageMatrox = module.GetType("ImageMatrox.extern_main");    // 利用するクラス(or 構造体)を取得
+            ImageMatroxDllMethod = Activator.CreateInstance(ImageMatrox);
+        }
 
-		[ DllImport( "ImageMatrox.dll" ) ]
-		public static extern void sifCloseImageProcess();
+        #region DLLインポート
+        //      [DllImport( "ImageMatrox.dll", EntryPoint = "sifInitializeImageProcess") ]
+        //public static extern int sifInitializeImageProcess( IntPtr nhDispHandle, string nstrSettingPath = null );
 
-		[ DllImport( "ImageMatrox.dll" ) ]
-		public static extern int sifThrough();
+        //[ DllImport( "ImageMatrox.dll" ) ]
+        //public static extern void sifCloseImageProcess();
 
-		[ DllImport( "ImageMatrox.dll" ) ]
-		public static extern void sifGetOneGrab();
+        //[ DllImport( "ImageMatrox.dll" ) ]
+        //public static extern int sifThrough();
 
-		[ DllImport( "ImageMatrox.dll" ) ]
-		public static extern void sifSaveImage( tag_rect nrctSaveArea, bool nAllSaveFlg, string nstrFilePath, bool nbSaveMono );
+        //[ DllImport( "ImageMatrox.dll" ) ]
+        //public static extern void sifGetOneGrab();
 
-		[ DllImport( "ImageMatrox.dll" ) ]
-		public static extern int sifSetDispHandleForInspectionResult( IntPtr nhDispHandle );
+        //[ DllImport( "ImageMatrox.dll" ) ]
+        //public static extern void sifSaveImage( tag_rect nrctSaveArea, bool nAllSaveFlg, string nstrFilePath, bool nbSaveMono );
 
-        [DllImport("ImageMatrox.dll")]
-        public static extern Size sifGetImageSize();
+        //[ DllImport( "ImageMatrox.dll" ) ]
+        //public static extern int sifSetDispHandleForInspectionResult( IntPtr nhDispHandle );
 
-		[ DllImport( "ImageMatrox.dll" ) ]
-		public static extern int sifSetTriggerModeOff();
+        //      [DllImport("ImageMatrox.dll")]
+        //      public static extern Size sifGetImageSize();
 
-		[ DllImport( "ImageMatrox.dll" ) ]
-		public static extern int sifSetTriggerModeSoftware();
+        //[ DllImport( "ImageMatrox.dll" ) ]
+        //public static extern int sifSetTriggerModeOff();
 
-		[ DllImport( "ImageMatrox.dll" ) ]
-		public static extern int sifSetTriggerModeHardware( string nstrTrigger );
+        //[ DllImport( "ImageMatrox.dll" ) ]
+        //public static extern int sifSetTriggerModeSoftware();
 
-		[ DllImport( "ImageMatrox.dll" ) ]
-		public static extern int sifExecuteSoftwareTrigger();
+        //[ DllImport( "ImageMatrox.dll" ) ]
+        //public static extern int sifSetTriggerModeHardware( string nstrTrigger );
 
-		[ DllImport( "ImageMatrox.dll" ) ]
-		public unsafe static extern int sifGetMonoBitmapData( long nlArySize, byte *npbyteData );
+        //[ DllImport( "ImageMatrox.dll" ) ]
+        //public static extern int sifExecuteSoftwareTrigger();
 
-		[ DllImport( "ImageMatrox.dll" ) ]
-		public static extern int sifSampleInspection( string nstrFolderName );
-		#endregion
-	}
+        //[ DllImport( "ImageMatrox.dll" ) ]
+        //public unsafe static extern int sifGetMonoBitmapData( long nlArySize, byte *npbyteData );
+
+        //[ DllImport( "ImageMatrox.dll" ) ]
+        //public static extern int sifSampleInspection( string nstrFolderName );
+        #endregion
+    }
 }

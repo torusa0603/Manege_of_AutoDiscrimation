@@ -28,6 +28,7 @@ namespace CameraControl
 		#region ローカル変数 サンプル動作用
 		private CancellationTokenSource		m_CancellationImage		= null;			// 撮影スレッド中止用
 		private CancellationTokenSource		m_CancellationProcess	= null;			// 処理スレッド中止用
+
 		#endregion
 
 
@@ -72,7 +73,7 @@ namespace CameraControl
 					str_log			= "Close.";
 					setLogExecute( str_log );
 					setLogDevice( str_log );
-					CImageMatrox.sifCloseImageProcess();
+					cImageMatrox.ImageMatroxDllMethod.sifCloseImageProcess();
 					m_bOpend		= false;
 				}
 			}
@@ -115,12 +116,13 @@ namespace CameraControl
 					int i_ret		= 0;
 					while( true )
 					{
-						i_ret	= CImageMatrox.sifInitializeImageProcess( nhDispHandle );
+                        
+                        i_ret	= cImageMatrox.ImageMatroxDllMethod.sifInitializeImageProcess( nhDispHandle ,"");
 						if( 0 != i_ret )
 						{
 							break;
 						}
-						i_ret	= CImageMatrox.sifThrough();
+						i_ret	= cImageMatrox.ImageMatroxDllMethod.sifThrough();
 						if( 0 != i_ret )
 						{
 							break;
@@ -170,8 +172,8 @@ namespace CameraControl
 					str_log			= "Save. Filename = " + nstrFilename;
 					setLogDevice( str_log );
 					rect.left = rect.top = rect.right = rect.bottom = 0;
-					//CImageMatrox.sifSaveImage( rect, true, nstrFilename, true );
-					CImageMatrox.sifSaveImage(rect, true, nstrFilename, false);
+					//cImageMatrox.ImageMatroxDllMethod.sifSaveImage( rect, true, nstrFilename, true );
+					cImageMatrox.ImageMatroxDllMethod.sifSaveImage(rect, true, nstrFilename, false);
 				}
 				else
 				{
@@ -210,7 +212,7 @@ namespace CameraControl
 				{
 					str_log			= "Trigger off.";
 					setLogDevice( str_log );
-					if( 0 != CImageMatrox.sifSetTriggerModeOff() )
+					if( 0 != cImageMatrox.ImageMatroxDllMethod.sifSetTriggerModeOff() )
 					{
 						str_log			= "Failed trigger off.";
 						setLogDevice( str_log );
@@ -247,8 +249,8 @@ namespace CameraControl
 				{
 					str_log			= "Set trigger mode software.";
 					setLogDevice( str_log );
-					CImageMatrox.sifSetTriggerModeSoftware();
-					if( 0 != CImageMatrox.sifSetTriggerModeSoftware() )
+					cImageMatrox.ImageMatroxDllMethod.sifSetTriggerModeSoftware();
+					if( 0 != cImageMatrox.ImageMatroxDllMethod.sifSetTriggerModeSoftware() )
 					{
 						str_log			= "Failed set trigger mode software.";
 						setLogDevice( str_log );
@@ -286,7 +288,7 @@ namespace CameraControl
 				{
 					str_log			= "Set trigger mode hardware( "+ nstrTrigger + " ).";
 					setLogDevice( str_log );
-					if( 0 != CImageMatrox.sifSetTriggerModeHardware( nstrTrigger ) )
+					if( 0 != cImageMatrox.ImageMatroxDllMethod.sifSetTriggerModeHardware( nstrTrigger ) )
 					{
 						str_log			= "Failed set trigger mode hardware.";
 						setLogDevice( str_log );
@@ -323,7 +325,7 @@ namespace CameraControl
 				{
 					str_log			= "Execute software trigger.";
 					setLogDevice( str_log );
-					if( 0 != CImageMatrox.sifExecuteSoftwareTrigger() )
+					if( 0 != cImageMatrox.ImageMatroxDllMethod.sifExecuteSoftwareTrigger() )
 					{
 						str_log			= "Failed execute software trigger.";
 						setLogDevice( str_log );
@@ -360,7 +362,7 @@ namespace CameraControl
 				// Open済み確認
 				if( true == is_open() )
 				{
-					nSize			= CImageMatrox.sifGetImageSize();
+					nSize			= cImageMatrox.ImageMatroxDllMethod.sifGetImageSize();
 					str_log			= "Get image size( " + nSize.Width.ToString() + ", " + nSize.Height.ToString() + " ).";
 					setLogDevice( str_log );
 				}
@@ -395,13 +397,14 @@ namespace CameraControl
 					str_log			= "Get bitmap data.";
 					setLogDevice( str_log );
 					int		i_ret	= 0;
-					unsafe
-					{ 
-						fixed( byte *px = npbyteData )
-						{
-							i_ret	= CImageMatrox.sifGetMonoBitmapData( nlArySize, px );
-						}
-					}
+                    i_ret = cImageMatrox.ImageMatroxDllMethod.sifGetMonoBitmapData(nlArySize, npbyteData);
+     //               unsafe
+					//{ 
+					//	fixed( byte px = npbyteData )
+					//	{
+					//		i_ret	= cImageMatrox.ImageMatroxDllMethod.sifGetMonoBitmapData( nlArySize, npbyteData);
+					//	}
+					//}
 					if( 0 != i_ret )
 					{
 						str_log			= "Failed get bitmap data.";
@@ -641,7 +644,7 @@ namespace CameraControl
 					// ファイル削除
 					exec_file_remove();
 					// 開始
-					if( 0 != CImageMatrox.sifSampleInspection( m_strFolderName ) )
+					if( 0 != cImageMatrox.ImageMatroxDllMethod.sifSampleInspection( m_strFolderName ) )
 					{
 						b_ret	= false;
 					}

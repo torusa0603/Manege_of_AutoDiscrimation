@@ -34,18 +34,19 @@ namespace CameraControl
 		#region ローカル変数
 		protected bool				m_bOpend			= false;		// オープン済み？
 		protected string			m_strFolderName		= "";			// フォルダ名
-		#endregion
+        protected CImageMatrox cImageMatrox = new CImageMatrox();
+        #endregion
 
 
-		#region プロパティ
-		#endregion
+        #region プロパティ
+        #endregion
 
 
-		#region コンストラクタ / デストラクタ
-		/// <summary>
-		/// コンストラクタ
-		/// </summary>
-		public CCameraControlBase()
+        #region コンストラクタ / デストラクタ
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        public CCameraControlBase()
 		{
 			m_strDeviceName			= m_strDEVICE_NAME;
 		}
