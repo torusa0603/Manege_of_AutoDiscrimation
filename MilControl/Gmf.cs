@@ -181,14 +181,14 @@ namespace MilControl
 					// 5)サーチ精度
 					{
 						MIL_INT			i_para		= MIL.M_DEFAULT;	str_para	= "MIL.M_DEFAULT";
-						switch( m_cParaMilControl.GmfAccuracy )
+						switch( m_cParaMilControl.GmfAccuraHeight )
 						{
 							case 0	:	i_para		= MIL.M_HIGH;		str_para	= "MIL.M_HIGH";			break;
 							case 1	:	i_para		= MIL.M_MIDDLE;		str_para	= "MIL.M_MIDDLE";		break;
 							case 2	:	i_para		= MIL.M_LOW;		str_para	= "MIL.M_LOW";			break;
 						}
 						MIL.MmodControl( mil_SearchContext, MIL.M_CONTEXT, MIL.M_ACCURACY, i_para );
-						str_log			= "MIL.MmodControl( ,,MIL.M_ACCURACY, " + str_para + " )";
+						str_log			= "MIL.MmodControl( ,,MIL.M_ACCURAHeight, " + str_para + " )";
 						setLogDevice( str_log );
 						setLabel( str_log );
 						if( true == is_mil_error() )	break;

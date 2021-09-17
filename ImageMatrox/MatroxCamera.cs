@@ -25,7 +25,7 @@ namespace ImageMatrox
             {
                 //	画像読み込み等でカメラのサイズと画像バッファのサイズが異なっている場合は、
                 //	スルー前にカメラのサイズにバッファを合わせる
-                if (m_szImageSizeForCamera.cx != m_szImageSize.cx || m_szImageSizeForCamera.cy != m_szImageSize.cy)
+                if (m_szImageSizeForCamera.Width != m_szImageSize.Width || m_szImageSizeForCamera.Height != m_szImageSize.Height)
                 {
                     reallocMilImage(m_szImageSizeForCamera);
                 }
@@ -285,7 +285,7 @@ namespace ImageMatrox
                 MIL.MappTimer(MIL.M_DEFAULT, MIL.M_TIMER_READ, ref StartTime);
 
                 MIL_ID mil_save_image = MIL.M_NULL;
-                MIL.MbufAllocColor(m_milSys, 1, m_szImageSize.cx, m_szImageSize.cy, 16 + MIL.M_UNSIGNED, MIL.M_IMAGE + MIL.M_PROC, ref mil_save_image);
+                MIL.MbufAllocColor(m_milSys, 1, m_szImageSize.Width, m_szImageSize.Height, 16 + MIL.M_UNSIGNED, MIL.M_IMAGE + MIL.M_PROC, ref mil_save_image);
                 MIL.MbufCopy(m_milAverageImageCalc, mil_save_image);
 
                 MIL.MappTimer(MIL.M_DEFAULT, MIL.M_TIMER_READ, ref EndTime);

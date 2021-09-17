@@ -100,13 +100,13 @@ namespace ImageMatrox
                 uc_header_buf[15] = (char)(0);
                 uc_header_buf[16] = (char)(0);
                 uc_header_buf[17] = (char)(0);
-                uc_header_buf[18] = (char)m_szImageSize.cx;
-                //memcpy(uc_header_buf + 18, &m_szImageSize.cx, sizeof(int));
+                uc_header_buf[18] = (char)m_szImageSize.Width;
+                //memcpy(uc_header_buf + 18, &m_szImageSize.Width, sizeof(int));
                 uc_header_buf[19] = (char)(0);
                 uc_header_buf[20] = (char)(0);
                 uc_header_buf[21] = (char)(0);
-                uc_header_buf[22] = (char)m_szImageSize.cy;
-                //memcpy(uc_header_buf + 22, &m_szImageSize.cy, sizeof(int));
+                uc_header_buf[22] = (char)m_szImageSize.Height;
+                //memcpy(uc_header_buf + 22, &m_szImageSize.Height, sizeof(int));
                 uc_header_buf[23] = (char)(0);
                 uc_header_buf[24] = (char)(0);
                 uc_header_buf[25] = (char)(0);
@@ -159,16 +159,16 @@ namespace ImageMatrox
                 // カラーパレットの書き込み
                 fp.WriteLine(uc_color_palette);
                 // RGB情報の書き込み
-                puc_line_buf = new StringBuilder(sizeof(char) * m_szImageSize.cx);
+                puc_line_buf = new StringBuilder(sizeof(char) * m_szImageSize.Width);
                 if (puc_line_buf == null)
                 {
                     return -1;
                 }
-                for (int i_loop_y = 0; i_loop_y < m_szImageSize.cy; i_loop_y++)
+                for (int i_loop_y = 0; i_loop_y < m_szImageSize.Height; i_loop_y++)
                 {
-                    for (int i_loop_x = 0; i_loop_x < m_szImageSize.cx; i_loop_x++)
+                    for (int i_loop_x = 0; i_loop_x < m_szImageSize.Width; i_loop_x++)
                     {
-                        puc_line_buf[i_loop_x] = (char)npbyData[(m_szImageSize.cy - i_loop_y - 1) * m_szImageSize.cx + i_loop_x];
+                        puc_line_buf[i_loop_x] = (char)npbyData[(m_szImageSize.Height - i_loop_y - 1) * m_szImageSize.Width + i_loop_x];
                     }
                     fp.WriteLine(puc_line_buf);
                 }
@@ -256,7 +256,7 @@ namespace ImageMatrox
             while (true)
             {
                 // 画像データ配列確保
-                int ui_total_pixel_num = m_szImageSize.cx * m_szImageSize.cy;
+                int ui_total_pixel_num = m_szImageSize.Width * m_szImageSize.Height;
                 pbt_pixel_value_buff = new byte[ui_total_pixel_num];
 
                 // 開始時刻設定

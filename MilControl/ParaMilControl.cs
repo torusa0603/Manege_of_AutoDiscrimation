@@ -44,7 +44,7 @@ namespace MilControl
 		// 4)スコア確定レベル
 		public double GmfCertainty { get; set; } = -1;
 		// 5)サーチ精度
-		public int GmfAccuracy { get; set; } = 0;
+		public int GmfAccuraHeight { get; set; } = 0;
 		// 6)角度範囲サーチ方式計算実施
 		public int GmfSearchAngleRange { get; set; } = 0;
 		// 7)負側サーチ角度
@@ -113,7 +113,7 @@ namespace MilControl
 			GmfSmoothness			= getXmlData< double >( nXroot, nameof( GmfSmoothness ), GmfSmoothness.ToString() );
 			GmfAcceptance			= getXmlData< double >( nXroot, nameof( GmfAcceptance ), GmfAcceptance.ToString() );
 			GmfCertainty			= getXmlData< double >( nXroot, nameof( GmfCertainty ), GmfCertainty.ToString() );
-			GmfAccuracy				= getXmlData< int >( nXroot, nameof( GmfAccuracy ), GmfAccuracy.ToString() );
+			GmfAccuraHeight				= getXmlData< int >( nXroot, nameof( GmfAccuraHeight ), GmfAccuraHeight.ToString() );
 			GmfSearchAngleRange		= getXmlData< int >( nXroot, nameof( GmfSearchAngleRange ), GmfSearchAngleRange.ToString() );
 			GmfAngleNegative		= getXmlData< double >( nXroot, nameof( GmfAngleNegative ), GmfAngleNegative.ToString() );
 			GmfAnglePositive		= getXmlData< double >( nXroot, nameof( GmfAnglePositive ), GmfAnglePositive.ToString() );
@@ -147,7 +147,7 @@ namespace MilControl
 				if( this.GmfSmoothness != ncSrc.GmfSmoothness )					break;
 				if( this.GmfAcceptance != ncSrc.GmfAcceptance )					break;
 				if( this.GmfCertainty != ncSrc.GmfCertainty )					break;
-				if( this.GmfAccuracy != ncSrc.GmfAccuracy )						break;
+				if( this.GmfAccuraHeight != ncSrc.GmfAccuraHeight )						break;
 				if( this.GmfSearchAngleRange != ncSrc.GmfSearchAngleRange )		break;
 				if( this.GmfAngleNegative != ncSrc.GmfAngleNegative )			break;
 				if( this.GmfAnglePositive != ncSrc.GmfAnglePositive )			break;
@@ -219,16 +219,16 @@ namespace MilControl
 			xml.Add( getXElement( nameof( GmfCertainty ), GmfCertainty ) );
 			// 5)サーチ精度
 			xml.Add( new XComment( "  Memo start. " ) );
-			xml.Add( new XComment( "  *** Speed vs Accuracy valid settings *** " ) );
+			xml.Add( new XComment( "  *** Speed vs AccuraHeight valid settings *** " ) );
 			xml.Add( new XComment( "      Speed | VHi |  Hi | Mid | Low  " ) );
-			xml.Add( new XComment( "   Accuracy +- - -+- - -+- - -+- - - " ) );
+			xml.Add( new XComment( "   AccuraHeight +- - -+- - -+- - -+- - - " ) );
 			xml.Add( new XComment( "       High |  o  |  o  |  x  |  o   " ) );
 			xml.Add( new XComment( "     Middle |  x  |  x  |  x  |  x   " ) );
 			xml.Add( new XComment( "        Low |  o  |  o  |  x  |  o   " ) );
 			xml.Add( new XComment( "    Middle is can not select!!! The reason is unknown. " ) );
 			xml.Add( new XComment( "  Memo end." ) );
-			xml.Add( new XComment( " Accuracy for Geometric Model Finder. 0:High(Default) / 1:Middle / 2:Low " ) );
-			xml.Add( getXElement( nameof( GmfAccuracy ), GmfAccuracy ) );
+			xml.Add( new XComment( " AccuraHeight for Geometric Model Finder. 0:High(Default) / 1:Middle / 2:Low " ) );
+			xml.Add( getXElement( nameof( GmfAccuraHeight ), GmfAccuraHeight ) );
 			// 6)角度範囲サーチ方式計算実施
 			xml.Add( new XComment( " Enable of search angle range mode for Geometric Model Finder. 0:Enable(Default) / 1:Disable " ) );
 			xml.Add( getXElement( nameof( GmfSearchAngleRange ), GmfSearchAngleRange ) );
@@ -272,7 +272,7 @@ namespace MilControl
 			setXmlData( nElem, nameof( GmfSmoothness ), GmfSmoothness );
 			setXmlData( nElem, nameof( GmfAcceptance ), GmfAcceptance );
 			setXmlData( nElem, nameof( GmfCertainty ), GmfCertainty );
-			setXmlData( nElem, nameof( GmfAccuracy ), GmfAccuracy );
+			setXmlData( nElem, nameof( GmfAccuraHeight ), GmfAccuraHeight );
 			setXmlData( nElem, nameof( GmfSearchAngleRange ), GmfSearchAngleRange );
 			setXmlData( nElem, nameof( GmfAngleNegative ), GmfAngleNegative );
 			setXmlData( nElem, nameof( GmfAnglePositive ), GmfAnglePositive );

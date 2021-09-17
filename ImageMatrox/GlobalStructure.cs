@@ -37,17 +37,17 @@ namespace ImageMatrox
             }
         }
 
-        public struct SIZE
-        {
-            public int cx;
-            public int cy;
+        //public struct SIZE
+        //{
+        //    public int Width;
+        //    public int Height;
 
-            public SIZE(int nlcx, int nlcy)
-            {
-                this.cx = nlcx;
-                this.cy = nlcy;
-            }
-        }
+        //    public SIZE(int nlWidth, int nlHeight)
+        //    {
+        //        this.Width = nlWidth;
+        //        this.Height = nlHeight;
+        //    }
+        //}
 
         public struct SYSTEM_INFO
         {

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Matrox.MatroxImagingLibrary;
 using System.Runtime.InteropServices;
 using System.IO;
+using System.Drawing;
 
 namespace ImageMatrox
 {
@@ -30,8 +31,8 @@ namespace ImageMatrox
         public static MIL_ID m_milGraphic;         //	グラフィックバッファ
         public static MIL_ID m_milOverLay;         //	オーバーレイバッファ
         public static string m_strCameraFilePath;  //	DCFファイル名
-        public static SIZE m_szImageSize;          //	画像サイズ
-        public static SIZE m_szImageSizeForCamera;
+        public static Size m_szImageSize;          //	画像サイズ
+        public static Size m_szImageSizeForCamera;
         public static int m_iBoardType;            //	使用ボードタイプ
         public static int m_iNowColor;         //	現在のカラー
         public static bool m_bMainInitialFinished;
@@ -89,8 +90,8 @@ namespace ImageMatrox
             m_milInspectionResultImage = MIL.M_NULL;
             m_milInspectionResultImageTemp = MIL.M_NULL;
             m_strCameraFilePath = "";
-            m_szImageSize = new SIZE(0, 0);
-            m_szImageSizeForCamera = new SIZE(0, 0);
+            m_szImageSize = new Size(0, 0);
+            m_szImageSizeForCamera = new Size(0, 0);
             m_iBoardType = -1;
             m_bMainInitialFinished = false;
             m_bThroughFlg = false;
@@ -217,37 +218,37 @@ namespace ImageMatrox
             //	表示用画像バッファ
             if (m_iBoardType != (int)MTX_TYPE.MTX_HOST)
             {
-                MIL.MbufAllocColor(m_milSys, 3, m_szImageSize.cx, m_szImageSize.cy, 8 + MIL.M_UNSIGNED, MIL.M_IMAGE + MIL.M_PROC + MIL.M_GRAB + MIL.M_DISP + MIL.M_PACKED + MIL.M_BGR24, ref m_milShowImage);
+                MIL.MbufAllocColor(m_milSys, 3, m_szImageSize.Width, m_szImageSize.Height, 8 + MIL.M_UNSIGNED, MIL.M_IMAGE + MIL.M_PROC + MIL.M_GRAB + MIL.M_DISP + MIL.M_PACKED + MIL.M_BGR24, ref m_milShowImage);
             }
             else
             {
                 //	M_GRABは外す
-                MIL.MbufAllocColor(m_milSys, 3, m_szImageSize.cx, m_szImageSize.cy, 8 + MIL.M_UNSIGNED, MIL.M_IMAGE + MIL.M_PROC + MIL.M_DISP + MIL.M_PACKED + MIL.M_BGR24, ref m_milShowImage);
+                MIL.MbufAllocColor(m_milSys, 3, m_szImageSize.Width, m_szImageSize.Height, 8 + MIL.M_UNSIGNED, MIL.M_IMAGE + MIL.M_PROC + MIL.M_DISP + MIL.M_PACKED + MIL.M_BGR24, ref m_milShowImage);
             }
             //	モノクロ画像バッファ
-            MIL.MbufAlloc2d(m_milSys, m_szImageSize.cx, m_szImageSize.cy, 8 + MIL.M_UNSIGNED, MIL.M_IMAGE + MIL.M_PROC, ref m_milMonoImage);
+            MIL.MbufAlloc2d(m_milSys, m_szImageSize.Width, m_szImageSize.Height, 8 + MIL.M_UNSIGNED, MIL.M_IMAGE + MIL.M_PROC, ref m_milMonoImage);
             //	オリジナル画像バッファ
-            MIL.MbufAllocColor(m_milSys, 3, m_szImageSize.cx, m_szImageSize.cy, 8 + MIL.M_UNSIGNED, MIL.M_IMAGE + MIL.M_PROC + MIL.M_PACKED + MIL.M_BGR24, ref m_milOriginalImage);
+            MIL.MbufAllocColor(m_milSys, 3, m_szImageSize.Width, m_szImageSize.Height, 8 + MIL.M_UNSIGNED, MIL.M_IMAGE + MIL.M_PROC + MIL.M_PACKED + MIL.M_BGR24, ref m_milOriginalImage);
             //	表示用画像バッファ
-            MIL.MbufAllocColor(m_milSys, 3, m_szImageSize.cx, m_szImageSize.cy, 8 + MIL.M_UNSIGNED, MIL.M_IMAGE + MIL.M_PROC + MIL.M_PACKED + MIL.M_BGR24, ref m_milPreShowImage);
+            MIL.MbufAllocColor(m_milSys, 3, m_szImageSize.Width, m_szImageSize.Height, 8 + MIL.M_UNSIGNED, MIL.M_IMAGE + MIL.M_PROC + MIL.M_PACKED + MIL.M_BGR24, ref m_milPreShowImage);
             //	差分用オリジナル画像バッファ
-            MIL.MbufAllocColor(m_milSys, 3, m_szImageSize.cx, m_szImageSize.cy, 8 + MIL.M_UNSIGNED, MIL.M_IMAGE + MIL.M_PROC + MIL.M_PACKED + MIL.M_BGR24, ref m_milDiffOrgImage);
+            MIL.MbufAllocColor(m_milSys, 3, m_szImageSize.Width, m_szImageSize.Height, 8 + MIL.M_UNSIGNED, MIL.M_IMAGE + MIL.M_PROC + MIL.M_PACKED + MIL.M_BGR24, ref m_milDiffOrgImage);
             //	平均化用積算画像バッファ
-            MIL.MbufAllocColor(m_milSys, 3, m_szImageSize.cx, m_szImageSize.cy, 16 + MIL.M_UNSIGNED, MIL.M_IMAGE + MIL.M_PROC, ref m_milAverageImageCalc);
+            MIL.MbufAllocColor(m_milSys, 3, m_szImageSize.Width, m_szImageSize.Height, 16 + MIL.M_UNSIGNED, MIL.M_IMAGE + MIL.M_PROC, ref m_milAverageImageCalc);
             //検査結果表示用画像バッファ
-            MIL.MbufAllocColor(m_milSys, 3, m_szImageSize.cx, m_szImageSize.cy, 8 + MIL.M_UNSIGNED, MIL.M_IMAGE + MIL.M_PROC + MIL.M_DISP + MIL.M_PACKED + MIL.M_BGR24, ref m_milInspectionResultImage);
+            MIL.MbufAllocColor(m_milSys, 3, m_szImageSize.Width, m_szImageSize.Height, 8 + MIL.M_UNSIGNED, MIL.M_IMAGE + MIL.M_PROC + MIL.M_DISP + MIL.M_PACKED + MIL.M_BGR24, ref m_milInspectionResultImage);
             //グラフィックを画像に保存するためのバッファ
-            MIL.MbufAllocColor(m_milSys, 3, m_szImageSize.cx, m_szImageSize.cy, 8 + MIL.M_UNSIGNED, MIL.M_IMAGE + MIL.M_PROC + MIL.M_DISP + MIL.M_PACKED + MIL.M_BGR24, ref m_milDraphicSaveImage);
+            MIL.MbufAllocColor(m_milSys, 3, m_szImageSize.Width, m_szImageSize.Height, 8 + MIL.M_UNSIGNED, MIL.M_IMAGE + MIL.M_PROC + MIL.M_DISP + MIL.M_PACKED + MIL.M_BGR24, ref m_milDraphicSaveImage);
 
             if (m_iBoardType != (int)MTX_TYPE.MTX_HOST)
             {
                 for (i_loop = 0; i_loop < MAX_IMAGE_GRAB_NUM; i_loop++)
                 {
-                    MIL.MbufAllocColor(m_milSys, 3, m_szImageSize.cx, m_szImageSize.cy, 8 + MIL.M_UNSIGNED, MIL.M_IMAGE + MIL.M_GRAB + MIL.M_PROC, ref m_milImageGrab[i_loop]);
+                    MIL.MbufAllocColor(m_milSys, 3, m_szImageSize.Width, m_szImageSize.Height, 8 + MIL.M_UNSIGNED, MIL.M_IMAGE + MIL.M_GRAB + MIL.M_PROC, ref m_milImageGrab[i_loop]);
                 }
                 for (i_loop = 0; i_loop < MAX_AVERAGE_IMAGE_GRAB_NUM; i_loop++)
                 {
-                    MIL.MbufAllocColor(m_milSys, 3, m_szImageSize.cx, m_szImageSize.cy, 8 + MIL.M_UNSIGNED, MIL.M_IMAGE + MIL.M_GRAB + MIL.M_PROC, ref m_milAverageImageGrab[i_loop]);
+                    MIL.MbufAllocColor(m_milSys, 3, m_szImageSize.Width, m_szImageSize.Height, 8 + MIL.M_UNSIGNED, MIL.M_IMAGE + MIL.M_GRAB + MIL.M_PROC, ref m_milAverageImageGrab[i_loop]);
                 }
             }
 
@@ -260,8 +261,8 @@ namespace ImageMatrox
                 MIL.MdigControl(m_milDigitizer, MIL.M_SOURCE_OFFSET_X, 0);
                 MIL.MdigControl(m_milDigitizer, MIL.M_SOURCE_OFFSET_Y, 0);
                 //　取込幅をデフォルトの取込幅にする
-                MIL.MdigControl(m_milDigitizer, MIL.M_SOURCE_SIZE_X, (double)m_szImageSize.cx);
-                MIL.MdigControl(m_milDigitizer, MIL.M_SOURCE_SIZE_Y, (double)m_szImageSize.cy);
+                MIL.MdigControl(m_milDigitizer, MIL.M_SOURCE_SIZE_X, (double)m_szImageSize.Width);
+                MIL.MdigControl(m_milDigitizer, MIL.M_SOURCE_SIZE_Y, (double)m_szImageSize.Height);
             }
 
             //	画像バッファクリア
@@ -389,9 +390,9 @@ namespace ImageMatrox
 
             //	画像サイズ
             GetPrivateProfileString("Matrox", "sizeX", "800", buff, 256, m_strIniFilePAth);
-            m_szImageSize.cx = Int32.Parse(buff.ToString());
+            m_szImageSize.Width = Int32.Parse(buff.ToString());
             GetPrivateProfileString("Matrox", "sizeY", "640", buff, 256, m_strIniFilePAth);
-            m_szImageSize.cy = Int32.Parse(buff.ToString());
+            m_szImageSize.Height = Int32.Parse(buff.ToString());
 
             //	使用画像ボード
             GetPrivateProfileString("Matrox", "BoardType", "0", buff, 256, m_strIniFilePAth);
@@ -564,7 +565,7 @@ namespace ImageMatrox
             6.備考
                 なし
         ------------------------------------------------------------------------------------------*/
-        public void reallocMilImage(SIZE nszNewImageSize)
+        public void reallocMilImage(Size nszNewImageSize)
         {
             int i_loop;
 
@@ -622,33 +623,33 @@ namespace ImageMatrox
             //	表示用画像バッファ
             if (m_iBoardType != (int)MTX_TYPE.MTX_HOST)
             {
-                MIL.MbufAllocColor(m_milSys, 3, nszNewImageSize.cx, nszNewImageSize.cy, 8 + MIL.M_UNSIGNED, MIL.M_IMAGE + MIL.M_PROC + MIL.M_GRAB + MIL.M_DISP + MIL.M_PACKED + MIL.M_BGR24, ref m_milShowImage);
+                MIL.MbufAllocColor(m_milSys, 3, nszNewImageSize.Width, nszNewImageSize.Height, 8 + MIL.M_UNSIGNED, MIL.M_IMAGE + MIL.M_PROC + MIL.M_GRAB + MIL.M_DISP + MIL.M_PACKED + MIL.M_BGR24, ref m_milShowImage);
             }
             else
             {
                 //	GRABを外す
-                MIL.MbufAllocColor(m_milSys, 3, nszNewImageSize.cx, nszNewImageSize.cy, 8 + MIL.M_UNSIGNED, MIL.M_IMAGE + MIL.M_PROC + MIL.M_DISP + MIL.M_PACKED + MIL.M_BGR24, ref m_milShowImage);
+                MIL.MbufAllocColor(m_milSys, 3, nszNewImageSize.Width, nszNewImageSize.Height, 8 + MIL.M_UNSIGNED, MIL.M_IMAGE + MIL.M_PROC + MIL.M_DISP + MIL.M_PACKED + MIL.M_BGR24, ref m_milShowImage);
             }
 
             //	モノクロ画像バッファ
-            MIL.MbufAlloc2d(m_milSys, nszNewImageSize.cx, nszNewImageSize.cy, 8 + MIL.M_UNSIGNED, MIL.M_IMAGE + MIL.M_PROC, ref m_milMonoImage);
+            MIL.MbufAlloc2d(m_milSys, nszNewImageSize.Width, nszNewImageSize.Height, 8 + MIL.M_UNSIGNED, MIL.M_IMAGE + MIL.M_PROC, ref m_milMonoImage);
             //	オリジナル画像バッファ
-            MIL.MbufAllocColor(m_milSys, 3, nszNewImageSize.cx, nszNewImageSize.cy, 8 + MIL.M_UNSIGNED, MIL.M_IMAGE + MIL.M_PROC + MIL.M_PACKED + MIL.M_BGR24, ref m_milOriginalImage);
+            MIL.MbufAllocColor(m_milSys, 3, nszNewImageSize.Width, nszNewImageSize.Height, 8 + MIL.M_UNSIGNED, MIL.M_IMAGE + MIL.M_PROC + MIL.M_PACKED + MIL.M_BGR24, ref m_milOriginalImage);
             //	表示用画像バッファ
-            MIL.MbufAllocColor(m_milSys, 3, nszNewImageSize.cx, nszNewImageSize.cy, 8 + MIL.M_UNSIGNED, MIL.M_IMAGE + MIL.M_PROC + MIL.M_PACKED + MIL.M_BGR24, ref m_milPreShowImage);
+            MIL.MbufAllocColor(m_milSys, 3, nszNewImageSize.Width, nszNewImageSize.Height, 8 + MIL.M_UNSIGNED, MIL.M_IMAGE + MIL.M_PROC + MIL.M_PACKED + MIL.M_BGR24, ref m_milPreShowImage);
             //	差分用オリジナル画像バッファ
-            MIL.MbufAllocColor(m_milSys, 3, nszNewImageSize.cx, nszNewImageSize.cy, 8 + MIL.M_UNSIGNED, MIL.M_IMAGE + MIL.M_PROC + MIL.M_PACKED + MIL.M_BGR24, ref m_milDiffOrgImage);
+            MIL.MbufAllocColor(m_milSys, 3, nszNewImageSize.Width, nszNewImageSize.Height, 8 + MIL.M_UNSIGNED, MIL.M_IMAGE + MIL.M_PROC + MIL.M_PACKED + MIL.M_BGR24, ref m_milDiffOrgImage);
             if (m_iBoardType != (int)MTX_TYPE.MTX_HOST)
             {
                 for (i_loop = 0; i_loop < MAX_IMAGE_GRAB_NUM; i_loop++)
                 {
-                    MIL.MbufAllocColor(m_milSys, 3, nszNewImageSize.cx, nszNewImageSize.cy, 8 + MIL.M_UNSIGNED, MIL.M_IMAGE + MIL.M_GRAB + MIL.M_PROC, ref m_milImageGrab[i_loop]);
+                    MIL.MbufAllocColor(m_milSys, 3, nszNewImageSize.Width, nszNewImageSize.Height, 8 + MIL.M_UNSIGNED, MIL.M_IMAGE + MIL.M_GRAB + MIL.M_PROC, ref m_milImageGrab[i_loop]);
                 }
             }
             //グラフィックを画像に保存するためのバッファ
-            MIL.MbufAllocColor(m_milSys, 3, nszNewImageSize.cx, nszNewImageSize.cy, 8 + MIL.M_UNSIGNED, MIL.M_IMAGE + MIL.M_PROC + MIL.M_DISP + MIL.M_PACKED + MIL.M_BGR24, ref m_milDraphicSaveImage);
+            MIL.MbufAllocColor(m_milSys, 3, nszNewImageSize.Width, nszNewImageSize.Height, 8 + MIL.M_UNSIGNED, MIL.M_IMAGE + MIL.M_PROC + MIL.M_DISP + MIL.M_PACKED + MIL.M_BGR24, ref m_milDraphicSaveImage);
             //	//検査結果表示用画像バッファ
-            //	MbufAllocColor(m_milSys, 3, nszNewImageSize.cx, nszNewImageSize.cy, 8+M_UNSIGNED, MIL.M_IMAGE+M_PROC + MIL.M_DISP + MIL.M_PACKED + MIL.M_BGR24, ref m_milInspectionResultImage );
+            //	MbufAllocColor(m_milSys, 3, nszNewImageSize.Width, nszNewImageSize.Height, 8+M_UNSIGNED, MIL.M_IMAGE+M_PROC + MIL.M_DISP + MIL.M_PACKED + MIL.M_BGR24, ref m_milInspectionResultImage );
 
             MIL.MdispSelectWindow(m_milDisp, m_milShowImage, m_hWnd);
             MIL.MdispInquire(m_milDisp, MIL.M_OVERLAY_ID, ref m_milOverLay);
@@ -755,7 +756,7 @@ namespace ImageMatrox
                 else
                 {
                     MIL_ID mil_save_image = MIL.M_NULL;
-                    MIL.MbufAllocColor(m_milSys, 1, m_szImageSize.cx, m_szImageSize.cy, 8 + MIL.M_UNSIGNED, MIL.M_IMAGE + MIL.M_PROC, ref mil_save_image);
+                    MIL.MbufAllocColor(m_milSys, 1, m_szImageSize.Width, m_szImageSize.Height, 8 + MIL.M_UNSIGNED, MIL.M_IMAGE + MIL.M_PROC, ref mil_save_image);
                     MIL.MbufCopy(m_milShowImage, mil_save_image);
                     MIL.MbufExport(ncsFilePath, MIL.M_BMP, mil_save_image);
                     MIL.MbufFree(mil_save_image);
@@ -765,15 +766,15 @@ namespace ImageMatrox
             //	指定のエリアを保存
             else
             {
-                SIZE sz_image_size;
+                Size sz_image_size = new Size(0, 0);
                 MIL_ID mil_area_image = MIL.M_NULL;
 
                 //	画像サイズ取得
-                sz_image_size.cx = (int)MIL.MbufInquire(m_milShowImage, MIL.M_SIZE_X, MIL.M_NULL);
-                sz_image_size.cy = (int)MIL.MbufInquire(m_milShowImage, MIL.M_SIZE_Y, MIL.M_NULL);
+                sz_image_size.Width = (int)MIL.MbufInquire(m_milShowImage, MIL.M_SIZE_X, MIL.M_NULL);
+                sz_image_size.Height = (int)MIL.MbufInquire(m_milShowImage, MIL.M_SIZE_Y, MIL.M_NULL);
 
                 //	指定された位置に画像がない場合は0を返す
-                if (nrctSaveArea.left < 0 || nrctSaveArea.top < 0 || nrctSaveArea.right > sz_image_size.cx || nrctSaveArea.bottom > sz_image_size.cy ||
+                if (nrctSaveArea.left < 0 || nrctSaveArea.top < 0 || nrctSaveArea.right > sz_image_size.Width || nrctSaveArea.bottom > sz_image_size.Height ||
                 (nrctSaveArea.right - nrctSaveArea.left) == 0 || (nrctSaveArea.bottom - nrctSaveArea.top) == 0)
                 {
                     return;
@@ -843,15 +844,15 @@ namespace ImageMatrox
             //	指定のエリアを保存
             else
             {
-                SIZE sz_image_size;
+                Size sz_image_size = new Size(0, 0);
                 MIL_ID mil_area_image = MIL.M_NULL;
 
                 //	画像サイズ取得
-                sz_image_size.cx = (int)MIL.MbufInquire(m_milOriginalImage, MIL.M_SIZE_X, MIL.M_NULL);
-                sz_image_size.cy = (int)MIL.MbufInquire(m_milOriginalImage, MIL.M_SIZE_Y, MIL.M_NULL);
+                sz_image_size.Width = (int)MIL.MbufInquire(m_milOriginalImage, MIL.M_SIZE_X, MIL.M_NULL);
+                sz_image_size.Height = (int)MIL.MbufInquire(m_milOriginalImage, MIL.M_SIZE_Y, MIL.M_NULL);
 
                 //	指定された位置に画像がない場合は0を返す
-                if (nrctSaveArea.left < 0 || nrctSaveArea.top < 0 || nrctSaveArea.right > sz_image_size.cx || nrctSaveArea.bottom > sz_image_size.cy ||
+                if (nrctSaveArea.left < 0 || nrctSaveArea.top < 0 || nrctSaveArea.right > sz_image_size.Width || nrctSaveArea.bottom > sz_image_size.Height ||
                 (nrctSaveArea.right - nrctSaveArea.left) == 0 || (nrctSaveArea.bottom - nrctSaveArea.top) == 0)
                 {
                     return;
@@ -944,7 +945,7 @@ namespace ImageMatrox
             6.備考
                 なし
         ------------------------------------------------------------------------------------------*/
-        public SIZE getImageSize()
+        public Size getImageSize()
         {
             return m_szImageSize;
         }
@@ -970,7 +971,7 @@ namespace ImageMatrox
         {
             int i_loop;
             MIL_ID mil_image = MIL.M_NULL;
-            SIZE sz_image_size;
+            Size sz_image_size = new Size(0, 0);
 
             if (m_bMainInitialFinished == false)
             {
@@ -982,8 +983,8 @@ namespace ImageMatrox
             MIL.MbufRestore(ncsFilePath, m_milSys, ref mil_image);
 
             //	モデル画像サイズ取得
-            sz_image_size.cx = (int)MIL.MbufInquire(mil_image, MIL.M_SIZE_X, MIL.M_NULL);
-            sz_image_size.cy = (int)MIL.MbufInquire(mil_image, MIL.M_SIZE_Y, MIL.M_NULL);
+            sz_image_size.Width = (int)MIL.MbufInquire(mil_image, MIL.M_SIZE_X, MIL.M_NULL);
+            sz_image_size.Height = (int)MIL.MbufInquire(mil_image, MIL.M_SIZE_Y, MIL.M_NULL);
 
             //	メモリの再設定
             reallocMilImage(sz_image_size);
@@ -1162,7 +1163,7 @@ namespace ImageMatrox
         public int getPixelValueOnPosition(POINT nNowPoint, ref int RValue, ref int GValue, ref int BValue)
         {
             byte[] bt_pixel_value = { 0, 0, 0 };
-            SIZE sz_image_size;
+            Size sz_image_size = new Size(0, 0);
             int i_ret = -1;
 
             if (m_bMainInitialFinished == false)
@@ -1171,11 +1172,11 @@ namespace ImageMatrox
             }
 
             //	画像サイズ取得
-            sz_image_size.cx = (int)MIL.MbufInquire(m_milShowImage, MIL.M_SIZE_X, MIL.M_NULL);
-            sz_image_size.cy = (int)MIL.MbufInquire(m_milShowImage, MIL.M_SIZE_Y, MIL.M_NULL);
+            sz_image_size.Width = (int)MIL.MbufInquire(m_milShowImage, MIL.M_SIZE_X, MIL.M_NULL);
+            sz_image_size.Height = (int)MIL.MbufInquire(m_milShowImage, MIL.M_SIZE_Y, MIL.M_NULL);
 
             //	指定された位置に画像がない場合は0を返す
-            if (nNowPoint.x >= 0 && nNowPoint.x < sz_image_size.cx && nNowPoint.y >= 0 && nNowPoint.y < sz_image_size.cy)
+            if (nNowPoint.x >= 0 && nNowPoint.x < sz_image_size.Width && nNowPoint.y >= 0 && nNowPoint.y < sz_image_size.Height)
             {
                 MIL.MbufGet2d(m_milShowImage, nNowPoint.x, nNowPoint.y, 1, 1, bt_pixel_value);
                 i_ret = 0;
@@ -1356,8 +1357,8 @@ namespace ImageMatrox
             string str_ext;
 
             //	オーバーレイバッファと検査結果画像バッファの一時バッファを用意
-            MIL.MbufAllocColor(m_milSys, 3, m_szImageSize.cx, m_szImageSize.cy, 8 + MIL.M_UNSIGNED, MIL.M_IMAGE + MIL.M_PROC + MIL.M_DISP + MIL.M_PACKED + MIL.M_BGR24, ref mil_temp);
-            MIL.MbufAllocColor(m_milSys, 3, m_szImageSize.cx, m_szImageSize.cy, 8 + MIL.M_UNSIGNED, MIL.M_IMAGE + MIL.M_PROC + MIL.M_DISP + MIL.M_PACKED + MIL.M_BGR24, ref mil_result_temp);
+            MIL.MbufAllocColor(m_milSys, 3, m_szImageSize.Width, m_szImageSize.Height, 8 + MIL.M_UNSIGNED, MIL.M_IMAGE + MIL.M_PROC + MIL.M_DISP + MIL.M_PACKED + MIL.M_BGR24, ref mil_temp);
+            MIL.MbufAllocColor(m_milSys, 3, m_szImageSize.Width, m_szImageSize.Height, 8 + MIL.M_UNSIGNED, MIL.M_IMAGE + MIL.M_PROC + MIL.M_DISP + MIL.M_PACKED + MIL.M_BGR24, ref mil_result_temp);
             //	一時バッファに画像をコピー
             MIL.MbufCopy(m_milOverLayForInspectionResult, mil_temp);
             //	MbufCopy( m_milInspectionResultImage, mil_result_temp );
@@ -1681,20 +1682,20 @@ namespace ImageMatrox
             m_lstImageGrab.RemoveAt(0);
 
             // ユーザが準備した画像バッファサイズが少ない
-            if (nlArySize < m_szImageSize.cx * m_szImageSize.cy)
+            if (nlArySize < m_szImageSize.Width * m_szImageSize.Height)
             {
                 return -1;
             }
 
             // モノクロ画像バッファ確保
             MIL_ID mil_mono = MIL.M_NULL;
-            MIL.MbufAlloc2d(m_milSys, m_szImageSize.cx, m_szImageSize.cy, 8 + MIL.M_UNSIGNED, MIL.M_IMAGE + MIL.M_PROC, ref mil_mono);
+            MIL.MbufAlloc2d(m_milSys, m_szImageSize.Width, m_szImageSize.Height, 8 + MIL.M_UNSIGNED, MIL.M_IMAGE + MIL.M_PROC, ref mil_mono);
             // モノクロ画像バッファクリア
             MIL.MbufClear(mil_mono, 0);
             // モノクロ画像バッファコピー
             MIL.MbufCopy(mil_image, mil_mono);
             // モノクロ画像バッファ ビットマップデータ取得
-            MIL.MbufGet2d(mil_mono, 0, 0, m_szImageSize.cx, m_szImageSize.cy, npbyteData);
+            MIL.MbufGet2d(mil_mono, 0, 0, m_szImageSize.Width, m_szImageSize.Height, npbyteData);
             // メモリ解放
             MIL.MbufFree(mil_mono);
 

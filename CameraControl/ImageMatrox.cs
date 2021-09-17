@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 using System.Drawing;
 
-
+using ImageMatrox;
 using System.Reflection;
 
 
@@ -15,17 +15,13 @@ namespace CameraControl
 	/// <summary>
 	/// ImageMatrox.dllのラッパークラス
 	/// </summary>
-	public class CImageMatrox
-	{
-        public Module module;
-        public dynamic ImageMatroxDllMethod;
-        public CImageMatrox()
-        {
-            var asm = Assembly.LoadFrom("ImageMatrox.dll");       // アセンブリの読み込み
-            module = asm.GetModule("ImageMatrox.dll");        // アセンブリからモジュールを取得
-            var ImageMatrox = module.GetType("ImageMatrox.extern_main");    // 利用するクラス(or 構造体)を取得
-            ImageMatroxDllMethod = Activator.CreateInstance(ImageMatrox);
-        }
+	public class CImageMatrox : extern_main
+    {
+        //public extern_main ImageMatroxDllMethod;
+        //public CImageMatrox()
+        //{
+        //    ImageMatroxDllMethod = new extern_main();
+        //}
 
         #region DLLインポート
         //      [DllImport( "ImageMatrox.dll", EntryPoint = "sifInitializeImageProcess") ]
