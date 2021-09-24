@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
+using System.Threading;
 
 namespace ImageMatrox
 {
@@ -14,6 +15,7 @@ namespace ImageMatrox
         CMatroxGraphic pMatroxGraphic;
         CMatroxImageProcess pMatroxImageProcess;
 
+        public event EventHandlerVoid DiffImageEvent;
         /*------------------------------------------------------------------------------------------
 	1.日本語名
 		画像処理ボードの初期化を行う関数
@@ -605,7 +607,7 @@ namespace ImageMatrox
 
         /*------------------------------------------------------------------------------------------
             1.日本語名
-                差分用オリジナル画像を現在表示されている画像で登録する
+                差分用オリジナル画像を現在表示されている画像で登録し、差分モードに移行する
 
             2.パラメタ説明
                 なし
@@ -624,12 +626,74 @@ namespace ImageMatrox
         ------------------------------------------------------------------------------------------*/
         public int sifsetDiffOrgImage()
         {
-            return pMatroxCommon.setDiffOrgImage();
+            return pMatroxCommon.setDiffOrgImage(true);
 
         }
         /*------------------------------------------------------------------------------------------
             1.日本語名
-                差分用オリジナル画像を現在表示されている画像で登録する
+                差分画像の解析を行う
+
+            2.パラメタ説明
+                niSleepTime:待ち時間
+
+            3.概要
+                画像をロードする
+
+            4.機能説明
+                画像をロードする
+
+            5.戻り値
+                なし
+
+            6.備考
+                なし
+        ------------------------------------------------------------------------------------------*/
+        public void sifanalyzeDiffImage(int niSleepTime)
+        {
+            TimerCallback timerDelegate = new TimerCallback(analyzeDiffImage);
+            Timer timer = new Timer(timerDelegate, null, 0, niSleepTime);
+        }
+
+        /*------------------------------------------------------------------------------------------
+            1.日本語名
+                差分画像の解析を行う
+
+            2.パラメタ説明
+                niSleepTime:待ち時間
+
+            3.概要
+                画像をロードする
+
+            4.機能説明
+                画像をロードする
+
+            5.戻り値
+                なし
+
+            6.備考
+                なし
+        ------------------------------------------------------------------------------------------*/
+        private void analyzeDiffImage(object o)
+        {
+            int i_ret;
+            i_ret = pMatroxCommon.setDiffMode();
+            if (i_ret == 0)
+            {
+                //ファイル保存
+                pMatroxCommon.resetDiffMode();
+                //i_ret = 差分画像の解析
+                if (i_ret == 0)
+                {
+                    DiffImageEvent();
+                }
+            }
+            pMatroxCommon.setDiffOrgImage(false);
+        }
+
+
+        /*------------------------------------------------------------------------------------------
+            1.日本語名
+                差分モードを解除する
 
             2.パラメタ説明
                 なし

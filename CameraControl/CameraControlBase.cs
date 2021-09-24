@@ -34,7 +34,7 @@ namespace CameraControl
 		#region ローカル変数
 		protected bool				m_bOpend			= false;		// オープン済み？
 		protected string			m_strFolderName		= "";			// フォルダ名
-        protected CImageMatrox cImageMatrox = new CImageMatrox();
+        public CImageMatrox cImageMatrox = new CImageMatrox();
         #endregion
 
 

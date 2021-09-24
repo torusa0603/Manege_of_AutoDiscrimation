@@ -28,7 +28,7 @@ namespace CameraControl
         #region ローカル変数 サンプル動作用
         private CancellationTokenSource m_CancellationImage = null;         // 撮影スレッド中止用
         private CancellationTokenSource m_CancellationProcess = null;           // 処理スレッド中止用
-
+        
         #endregion
 
 
@@ -172,7 +172,6 @@ namespace CameraControl
                     str_log = "Save. Filename = " + nstrFilename;
                     setLogDevice(str_log);
                     //rect.left = rect.top = rect.right = rect.bottom = 0;
-                    //cImageMatrox.ImageMatroxDllMethod.sifSaveImage( rect, true, nstrFilename, true );
                     cImageMatrox.sifSaveImage(rect, true, nstrFilename, false);
                 }
                 else

@@ -10,61 +10,68 @@ using System.Drawing;
 
 namespace ImageMatrox
 {
+    public delegate void EventHandlerVoid();
     public class CMatroxCommon : GlobalStructure
     {
 
 
         #region"使用する変数群"
-        public static MIL_ID m_milApp;             //	アプリケーションID
-        public static MIL_ID m_milSys;             //	システムID
-        public static MIL_ID m_milDisp;                //	ディスプレイID
-        public static MIL_ID m_milDigitizer;           //	デジタイザID
-        public MIL_ID m_milShowImage;           //	画像バッファ(表示用)
-        public static MIL_ID m_milPreShowImage;        //	1つ前にグラブした画像バッファ
-        public static MIL_ID m_milDiffOrgImage;        //	差分用オリジナル画像
-        public static MIL_ID m_milDiffTargetImage;     //	差分用ターゲット画像
-        public static MIL_ID[] m_milImageGrab;   //	画像バッファ(グラブ専用)
-        public static MIL_ID[] m_milAverageImageGrab;    //	平均化用画像バッファ(グラブ専用)
-        public static MIL_ID m_milAverageImageCalc;    //	平均化用画像バッファ(積算用)
-        public MIL_ID m_milMonoImage;           //	1プレーンの画像(モノクロなら表示用バッファと同じ、カラーならばRGBのいずれか)
-        public MIL_ID m_milOriginalImage;       //	オリジナル画像(カラーバッファとして確保)
-        public static MIL_ID m_milGraphic;         //	グラフィックバッファ
-        public static MIL_ID m_milOverLay;         //	オーバーレイバッファ
-        public static string m_strCameraFilePath;  //	DCFファイル名
-        public static Size m_szImageSize;          //	画像サイズ
-        public static Size m_szImageSizeForCamera;
-        public static int m_iBoardType;            //	使用ボードタイプ
-        public static int m_iNowColor;         //	現在のカラー
-        public static bool m_bMainInitialFinished;
-        public static bool m_bThroughFlg;          //	スルーならばTrue、フリーズならFalse
-        public static double m_dNowMag;                //	現在の表示画像の倍率
-        public static IntPtr m_hWnd;                 //	ウインドウのハンドル
-        public static bool m_bNowDiffMode;         //	現在差分表示モードか否か
-        public readonly MIL_INT TRANSPARENT_COLOR = MIL.M_RGB888(1, 1, 1);      //透過色
+        protected static MIL_ID m_milApp;             //	アプリケーションID
+        protected static MIL_ID m_milSys;             //	システムID
+        protected static MIL_ID m_milDisp;                //	ディスプレイID
+        protected static MIL_ID m_milDigitizer;           //	デジタイザID
+        protected static MIL_ID m_milShowImage;           //	画像バッファ(表示用)
+        protected static MIL_ID m_milPreShowImage;        //	1つ前にグラブした画像バッファ
+        protected static MIL_ID m_milDiffOrgImage;        //	差分用オリジナル画像
+        protected static MIL_ID m_milDiffTargetImage;     //	差分用ターゲット画像
+        protected static MIL_ID[] m_milImageGrab;   //	画像バッファ(グラブ専用)
+        protected static MIL_ID[] m_milAverageImageGrab;    //	平均化用画像バッファ(グラブ専用)
+        protected static MIL_ID m_milAverageImageCalc;    //	平均化用画像バッファ(積算用)
+        protected static MIL_ID m_milMonoImage;           //	1プレーンの画像(モノクロなら表示用バッファと同じ、カラーならばRGBのいずれか)
+        protected static MIL_ID m_milOriginalImage;       //	オリジナル画像(カラーバッファとして確保)
+        protected static MIL_ID m_milGraphic;         //	グラフィックバッファ
+        protected static MIL_ID m_milOverLay;         //	オーバーレイバッファ
+        protected static string m_strCameraFilePath;  //	DCFファイル名
+        protected static Size m_szImageSize;          //	画像サイズ
+        protected static Size m_szImageSizeForCamera;
+        protected static int m_iBoardType;            //	使用ボードタイプ
+        protected static int m_iNowColor;         //	現在のカラー
+        protected static bool m_bMainInitialFinished;
+        protected static bool m_bThroughFlg;          //	スルーならばTrue、フリーズならFalse
+        protected static double m_dNowMag;                //	現在の表示画像の倍率
+        protected static IntPtr m_hWnd;                 //	ウインドウのハンドル
+        protected static bool m_bNowDiffMode;         //	現在差分表示モードか否か
+        protected readonly MIL_INT TRANSPARENT_COLOR = MIL.M_RGB888(1, 1, 1);      //透過色
 
-        public static IntPtr m_hWndForInspectionResult;  //	ウインドウのハンドル(検査結果表示用)
-        public static MIL_ID m_milDispForInspectionResult;             //	ディスプレイID(検査結果表示用)
-        public static MIL_ID m_milInspectionResultImage;           //	画像バッファ(検査結果表示用)
-        public static MIL_ID m_milOverLayForInspectionResult;          //	オーバーレイバッファ(検査結果表示用)
-        public static double m_dNowMagForInspectionResult;             //	現在の検査結果表示画像の倍率
-        public static MIL_ID m_milDraphicSaveImage;                        //	グラフィックを画像に保存するためのバッファ
+        protected static IntPtr m_hWndForInspectionResult;  //	ウインドウのハンドル(検査結果表示用)
+        protected static MIL_ID m_milDispForInspectionResult;             //	ディスプレイID(検査結果表示用)
+        protected static MIL_ID m_milInspectionResultImage;           //	画像バッファ(検査結果表示用)
+        protected static MIL_ID m_milOverLayForInspectionResult;          //	オーバーレイバッファ(検査結果表示用)
+        protected static double m_dNowMagForInspectionResult;             //	現在の検査結果表示画像の倍率
+        protected static MIL_ID m_milDraphicSaveImage;                        //	グラフィックを画像に保存するためのバッファ
 
-        public bool m_bFatalErrorOccured;   //	致命的なエラー発生(ソフト再起動必須)
+        protected bool m_bFatalErrorOccured;   //	致命的なエラー発生(ソフト再起動必須)
 
-        public static MIL_ID m_milInspectionResultImageTemp;
-        public static double m_dFrameRate;         //	カメラのフレームレート(FPS)
-        public static string m_strIPAddress;           //  カメラのIPアドレス
+        protected static MIL_ID m_milInspectionResultImageTemp;
+        protected static double m_dFrameRate;         //	カメラのフレームレート(FPS)
+        protected static string m_strIPAddress;           //  カメラのIPアドレス
+        protected static double m_dGain;         //	カメラのゲイン
 
-        public static int m_iEachLightPatternMatching; //照明毎にパターンマッチングを行うか否か　1:照明毎にパターンマッチング行う　0:一つの照明のみでパターンマッチング
 
-        public static List<MIL_ID> m_lstImageGrab;		// ImageGrabのリスト
+        protected static int m_iEachLightPatternMatching; //照明毎にパターンマッチングを行うか否か　1:照明毎にパターンマッチング行う　0:一つの照明のみでパターンマッチング
 
-        public bool m_bDebugON;                //	デバッグ情報を出力する
-        public string m_strDebugFolder;        //	デバッグ情報出力フォルダー
-        public string m_strIniFilePAth = ".\\file.ini";
-        public static string m_strDebugFileIdentifiedName;
+        protected static List<MIL_ID> m_lstImageGrab;		// ImageGrabのリスト
+
+        protected bool m_bDebugON;                //	デバッグ情報を出力する
+        protected string m_strDebugFolder;        //	デバッグ情報出力フォルダー
+        protected string m_strIniFilePAth = ".\\file.ini";
+        protected static string m_strDebugFileIdentifiedName;
         private string m_strExePath = AppDomain.CurrentDomain.BaseDirectory.TrimEnd('\\');
         private Encoding m_Encoding = Encoding.GetEncoding("Shift_JIS");
+
+        
+        public event EventHandlerVoid m_evDiffImage;
+
         #endregion
 
         public CMatroxCommon()
@@ -84,8 +91,10 @@ namespace ImageMatrox
             m_milOverLay = MIL.M_NULL;
             m_milOverLayForInspectionResult = MIL.M_NULL;
             m_milDraphicSaveImage = MIL.M_NULL;
-            m_milImageGrab = new MIL_ID[MAX_IMAGE_GRAB_NUM] { 0, 0 };
-            m_milAverageImageGrab = new MIL_ID[MAX_AVERAGE_IMAGE_GRAB_NUM] { 0, 0 };
+            //m_milImageGrab = new MIL_ID[MAX_IMAGE_GRAB_NUM] { 0, 0 };
+            m_milImageGrab = new MIL_ID[MAX_IMAGE_GRAB_NUM];
+            //m_milAverageImageGrab = new MIL_ID[MAX_AVERAGE_IMAGE_GRAB_NUM] { 0, 0 };
+            m_milAverageImageGrab = new MIL_ID[MAX_AVERAGE_IMAGE_GRAB_NUM];
             m_milAverageImageCalc = MIL.M_NULL;
             m_milInspectionResultImage = MIL.M_NULL;
             m_milInspectionResultImageTemp = MIL.M_NULL;
@@ -106,6 +115,7 @@ namespace ImageMatrox
             m_strDebugFileIdentifiedName = "";
             m_bDebugON = true;
             m_strDebugFolder = ".\\DebugFile\\";
+            m_lstImageGrab = new List<MIL_ID> {};
         }
 
         public int Initial(IntPtr nhDispHandle, string nstrSettingPath)
@@ -185,6 +195,7 @@ namespace ImageMatrox
 
             //	ディスプレイID取得
 
+            //MIL.MdispAlloc(m_milSys, MIL.M_DEFAULT, "M_DEFAULT", MIL.M_DEFAULT, ref m_milDisp);
             MIL.MdispAlloc(m_milSys, MIL.M_DEFAULT, "M_DEFAULT", MIL.M_DEFAULT, ref m_milDisp);
             if (m_milDisp == MIL.M_NULL)
             {
@@ -199,6 +210,7 @@ namespace ImageMatrox
 
             if (m_iBoardType != (int)MTX_TYPE.MTX_HOST)
             {
+                int rec = 0;
                 //	デジタイザID取得
 
                 if (m_strIPAddress != "")
@@ -309,35 +321,37 @@ namespace ImageMatrox
                 string DeviceVendorName = str_vendor_name.ToString();
                 // ********** Sonyカメラの対応が未設定ではあるが、ここでの処理は重要ではないためすっ飛ばす	2021/03/12 ***************************************
                 //	Basler initial
-                //if( strstr(str_vendor_name,"Basler") != NULL )
+                //if (DeviceVendorName.IndexOf("Basler") != -1)
                 //{
-                //	MIL_INT32 i_gain_raw = 301;
-                //	double d_frame_rate_abs = m_dFrameRate;
-                //	double d_exposure_time_abs = (1.0 / m_dFrameRate)*1.0e6 - 100.0;
-                //	MIL_BOOL b_acquition_frame_rate_enable = MIL.M_TRUE;
-                //	MdigControlFeature(m_milDigitizer,M_FEATURE_VALUE_AS_STRING,("GainAuto"),M_TYPE_ENUMERATION,("Off"));
-                //	MdigControlFeature(m_milDigitizer,M_FEATURE_VALUE_AS_STRING,("ExposureAuto"),M_TYPE_ENUMERATION,("Off"));
-                //	MdigControlFeature(m_milDigitizer,M_FEATURE_VALUE,("AcquisitionFrameRateEnable"),M_TYPE_BOOLEAN,&b_acquition_frame_rate_enable);
-                //	MdigControlFeature(m_milDigitizer,M_FEATURE_VALUE,("GainRaw"),M_TYPE_MIL_INT32 ,&i_gain_raw);
-                //	MdigControlFeature(m_milDigitizer,M_FEATURE_VALUE,("AcquisitionFrameRateAbs"),M_TYPE_DOUBLE ,&d_frame_rate_abs);
-                //	MdigControlFeature(m_milDigitizer,M_FEATURE_VALUE,("ExposureTimeAbs"),M_TYPE_DOUBLE ,&d_exposure_time_abs);
+                //    int i_gain_raw = 301;
+                //    double d_frame_rate_abs = m_dFrameRate;
+                //    double d_exposure_time_abs = (1.0 / m_dFrameRate) * 1.0e6 - 100.0;
+                //    bool b_acquition_frame_rate_enable = true;
+                //    MIL.MdigControlFeature(m_milDigitizer, MIL.M_FEATURE_VALUE_AS_STRING, ("GainAuto"), MIL.M_TYPE_ENUMERATION, ("Off"));
+                //    MIL.MdigControlFeature(m_milDigitizer, MIL.M_FEATURE_VALUE_AS_STRING, ("ExposureAuto"), MIL.M_TYPE_ENUMERATION, ("Off"));
+                //    MIL.MdigControlFeature(m_milDigitizer, MIL.M_FEATURE_VALUE, ("AcquisitionFrameRateEnable"), MIL.M_TYPE_BOOLEAN,  ref b_acquition_frame_rate_enable);
+                //    MIL.MdigControlFeature(m_milDigitizer, MIL.M_FEATURE_VALUE, ("GainRaw"), MIL.M_TYPE_MIL_INT32, ref i_gain_raw);
+                //    MIL.MdigControlFeature(m_milDigitizer, MIL.M_FEATURE_VALUE, ("AcquisitionFrameRateAbs"), MIL.M_TYPE_DOUBLE, ref d_frame_rate_abs);
+                //    MIL.MdigControlFeature(m_milDigitizer, MIL.M_FEATURE_VALUE, ("ExposureTimeAbs"), MIL.M_TYPE_DOUBLE, ref d_exposure_time_abs);
                 //}
                 ////	Point grey initial
                 //else
                 //{
-                //	double d_blackLevel = 0.0;
-                //	double d_gain = 00.0;
-                //	double d_frame_rate = m_dFrameRate;
-                //	double d_exposure_time = (1.0 / m_dFrameRate)*1.0e6 - 1000.0;
-                //	MdigControlFeature(m_milDigitizer,M_FEATURE_VALUE_AS_STRING,("GainAuto"),M_TYPE_ENUMERATION,("Off"));
-                //	MdigControlFeature(m_milDigitizer,M_FEATURE_VALUE_AS_STRING,("ExposureAuto"),M_TYPE_ENUMERATION,("Off"));
-                //	MdigControlFeature(m_milDigitizer,M_FEATURE_VALUE_AS_STRING,("AcquisitionFrameRateAuto"),M_TYPE_ENUMERATION,("Off"));
-                //	MdigControlFeature(m_milDigitizer,M_FEATURE_VALUE,("BlackLevel"),M_TYPE_DOUBLE ,&d_blackLevel);
-                //	MdigControlFeature(m_milDigitizer,M_FEATURE_VALUE,("Gain"),M_TYPE_DOUBLE ,&d_gain);
-                //	MdigControlFeature(m_milDigitizer,M_FEATURE_VALUE,("AcquisitionFrameRate"),M_TYPE_DOUBLE ,&d_frame_rate);
-                //	MdigControlFeature(m_milDigitizer,M_FEATURE_VALUE,("ExposureTime"),M_TYPE_DOUBLE ,&d_exposure_time);
+                //    double d_blackLevel = 30.0;
+                //    double d_gain = m_dGain;
+                //    double d_frame_rate = m_dFrameRate;
+                //    double d_exposure_time = (1.0 / m_dFrameRate) * 1.0e6 - 1000.0;
 
-                //	MdigControlFeature(m_milDigitizer, MIL.M_FEATURE_VALUE, ("PixelFormat"), MIL.M_TYPE_STRING, ("Mono8"));
+                //    MIL.MdigControlFeature(m_milDigitizer, MIL.M_FEATURE_VALUE_AS_STRING, ("GainAuto"), MIL.M_TYPE_ENUMERATION, ("Off"));
+                //    MIL.MdigControlFeature(m_milDigitizer, MIL.M_FEATURE_VALUE_AS_STRING, ("ExposureAuto"), MIL.M_TYPE_ENUMERATION, ("Off"));
+                //    MIL.MdigControlFeature(m_milDigitizer, MIL.M_FEATURE_VALUE_AS_STRING, ("AcquisitionFrameRateAuto"), MIL.M_TYPE_ENUMERATION, ("Off"));
+
+                //    MIL.MdigControlFeature(m_milDigitizer, MIL.M_FEATURE_VALUE, ("BlackLevel"), MIL.M_TYPE_DOUBLE, ref d_blackLevel);
+                //    MIL.MdigControlFeature(m_milDigitizer, MIL.M_FEATURE_VALUE, ("Gain"), MIL.M_TYPE_DOUBLE, ref d_gain);
+                //    MIL.MdigControlFeature(m_milDigitizer, MIL.M_FEATURE_VALUE, ("AcquisitionFrameRate"), MIL.M_TYPE_DOUBLE, ref d_frame_rate);
+                //    MIL.MdigControlFeature(m_milDigitizer, MIL.M_FEATURE_VALUE, ("ExposureTime"), MIL.M_TYPE_DOUBLE, ref d_exposure_time);
+
+                //    MIL.MdigControlFeature(m_milDigitizer, MIL.M_FEATURE_VALUE, ("PixelFormat"), MIL.M_TYPE_STRING, ("Mono8"));
 
                 //}
             }
@@ -382,9 +396,9 @@ namespace ImageMatrox
             {
                 cs_ini_file = nstrSettingPath + "\\ImageProcess.ini";
             }
-
+            m_strIniFilePAth = cs_ini_file;
             //	DCFファイルパス
-            GetPrivateProfileString("Matrox", "CameraFile", "0", buff, 256, m_strIniFilePAth);
+            GetPrivateProfileString("Matrox", "CameraFile", "", buff, 256, m_strIniFilePAth);
             m_strCameraFilePath = buff.ToString();
             m_strCameraFilePath = "PRM\\" + m_strCameraFilePath;
 
@@ -404,6 +418,14 @@ namespace ImageMatrox
             if (m_dFrameRate <= 0.0)
             {
                 m_dFrameRate = 10.0;
+            }
+
+            //	Gain(ゲイン)
+            GetPrivateProfileString("Matrox", "Gain", "10", buff, 256, m_strIniFilePAth);
+            m_dGain = Int64.Parse(buff.ToString());
+            if (m_dGain <= 0.0)
+            {
+                m_dGain = 10.0;
             }
 
             //  カメラのIPアドレス
@@ -1206,9 +1228,38 @@ namespace ImageMatrox
             6.備考
                 なし
         ------------------------------------------------------------------------------------------*/
-        public int setDiffOrgImage()
+        public int setDiffOrgImage(bool nbNowDiffMode)
         {
             MIL.MbufCopy(m_milShowImage, m_milDiffOrgImage);
+            m_bNowDiffMode = nbNowDiffMode;
+            return 0;
+        }
+        /*------------------------------------------------------------------------------------------
+            1.日本語名
+                差分モードを開始する
+
+            2.パラメタ説明
+
+
+            3.概要
+                差分モードを開始する
+
+            4.機能説明
+                差分モードを開始する
+
+            5.戻り値
+                -1:差分用オリジナル画像が設定されていません。
+                0 ;正常終了 
+
+            6.備考
+                なし
+        ------------------------------------------------------------------------------------------*/
+        public int setDiffMode()
+        {
+            if (m_milDiffOrgImage == MIL.M_NULL)
+            {
+                return -1;
+            }
             m_bNowDiffMode = true;
             return 0;
         }
@@ -1236,6 +1287,7 @@ namespace ImageMatrox
             m_bNowDiffMode = false;
         }
 
+        
         /*------------------------------------------------------------------------------------------
             1.日本語名
                 検査結果表示用ウインドウのハンドルをセットする

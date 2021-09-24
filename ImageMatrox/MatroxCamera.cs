@@ -10,9 +10,13 @@ namespace ImageMatrox
 {
     public class CMatroxCamera : CMatroxCommon
     {
+        GCHandle hUserData_ProcessingFunction;
+        CMatroxCamera p_matrox;
+        GCHandle hUserData_doThrough;
+        MIL_DIG_HOOK_FUNCTION_PTR ProcessingFunctionPtr;
         public CMatroxCamera()
         {
-
+            
         }
         public int doThrough()
         {
@@ -20,6 +24,10 @@ namespace ImageMatrox
             {
                 return -1;
             }
+
+            //MIL.MbufAllocColor(m_milSys, 3, m_szImageSize.Width, m_szImageSize.Height, 8 + MIL.M_UNSIGNED, MIL.M_IMAGE + MIL.M_PROC + MIL.M_PACKED + MIL.M_BGR24, ref m_milOriginalImage);
+            //MIL.MbufAllocColor(m_milSys, 3, m_szImageSize.Width, m_szImageSize.Height, 8 + MIL.M_UNSIGNED, MIL.M_IMAGE + MIL.M_PROC + MIL.M_PACKED + MIL.M_BGR24, ref m_milShowImage);
+            //MIL.MbufAllocColor(m_milSys, 3, m_szImageSize.Width, m_szImageSize.Height, 8 + MIL.M_UNSIGNED, MIL.M_IMAGE + MIL.M_PROC + MIL.M_PACKED + MIL.M_BGR24, ref m_milMonoImage);
 
             if (m_bThroughFlg == false)
             {
@@ -31,13 +39,12 @@ namespace ImageMatrox
                 }
                 if (m_iBoardType != (int)MTX_TYPE.MTX_HOST)
                 {
-                    GCHandle hUserData = GCHandle.Alloc(this);
-                    MIL_DIG_HOOK_FUNCTION_PTR ProcessingFunction = hUserData.Target as MIL_DIG_HOOK_FUNCTION_PTR;
+                    hUserData_doThrough = GCHandle.Alloc(this);
+                    ProcessingFunctionPtr = new MIL_DIG_HOOK_FUNCTION_PTR(ProcessingFunction);
                     //	フック関数を使用する
                     MIL.MdigProcess(m_milDigitizer, m_milImageGrab, MAX_IMAGE_GRAB_NUM,
-                                        MIL.M_START, MIL.M_DEFAULT, ProcessingFunction, GCHandle.ToIntPtr(hUserData));
+                                        MIL.M_START, MIL.M_DEFAULT, ProcessingFunctionPtr, GCHandle.ToIntPtr(hUserData_doThrough));
                 }
-
                 m_bThroughFlg = true;
             }
 
@@ -75,10 +82,11 @@ namespace ImageMatrox
                 if (m_iBoardType != (int)MTX_TYPE.MTX_HOST)
                 {
                     GCHandle hUserData = GCHandle.Alloc(this);
-                    MIL_DIG_HOOK_FUNCTION_PTR ProcessingFunction = hUserData.Target as MIL_DIG_HOOK_FUNCTION_PTR;
+                    MIL_DIG_HOOK_FUNCTION_PTR ProcessingFunctionPtr = new MIL_DIG_HOOK_FUNCTION_PTR(ProcessingFunction);
                     //	フック関数を使用する
                     MIL.MdigProcess(m_milDigitizer, m_milImageGrab, MAX_IMAGE_GRAB_NUM,
-                                MIL.M_STOP + MIL.M_WAIT, MIL.M_DEFAULT, ProcessingFunction, GCHandle.ToIntPtr(hUserData));
+                                MIL.M_STOP + MIL.M_WAIT, MIL.M_DEFAULT, ProcessingFunctionPtr, GCHandle.ToIntPtr(hUserData));
+                    //MIL.MdigHalt(m_milDigitizer);
                 }
 
                 m_bThroughFlg = false;
@@ -107,34 +115,36 @@ namespace ImageMatrox
         ------------------------------------------------------------------------------------------*/
         protected MIL_INT ProcessingFunction(MIL_INT nlHookType, MIL_ID nEventId, IntPtr npUserDataPtr)
         {
-            MIL_ID mil_modified_image = MIL.M_NULL;
-
-            nlHookType = 0;
-            //　送られてきたポインタをマトロックスクラスポインタにキャスティングする
-            GCHandle hUserData = GCHandle.FromIntPtr(npUserDataPtr);
-            CMatroxCamera p_matrox = hUserData.Target as CMatroxCamera;
-            //　変更されたバッファIDを取得する
-            MIL.MdigGetHookInfo(nEventId, MIL.M_MODIFIED_BUFFER + MIL.M_BUFFER_ID, ref mil_modified_image);
-
-            MIL.MbufCopy(mil_modified_image, p_matrox.m_milOriginalImage);
-            //	表示用画像バッファにコピーする
-            if (p_matrox.IsDiffMode() == true)
+            if (!IntPtr.Zero.Equals(npUserDataPtr))
             {
-                p_matrox.makeDiffImage();
-            }
-            else
-            {
-                MIL.MbufCopy(mil_modified_image, p_matrox.m_milShowImage);
-                MIL.MbufCopy(mil_modified_image, p_matrox.m_milMonoImage);
-            }
+                MIL_ID mil_modified_image = MIL.M_NULL;
 
-            // リスト化する(リングバッファ数以上あれば削除)
-            m_lstImageGrab.Add(mil_modified_image);
-            while (MAX_AVERAGE_IMAGE_GRAB_NUM < m_lstImageGrab.Count())
-            {
-                m_lstImageGrab.RemoveAt(0);
-            }
+                nlHookType = 0;
+                //　送られてきたポインタをマトロックスクラスポインタにキャスティングする
+                hUserData_ProcessingFunction = GCHandle.FromIntPtr(npUserDataPtr);
+                p_matrox = hUserData_ProcessingFunction.Target as CMatroxCamera;
+                //　変更されたバッファIDを取得する
+                MIL.MdigGetHookInfo(nEventId, MIL.M_MODIFIED_BUFFER + MIL.M_BUFFER_ID, ref mil_modified_image);
+                MIL.MbufCopy(mil_modified_image, CMatroxCamera.m_milOriginalImage);
+                //	表示用画像バッファにコピーする
+                if (p_matrox.IsDiffMode() == true)
+                {
+                    p_matrox.makeDiffImage();
+                }
+                else
+                {
+                    MIL.MbufCopy(mil_modified_image, CMatroxCamera.m_milShowImage);
+                    MIL.MbufCopy(mil_modified_image, CMatroxCamera.m_milMonoImage);
+                }
 
+                // リスト化する(リングバッファ数以上あれば削除)
+                m_lstImageGrab.Add(mil_modified_image);
+                while (MAX_AVERAGE_IMAGE_GRAB_NUM < m_lstImageGrab.Count())
+                {
+                    m_lstImageGrab.RemoveAt(0);
+                }
+                //MIL.MimArith(mil_modified_image, MIL.M_NULL, CMatroxCamera.m_milShowImage, MIL.M_NOT);
+            }
             return (0);
         }
         /*------------------------------------------------------------------------------------------
@@ -199,10 +209,11 @@ namespace ImageMatrox
             6.備考
                 なし
         ------------------------------------------------------------------------------------------*/
-        public void makeDiffImage()
+        public int makeDiffImage()
         {
             //	直前と今の画像の絶対値差分を取る
             MIL.MimArith(m_milOriginalImage, m_milDiffOrgImage, m_milShowImage, MIL.M_SUB_ABS + MIL.M_SATURATION);
+            return 0;
         }
 
         /*------------------------------------------------------------------------------------------
