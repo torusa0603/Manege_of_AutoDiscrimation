@@ -626,7 +626,7 @@ namespace ImageMatrox
         ------------------------------------------------------------------------------------------*/
         public int sifsetDiffOrgImage()
         {
-            return pMatroxCommon.setDiffOrgImage(true);
+            return pMatroxCommon.setDiffOrgImage(1);
 
         }
         /*------------------------------------------------------------------------------------------
@@ -651,7 +651,10 @@ namespace ImageMatrox
         public void sifanalyzeDiffImage(int niSleepTime)
         {
             TimerCallback timerDelegate = new TimerCallback(analyzeDiffImage);
-            Timer timer = new Timer(timerDelegate, null, 0, niSleepTime);
+            Thread.Sleep(1000);
+
+            pMatroxCommon.setDiffOrgImage(0);
+            Timer timer = new Timer(timerDelegate, null, niSleepTime, niSleepTime);
         }
 
         /*------------------------------------------------------------------------------------------
@@ -675,19 +678,13 @@ namespace ImageMatrox
         ------------------------------------------------------------------------------------------*/
         private void analyzeDiffImage(object o)
         {
-            int i_ret;
-            i_ret = pMatroxCommon.setDiffMode();
+            int i_ret = -1;
+            i_ret = pMatroxImageProcess.discriminantDiffImage(20);
             if (i_ret == 0)
             {
-                //ファイル保存
-                pMatroxCommon.resetDiffMode();
-                //i_ret = 差分画像の解析
-                if (i_ret == 0)
-                {
-                    DiffImageEvent();
-                }
+                DiffImageEvent();
             }
-            pMatroxCommon.setDiffOrgImage(false);
+            pMatroxCommon.setDiffOrgImage(0);
         }
 
 
@@ -1241,7 +1238,7 @@ namespace ImageMatrox
         ------------------------------------------------------------------------------------------*/
         public int sifGetMonoBitmapData(long nlArySize, byte[] npbyteData)
         {
-            return pMatroxCommon.getMonoBitmapData(nlArySize,ref npbyteData);
+            return pMatroxCommon.getMonoBitmapData(nlArySize, ref npbyteData);
         }
 
         /*------------------------------------------------------------------------------------------

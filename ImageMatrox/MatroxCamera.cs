@@ -126,15 +126,20 @@ namespace ImageMatrox
                 //　変更されたバッファIDを取得する
                 MIL.MdigGetHookInfo(nEventId, MIL.M_MODIFIED_BUFFER + MIL.M_BUFFER_ID, ref mil_modified_image);
                 MIL.MbufCopy(mil_modified_image, CMatroxCamera.m_milOriginalImage);
+                MIL.MbufCopy(mil_modified_image, CMatroxCamera.m_milShowImage);
                 //	表示用画像バッファにコピーする
-                if (p_matrox.IsDiffMode() == true)
+                if (p_matrox.IsDiffMode() == 0)
                 {
-                    p_matrox.makeDiffImage();
+                    MIL.MbufCopy(mil_modified_image, CMatroxCamera.m_milMonoImage);
                 }
                 else
                 {
-                    MIL.MbufCopy(mil_modified_image, CMatroxCamera.m_milShowImage);
-                    MIL.MbufCopy(mil_modified_image, CMatroxCamera.m_milMonoImage);
+                    p_matrox.makeDiffImage();
+                    MIL.MbufCopy(CMatroxCamera.m_milDiffDstImage, CMatroxCamera.m_milMonoImage);
+                    if (p_matrox.IsDiffMode() == 1)
+                    {
+                        MIL.MbufCopy(CMatroxCamera.m_milDiffDstImage, CMatroxCamera.m_milShowImage);
+                    }
                 }
 
                 // リスト化する(リングバッファ数以上あれば削除)
@@ -212,7 +217,7 @@ namespace ImageMatrox
         public int makeDiffImage()
         {
             //	直前と今の画像の絶対値差分を取る
-            MIL.MimArith(m_milOriginalImage, m_milDiffOrgImage, m_milShowImage, MIL.M_SUB_ABS + MIL.M_SATURATION);
+            MIL.MimArith(m_milOriginalImage, m_milDiffOrgImage, m_milDiffDstImage, MIL.M_SUB_ABS + MIL.M_SATURATION);
             return 0;
         }
 

@@ -24,6 +24,7 @@ namespace ImageMatrox
         protected static MIL_ID m_milPreShowImage;        //	1つ前にグラブした画像バッファ
         protected static MIL_ID m_milDiffOrgImage;        //	差分用オリジナル画像
         protected static MIL_ID m_milDiffTargetImage;     //	差分用ターゲット画像
+        protected static MIL_ID m_milDiffDstImage;        //	差分結果画像
         protected static MIL_ID[] m_milImageGrab;   //	画像バッファ(グラブ専用)
         protected static MIL_ID[] m_milAverageImageGrab;    //	平均化用画像バッファ(グラブ専用)
         protected static MIL_ID m_milAverageImageCalc;    //	平均化用画像バッファ(積算用)
@@ -36,11 +37,11 @@ namespace ImageMatrox
         protected static Size m_szImageSizeForCamera;
         protected static int m_iBoardType;            //	使用ボードタイプ
         protected static int m_iNowColor;         //	現在のカラー
-        protected static bool m_bMainInitialFinished;
+        protected static bool m_bMainInitialFinished; //初期処理完了済みかを示す
         protected static bool m_bThroughFlg;          //	スルーならばTrue、フリーズならFalse
         protected static double m_dNowMag;                //	現在の表示画像の倍率
         protected static IntPtr m_hWnd;                 //	ウインドウのハンドル
-        protected static bool m_bNowDiffMode;         //	現在差分表示モードか否か
+        protected static int m_bNowDiffMode;         //	現在差分表示モード(0:否, 1:肯_表示あり, 2:肯_表示なし)
         protected readonly MIL_INT TRANSPARENT_COLOR = MIL.M_RGB888(1, 1, 1);      //透過色
 
         protected static IntPtr m_hWndForInspectionResult;  //	ウインドウのハンドル(検査結果表示用)
@@ -86,6 +87,7 @@ namespace ImageMatrox
             m_milMonoImage = MIL.M_NULL;
             m_milDiffOrgImage = MIL.M_NULL;
             m_milDiffTargetImage = MIL.M_NULL;
+            m_milDiffDstImage = MIL.M_NULL;
             m_milOriginalImage = MIL.M_NULL;
             m_milGraphic = MIL.M_NULL;
             m_milOverLay = MIL.M_NULL;
@@ -107,7 +109,7 @@ namespace ImageMatrox
             m_iNowColor = 0;
             m_dNowMag = 1.0;
             m_dNowMagForInspectionResult = 1.0;
-            m_bNowDiffMode = false;
+            m_bNowDiffMode = 0;
             m_dFrameRate = 10.0;
             m_bFatalErrorOccured = false;
             m_strIPAddress = "";
@@ -245,6 +247,8 @@ namespace ImageMatrox
             MIL.MbufAllocColor(m_milSys, 3, m_szImageSize.Width, m_szImageSize.Height, 8 + MIL.M_UNSIGNED, MIL.M_IMAGE + MIL.M_PROC + MIL.M_PACKED + MIL.M_BGR24, ref m_milPreShowImage);
             //	差分用オリジナル画像バッファ
             MIL.MbufAllocColor(m_milSys, 3, m_szImageSize.Width, m_szImageSize.Height, 8 + MIL.M_UNSIGNED, MIL.M_IMAGE + MIL.M_PROC + MIL.M_PACKED + MIL.M_BGR24, ref m_milDiffOrgImage);
+            //	差分結果画像バッファ
+            MIL.MbufAllocColor(m_milSys, 3, m_szImageSize.Width, m_szImageSize.Height, 8 + MIL.M_UNSIGNED, MIL.M_IMAGE + MIL.M_PROC + MIL.M_PACKED + MIL.M_BGR24, ref m_milDiffDstImage);
             //	平均化用積算画像バッファ
             MIL.MbufAllocColor(m_milSys, 3, m_szImageSize.Width, m_szImageSize.Height, 16 + MIL.M_UNSIGNED, MIL.M_IMAGE + MIL.M_PROC, ref m_milAverageImageCalc);
             //検査結果表示用画像バッファ
@@ -252,6 +256,7 @@ namespace ImageMatrox
             //グラフィックを画像に保存するためのバッファ
             MIL.MbufAllocColor(m_milSys, 3, m_szImageSize.Width, m_szImageSize.Height, 8 + MIL.M_UNSIGNED, MIL.M_IMAGE + MIL.M_PROC + MIL.M_DISP + MIL.M_PACKED + MIL.M_BGR24, ref m_milDraphicSaveImage);
 
+            
             if (m_iBoardType != (int)MTX_TYPE.MTX_HOST)
             {
                 for (i_loop = 0; i_loop < MAX_IMAGE_GRAB_NUM; i_loop++)
@@ -1228,7 +1233,7 @@ namespace ImageMatrox
             6.備考
                 なし
         ------------------------------------------------------------------------------------------*/
-        public int setDiffOrgImage(bool nbNowDiffMode)
+        public int setDiffOrgImage(int nbNowDiffMode)
         {
             MIL.MbufCopy(m_milShowImage, m_milDiffOrgImage);
             m_bNowDiffMode = nbNowDiffMode;
@@ -1254,13 +1259,13 @@ namespace ImageMatrox
             6.備考
                 なし
         ------------------------------------------------------------------------------------------*/
-        public int setDiffMode()
+        public int setDiffMode(int nbNowDiffMode)
         {
-            if (m_milDiffOrgImage == MIL.M_NULL)
+            if (nbNowDiffMode == 0)
             {
                 return -1;
             }
-            m_bNowDiffMode = true;
+            m_bNowDiffMode = nbNowDiffMode;
             return 0;
         }
         /*------------------------------------------------------------------------------------------
@@ -1284,7 +1289,7 @@ namespace ImageMatrox
         ------------------------------------------------------------------------------------------*/
         public void resetDiffMode()
         {
-            m_bNowDiffMode = false;
+            m_bNowDiffMode = 0;
         }
 
         
@@ -1864,7 +1869,7 @@ namespace ImageMatrox
                 return (MIL.M_NULL);
             }
         }
-        public bool IsDiffMode()
+        public int IsDiffMode()
         {
             return m_bNowDiffMode;
         }
