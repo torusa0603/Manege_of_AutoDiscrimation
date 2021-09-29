@@ -14,8 +14,19 @@ namespace ImageMatrox
         CMatroxCamera pMatroxCamera;
         CMatroxGraphic pMatroxGraphic;
         CMatroxImageProcess pMatroxImageProcess;
+        CancellationTokenSource token_source;
+        CancellationToken cansel_token;
 
         public event EventHandlerVoid DiffImageEvent;
+        
+        /// <summary>
+        /// デストラクタ
+        /// </summary>
+        ~extern_main()
+        {
+            token_source.Cancel();
+        }
+
         /*------------------------------------------------------------------------------------------
 	1.日本語名
 		画像処理ボードの初期化を行う関数
@@ -650,11 +661,15 @@ namespace ImageMatrox
         ------------------------------------------------------------------------------------------*/
         public void sifanalyzeDiffImage(int niSleepTime)
         {
-            TimerCallback timerDelegate = new TimerCallback(analyzeDiffImage);
+            token_source = new CancellationTokenSource();
+            cansel_token = token_source.Token;
+
+            //TimerCallback timerDelegate = new TimerCallback(analyzeDiffImage);
             Thread.Sleep(1000);
 
             pMatroxCommon.setDiffOrgImage(0);
-            Timer timer = new Timer(timerDelegate, null, niSleepTime, niSleepTime);
+            //Timer timer = new Timer(timerDelegate, null, niSleepTime, niSleepTime);
+            Task.Run(() => analyzeDiffImage(cansel_token, niSleepTime));
         }
 
         /*------------------------------------------------------------------------------------------
@@ -676,15 +691,24 @@ namespace ImageMatrox
             6.備考
                 なし
         ------------------------------------------------------------------------------------------*/
-        private void analyzeDiffImage(object o)
+        private void analyzeDiffImage(CancellationToken n_CaseToken, int niSleepTime)
         {
-            int i_ret = -1;
-            i_ret = pMatroxImageProcess.discriminantDiffImage(20);
-            if (i_ret == 0)
+            while(true)
             {
-                DiffImageEvent();
+                int i_ret = -1;
+                i_ret = pMatroxImageProcess.discriminantDiffImage(100);
+                if (i_ret == 0)
+                {
+                    DiffImageEvent();
+                }
+                pMatroxCommon.setDiffOrgImage(0);
+                Thread.Sleep(niSleepTime);
+                if (n_CaseToken.IsCancellationRequested)
+                {
+                    // ループを終了します。
+                    break;
+                }
             }
-            pMatroxCommon.setDiffOrgImage(0);
         }
 
 

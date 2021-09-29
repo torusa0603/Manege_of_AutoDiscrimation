@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Matrox.MatroxImagingLibrary;
 using System.Runtime.InteropServices;
 
+
 namespace ImageMatrox
 {
     public class CMatroxCamera : CMatroxCommon
@@ -14,6 +15,7 @@ namespace ImageMatrox
         CMatroxCamera p_matrox;
         GCHandle hUserData_doThrough;
         MIL_DIG_HOOK_FUNCTION_PTR ProcessingFunctionPtr;
+        public bool m_bWritableShowImageBaffa;
         public CMatroxCamera()
         {
             
@@ -25,10 +27,6 @@ namespace ImageMatrox
                 return -1;
             }
 
-            //MIL.MbufAllocColor(m_milSys, 3, m_szImageSize.Width, m_szImageSize.Height, 8 + MIL.M_UNSIGNED, MIL.M_IMAGE + MIL.M_PROC + MIL.M_PACKED + MIL.M_BGR24, ref m_milOriginalImage);
-            //MIL.MbufAllocColor(m_milSys, 3, m_szImageSize.Width, m_szImageSize.Height, 8 + MIL.M_UNSIGNED, MIL.M_IMAGE + MIL.M_PROC + MIL.M_PACKED + MIL.M_BGR24, ref m_milShowImage);
-            //MIL.MbufAllocColor(m_milSys, 3, m_szImageSize.Width, m_szImageSize.Height, 8 + MIL.M_UNSIGNED, MIL.M_IMAGE + MIL.M_PROC + MIL.M_PACKED + MIL.M_BGR24, ref m_milMonoImage);
-
             if (m_bThroughFlg == false)
             {
                 //	画像読み込み等でカメラのサイズと画像バッファのサイズが異なっている場合は、
@@ -39,6 +37,8 @@ namespace ImageMatrox
                 }
                 if (m_iBoardType != (int)MTX_TYPE.MTX_HOST)
                 {
+                    m_bWritableShowImageBaffa = true;
+
                     hUserData_doThrough = GCHandle.Alloc(this);
                     ProcessingFunctionPtr = new MIL_DIG_HOOK_FUNCTION_PTR(ProcessingFunction);
                     //	フック関数を使用する
@@ -117,38 +117,48 @@ namespace ImageMatrox
         {
             if (!IntPtr.Zero.Equals(npUserDataPtr))
             {
-                MIL_ID mil_modified_image = MIL.M_NULL;
-
-                nlHookType = 0;
-                //　送られてきたポインタをマトロックスクラスポインタにキャスティングする
-                hUserData_ProcessingFunction = GCHandle.FromIntPtr(npUserDataPtr);
-                p_matrox = hUserData_ProcessingFunction.Target as CMatroxCamera;
-                //　変更されたバッファIDを取得する
-                MIL.MdigGetHookInfo(nEventId, MIL.M_MODIFIED_BUFFER + MIL.M_BUFFER_ID, ref mil_modified_image);
-                MIL.MbufCopy(mil_modified_image, CMatroxCamera.m_milOriginalImage);
-                MIL.MbufCopy(mil_modified_image, CMatroxCamera.m_milShowImage);
-                //	表示用画像バッファにコピーする
-                if (p_matrox.IsDiffMode() == 0)
+                if (m_bWritableShowImageBaffa)
                 {
-                    MIL.MbufCopy(mil_modified_image, CMatroxCamera.m_milMonoImage);
+                    m_bWritableShowImageBaffa = false;
+
+                    MIL_ID mil_modified_image = MIL.M_NULL;
+
+                    nlHookType = 0;
+                    //　送られてきたポインタをマトロックスクラスポインタにキャスティングする
+                    hUserData_ProcessingFunction = GCHandle.FromIntPtr(npUserDataPtr);
+                    p_matrox = hUserData_ProcessingFunction.Target as CMatroxCamera;
+                    //　変更されたバッファIDを取得する
+                    MIL.MdigGetHookInfo(nEventId, MIL.M_MODIFIED_BUFFER + MIL.M_BUFFER_ID, ref mil_modified_image);
+                    MIL.MbufCopy(mil_modified_image, CMatroxCamera.m_milOriginalImage);
+                    MIL.MbufCopy(CMatroxCamera.m_milOriginalImage, CMatroxCamera.m_milShowImage);
+                    //	表示用画像バッファにコピーする
+                    if (p_matrox.IsDiffMode() == 0)
+                    {
+                        MIL.MbufCopy(mil_modified_image, CMatroxCamera.m_milMonoImage);
+                    }
+                    else
+                    {
+                        p_matrox.makeDiffImage();
+                        MIL.MbufCopy(CMatroxCamera.m_milDiffDstImage, CMatroxCamera.m_milMonoImage);
+                        if (p_matrox.IsDiffMode() == 1)
+                        {
+                            MIL.MbufCopy(CMatroxCamera.m_milDiffDstImage, CMatroxCamera.m_milShowImage);
+                        }
+                    }
+
+                    // リスト化する(リングバッファ数以上あれば削除)
+                    m_lstImageGrab.Add(mil_modified_image);
+                    while (MAX_AVERAGE_IMAGE_GRAB_NUM < m_lstImageGrab.Count())
+                    {
+                        m_lstImageGrab.RemoveAt(0);
+                    }
+                    //MIL.MimArith(mil_modified_image, MIL.M_NULL, CMatroxCamera.m_milShowImage, MIL.M_NOT);
+                    m_bWritableShowImageBaffa = true;
                 }
                 else
                 {
-                    p_matrox.makeDiffImage();
-                    MIL.MbufCopy(CMatroxCamera.m_milDiffDstImage, CMatroxCamera.m_milMonoImage);
-                    if (p_matrox.IsDiffMode() == 1)
-                    {
-                        MIL.MbufCopy(CMatroxCamera.m_milDiffDstImage, CMatroxCamera.m_milShowImage);
-                    }
-                }
 
-                // リスト化する(リングバッファ数以上あれば削除)
-                m_lstImageGrab.Add(mil_modified_image);
-                while (MAX_AVERAGE_IMAGE_GRAB_NUM < m_lstImageGrab.Count())
-                {
-                    m_lstImageGrab.RemoveAt(0);
                 }
-                //MIL.MimArith(mil_modified_image, MIL.M_NULL, CMatroxCamera.m_milShowImage, MIL.M_NOT);
             }
             return (0);
         }

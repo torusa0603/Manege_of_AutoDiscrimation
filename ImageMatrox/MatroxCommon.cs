@@ -72,6 +72,8 @@ namespace ImageMatrox
 
         
         public event EventHandlerVoid m_evDiffImage;
+        GCHandle hUserData_Error;
+        MIL_APP_HOOK_FUNCTION_PTR ProcessingFunctionPtr_Error;
 
         #endregion
 
@@ -140,11 +142,11 @@ namespace ImageMatrox
             MIL.MappControl(MIL.M_ERROR, MIL.M_PRINT_DISABLE);
             //	エラーフック関数登録
             // 本クラスのポインター
-            GCHandle hUserData = GCHandle.Alloc(this);
+            hUserData_Error = GCHandle.Alloc(this);
             // フック関数のポインタ
-            MIL_APP_HOOK_FUNCTION_PTR ProcessingFunctionPtr = new MIL_APP_HOOK_FUNCTION_PTR(hookErrorHandler);
+            ProcessingFunctionPtr_Error = new MIL_APP_HOOK_FUNCTION_PTR(hookErrorHandler);
             // 設定
-            MIL.MappHookFunction(MIL.M_ERROR_CURRENT, ProcessingFunctionPtr, GCHandle.ToIntPtr(hUserData));
+            MIL.MappHookFunction(MIL.M_ERROR_CURRENT, ProcessingFunctionPtr_Error, GCHandle.ToIntPtr(hUserData_Error));
 
             //	OSが64bitで、アプリケーションが32bitであるかどうかチェック
             //GetNativeSystemInfo(&SystemInfo);
@@ -554,11 +556,11 @@ namespace ImageMatrox
             //	エラーフックを解除
 
             // 本クラスのポインター
-            GCHandle hUserData = GCHandle.Alloc(this);
+            hUserData_Error = GCHandle.Alloc(this);
             // フック関数のポインタ
-            MIL_APP_HOOK_FUNCTION_PTR ProcessingFunctionPtr = new MIL_APP_HOOK_FUNCTION_PTR(hookErrorHandler);
+            ProcessingFunctionPtr_Error = new MIL_APP_HOOK_FUNCTION_PTR(hookErrorHandler);
             // 設定
-            MIL.MappHookFunction(MIL.M_ERROR_CURRENT + MIL.M_UNHOOK, ProcessingFunctionPtr, GCHandle.ToIntPtr(hUserData));
+            MIL.MappHookFunction(MIL.M_ERROR_CURRENT + MIL.M_UNHOOK, ProcessingFunctionPtr_Error, GCHandle.ToIntPtr(hUserData_Error));
 
             if (m_milSys != MIL.M_NULL)
             {
@@ -775,10 +777,15 @@ namespace ImageMatrox
             //	全画面保存
             if (nAllSaveFlg == true)
             {
-
+                
                 if (nbSaveMono == false)
                 {
-                    MIL.MbufExport(ncsFilePath, MIL.M_BMP, m_milShowImage);
+                    MIL_ID mil_save_image = MIL.M_NULL;
+                    MIL.MbufAllocColor(m_milSys, 3, m_szImageSize.Width, m_szImageSize.Height, 8 + MIL.M_UNSIGNED, MIL.M_IMAGE + MIL.M_PROC, ref mil_save_image);
+                    MIL.MbufCopy(m_milShowImage, mil_save_image);
+                    MIL.MbufExport(ncsFilePath, MIL.M_BMP, mil_save_image);
+                    MIL.MbufFree(mil_save_image);
+                    //MIL.MbufExport(ncsFilePath, MIL.M_BMP, m_milShowImage);
                 }
                 else
                 {

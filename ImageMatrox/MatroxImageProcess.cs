@@ -35,7 +35,7 @@ namespace ImageMatrox
             {
                 return -100;
             }
-
+            //画差分モードに変更
             setDiffMode(2);
             // 画像を確実に取得させるためのスリープ処理
             Thread.Sleep(100);
@@ -50,9 +50,9 @@ namespace ImageMatrox
             resetDiffMode();
             if (n_discriminantValue < i_pixel_value)
             {
-                string cs_file_path = "D: \\image" + "\\" + System.DateTime.Now.ToString("yyyyMMddHHmmssfff") + "_milOriImage" + ".bmp"; ;
-                RECT rect = new RECT(0, 0, 0, 0);
-                saveImage(rect, true, cs_file_path, false);
+                //string cs_file_path = "D: \\image" + "\\" + System.DateTime.Now.ToString("yyyyMMddHHmmssfff") + "_milOriImage" + ".bmp"; ;
+                //RECT rect = new RECT(0, 0, 0, 0);
+                //saveImage(rect, true, cs_file_path, false);
                 i_ret = 0;
             }
             else
