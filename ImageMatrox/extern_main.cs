@@ -696,7 +696,7 @@ namespace ImageMatrox
             while(true)
             {
                 int i_ret = -1;
-                i_ret = pMatroxImageProcess.discriminantDiffImage(100);
+                i_ret = pMatroxImageProcess.discriminantDiffImage(20);
                 if (i_ret == 0)
                 {
                     DiffImageEvent();
