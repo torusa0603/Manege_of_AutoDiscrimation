@@ -16,10 +16,16 @@ namespace ImageMatrox
         GCHandle hUserData_doThrough;
         MIL_DIG_HOOK_FUNCTION_PTR ProcessingFunctionPtr;
         public bool m_bWritableShowImageBaffa;
+        public bool m_ThroughSimple = false;
+
         public CMatroxCamera()
         {
             
         }
+        /// <summary>
+        /// フック関数を利用して画像表示を開始する
+        /// </summary>
+        /// <returns></returns>
         public int doThrough()
         {
             if (m_bMainInitialFinished == false)
@@ -35,6 +41,7 @@ namespace ImageMatrox
                 {
                     reallocMilImage(m_szImageSizeForCamera);
                 }
+
                 if (m_iBoardType != (int)MTX_TYPE.MTX_HOST)
                 {
                     m_bWritableShowImageBaffa = true;
@@ -45,31 +52,44 @@ namespace ImageMatrox
                     MIL.MdigProcess(m_milDigitizer, m_milImageGrab, MAX_IMAGE_GRAB_NUM,
                                         MIL.M_START, MIL.M_DEFAULT, ProcessingFunctionPtr, GCHandle.ToIntPtr(hUserData_doThrough));
                 }
+                m_ThroughSimple = false;
                 m_bThroughFlg = true;
             }
 
             return 0;
         }
 
-        /*------------------------------------------------------------------------------------------
-            1.日本語名
-                フリーズを行う
+        /// <summary>
+        /// MILの関数(MdigGrabContinuous)を利用して画像表示を開始する
+        /// </summary>
+        /// <returns></returns>
+        public int doThroughSimple()
+        {
+            if (m_bMainInitialFinished == false)
+            {
+                return -1;
+            }
 
-            2.パラメタ説明
-                なし
+            if (m_bThroughFlg == false)
+            {
+                //	画像読み込み等でカメラのサイズと画像バッファのサイズが異なっている場合は、
+                //	スルー前にカメラのサイズにバッファを合わせる
+                if (m_szImageSizeForCamera.Width != m_szImageSize.Width || m_szImageSizeForCamera.Height != m_szImageSize.Height)
+                {
+                    reallocMilImage(m_szImageSizeForCamera);
+                }
+                MIL.MdigGrabContinuous(m_milDigitizer, m_milShowImage);
+                m_ThroughSimple = true;
+                m_bThroughFlg = true;
+            }
 
-            3.概要
-                フリーズを行う
+            return 0;
+        }
 
-            4.機能説明
-                フリーズを行う
-
-            5.戻り値
-                ０
-
-            6.備考
-                なし
-        ------------------------------------------------------------------------------------------*/
+        /// <summary>
+        /// フリーズを行う
+        /// </summary>
+        /// <returns></returns>
         public int doFreeze()
         {
             if (m_bMainInitialFinished == false)
@@ -79,14 +99,21 @@ namespace ImageMatrox
 
             if (m_bThroughFlg == true)
             {
-                if (m_iBoardType != (int)MTX_TYPE.MTX_HOST)
+                if (m_ThroughSimple) 
                 {
-                    GCHandle hUserData = GCHandle.Alloc(this);
-                    MIL_DIG_HOOK_FUNCTION_PTR ProcessingFunctionPtr = new MIL_DIG_HOOK_FUNCTION_PTR(ProcessingFunction);
-                    //	フック関数を使用する
-                    MIL.MdigProcess(m_milDigitizer, m_milImageGrab, MAX_IMAGE_GRAB_NUM,
-                                MIL.M_STOP + MIL.M_WAIT, MIL.M_DEFAULT, ProcessingFunctionPtr, GCHandle.ToIntPtr(hUserData));
-                    //MIL.MdigHalt(m_milDigitizer);
+                    MIL.MdigHalt(m_milDigitizer);
+                }
+                else
+                {
+                    if (m_iBoardType != (int)MTX_TYPE.MTX_HOST)
+                    {
+                        GCHandle hUserData = GCHandle.Alloc(this);
+                        MIL_DIG_HOOK_FUNCTION_PTR ProcessingFunctionPtr = new MIL_DIG_HOOK_FUNCTION_PTR(ProcessingFunction);
+                        //	フック関数を使用する
+                        MIL.MdigProcess(m_milDigitizer, m_milImageGrab, MAX_IMAGE_GRAB_NUM,
+                                    MIL.M_STOP + MIL.M_WAIT, MIL.M_DEFAULT, ProcessingFunctionPtr, GCHandle.ToIntPtr(hUserData));
+                        //MIL.MdigHalt(m_milDigitizer);
+                    }
                 }
 
                 m_bThroughFlg = false;
@@ -94,25 +121,14 @@ namespace ImageMatrox
 
             return 0;
         }
-        /*------------------------------------------------------------------------------------------
-            1.日本語名
-                フック関数
 
-            2.パラメタ説明
-                なし
-
-            3.概要
-                画像のグラブを行う
-
-            4.機能説明
-                画像のグラブを行う
-
-            5.戻り値
-                ０
-
-            6.備考
-                なし
-        ------------------------------------------------------------------------------------------*/
+        /// <summary>
+        /// フック関数-カメラから画像を取得する
+        /// </summary>
+        /// <param name="nlHookType"></param>
+        /// <param name="nEventId"></param>
+        /// <param name="npUserDataPtr"></param>
+        /// <returns></returns>
         protected MIL_INT ProcessingFunction(MIL_INT nlHookType, MIL_ID nEventId, IntPtr npUserDataPtr)
         {
             if (!IntPtr.Zero.Equals(npUserDataPtr))
@@ -162,25 +178,10 @@ namespace ImageMatrox
             }
             return (0);
         }
-        /*------------------------------------------------------------------------------------------
-            1.日本語名
-                1枚画像をGrabする
 
-            2.パラメタ説明
-
-
-            3.概要
-                1枚画像をGrabする
-
-            4.機能説明
-                1枚画像をGrabする
-
-            5.戻り値
-                ０
-
-            6.備考
-                なし
-        ------------------------------------------------------------------------------------------*/
+        /// <summary>
+        /// 画像を一枚取得する
+        /// </summary>
         public void getOneGrab()
         {
             if (m_bMainInitialFinished == false)
@@ -205,25 +206,10 @@ namespace ImageMatrox
             return;
         }
 
-        /*------------------------------------------------------------------------------------------
-            1.日本語名
-                差分画像を作成する
-
-            2.パラメタ説明
-
-
-            3.概要
-                差分画像を作成する
-
-            4.機能説明
-                差分画像を作成する
-
-            5.戻り値
-                ０
-
-            6.備考
-                なし
-        ------------------------------------------------------------------------------------------*/
+        /// <summary>
+        /// 差分画像を作成する
+        /// </summary>
+        /// <returns></returns>
         public int makeDiffImage()
         {
             //	直前と今の画像の絶対値差分を取る
@@ -250,6 +236,14 @@ namespace ImageMatrox
             6.備考
                 なし
         ------------------------------------------------------------------------------------------*/
+        /// <summary>
+        /// 平均画像を取得する____
+        /// メモリー上では"m_milAverageImageCalc"に保存される
+        /// </summary>
+        /// <param name="niAverageNum">平均化に使用する画像枚数</param>
+        /// <param name="ncsFilePath">平均画像の保存ファイルパス</param>
+        /// <param name="nbSaveMono">平均画像のモノクロ化を行うかのフラグ</param>
+        /// <param name="nbSaveOnMemory">モノクロ平均画像をメモリー上にのみ保存を行うかのフラグ</param>
         public void getAveragedImageGrab(int niAverageNum, string ncsFilePath, bool nbSaveMono, bool nbSaveOnMemory)
         {
             bool b_now_through_flg;
@@ -353,25 +347,12 @@ namespace ImageMatrox
 
         }
 
-        /*------------------------------------------------------------------------------------------
-            1.日本語名
-                Gainと露光時間をセットする
-
-            2.パラメタ説明
-
-
-            3.概要
-                Gainと露光時間をセットする
-
-            4.機能説明
-                Gainと露光時間をセットする
-
-            5.戻り値
-
-
-            6.備考
-                なし
-        ------------------------------------------------------------------------------------------*/
+        /// <summary>
+        /// ゲインと露光時間を設定する
+        /// </summary>
+        /// <param name="ndGain">ゲイン値</param>
+        /// <param name="ndExposureTime">露光時間</param>
+        /// <returns></returns>
         public int setGainAndExposureTime(double ndGain, double ndExposureTime)
         {
             if (m_bMainInitialFinished == false)
@@ -403,25 +384,11 @@ namespace ImageMatrox
             return 0;
         }
 
-        /*------------------------------------------------------------------------------------------
-            1.日本語名
-                ブラックレベルをセットする
-
-            2.パラメタ説明
-
-
-            3.概要
-                ブラックレベルをセットする
-
-            4.機能説明
-                ブラックレベルをセットする
-
-            5.戻り値
-
-
-            6.備考
-                なし
-        ------------------------------------------------------------------------------------------*/
+        /// <summary>
+        /// ブラックレベルを設定する
+        /// </summary>
+        /// <param name="ndBlackLevel">ブラックレベル</param>
+        /// <returns></returns>
         public int setBlackLevel(double ndBlackLevel)
         {
             if (m_bMainInitialFinished == false)
@@ -451,25 +418,11 @@ namespace ImageMatrox
             return 0;
         }
 
-        /*------------------------------------------------------------------------------------------
-            1.日本語名
-                Gainをセットする
-
-            2.パラメタ説明
-
-
-            3.概要
-                Gainをセットする
-
-            4.機能説明
-                Gainをセットする
-
-            5.戻り値
-
-
-            6.備考
-                なし
-        ------------------------------------------------------------------------------------------*/
+        /// <summary>
+        /// ゲインを設定する
+        /// </summary>
+        /// <param name="ndGain">ゲイン値</param>
+        /// <returns></returns>
         public int setGain(double ndGain)
         {
             if (m_bMainInitialFinished == false)
@@ -499,25 +452,11 @@ namespace ImageMatrox
             return 0;
         }
 
-        /*------------------------------------------------------------------------------------------
-            1.日本語名
-                露光時間をセットする
-
-            2.パラメタ説明
-
-
-            3.概要
-                露光時間をセットする
-
-            4.機能説明
-                露光時間をセットする
-
-            5.戻り値
-
-
-            6.備考
-                なし
-        ------------------------------------------------------------------------------------------*/
+        /// <summary>
+        /// 露光時間を設定する
+        /// </summary>
+        /// <param name="ndExposureTime">露光時間</param>
+        /// <returns></returns>
         public int setExposureTime(double ndExposureTime)
         {
             if (m_bMainInitialFinished == false)
@@ -545,25 +484,12 @@ namespace ImageMatrox
             return 0;
         }
 
-        /*------------------------------------------------------------------------------------------
-            1.日本語名
-                ブラックレベルのMAX,MINを取得する
-
-            2.パラメタ説明
-
-
-            3.概要
-                ブラックレベルのMAX,MINを取得する
-
-            4.機能説明
-                ブラックレベルのMAX,MINを取得する
-
-            5.戻り値
-
-
-            6.備考
-                なし
-        ------------------------------------------------------------------------------------------*/
+        /// <summary>
+        /// ブラックレベルの最大値、最小値を取得する
+        /// </summary>
+        /// <param name="npdMax">最大値</param>
+        /// <param name="npdMin">最小値</param>
+        /// <returns></returns>
         public int getBlackLevelMaxMin(ref double npdMax, ref double npdMin)
         {
 
@@ -602,25 +528,12 @@ namespace ImageMatrox
             return 0;
         }
 
-        /*------------------------------------------------------------------------------------------
-            1.日本語名
-                GainのMAX,MINを取得する
-
-            2.パラメタ説明
-
-
-            3.概要
-                GainのMAX,MINを取得する
-
-            4.機能説明
-                GainのMAX,MINを取得する
-
-            5.戻り値
-
-
-            6.備考
-                なし
-        ------------------------------------------------------------------------------------------*/
+        /// <summary>
+        /// ゲインの最大値、最小値を取得する
+        /// </summary>
+        /// <param name="npdMax">最大値</param>
+        /// <param name="npdMin">最小値</param>
+        /// <returns></returns>
         public int getGainMaxMin(ref double npdMax, ref double npdMin)
         {
 
@@ -658,25 +571,12 @@ namespace ImageMatrox
             return 0;
         }
 
-        /*------------------------------------------------------------------------------------------
-            1.日本語名
-                露光時間のMAX,MINを取得する
-
-            2.パラメタ説明
-
-
-            3.概要
-                露光時間のMAX,MINを取得する
-
-            4.機能説明
-                露光時間のMAX,MINを取得する
-
-            5.戻り値
-
-
-            6.備考
-                なし
-        ------------------------------------------------------------------------------------------*/
+        /// <summary>
+        /// 露光時間の最大値、最小値を取得する
+        /// </summary>
+        /// <param name="npdMax">最大値</param>
+        /// <param name="npdMin">最小値</param>
+        /// <returns></returns>
         public int getExposureTimeMaxMin(ref double npdMax, ref double npdMin)
         {
 
@@ -708,25 +608,10 @@ namespace ImageMatrox
             return 0;
         }
 
-        /*------------------------------------------------------------------------------------------
-            1.日本語名
-                トリガモード オフ設定
-
-            2.パラメタ説明
-
-
-            3.概要
-                トリガモード オフ設定
-
-            4.機能説明
-
-
-            5.戻り値
-
-
-            6.備考
-                なし
-        ------------------------------------------------------------------------------------------*/
+        /// <summary>
+        /// トリガーモードをオフにする
+        /// </summary>
+        /// <returns></returns>
         public int setTriggerModeOff()
         {
 
@@ -756,25 +641,11 @@ namespace ImageMatrox
             return 0;
         }
 
-        /*------------------------------------------------------------------------------------------
-            1.日本語名
-                トリガモード ソフトウェア設定
-
-            2.パラメタ説明
-
-
-            3.概要
-                トリガモード ソフトウェア設定
-
-            4.機能説明
-
-
-            5.戻り値
-
-
-            6.備考
-                MILHelpのmilgige.cppを参考にする。
-        ------------------------------------------------------------------------------------------*/
+        /// <summary>
+        /// トリガーモードのソフトウェア設定____
+        /// MILHelpのmilgige.cppを参考にする
+        /// </summary>
+        /// <returns></returns>
         public int setTriggerModeSoftware()
         {
             if (m_bMainInitialFinished == false)
@@ -805,25 +676,11 @@ namespace ImageMatrox
             return 0;
         }
 
-        /*------------------------------------------------------------------------------------------
-            1.日本語名
-                トリガモード ハードウェア設定
-
-            2.パラメタ説明
-                nstrTrigger		トリガ名 (Ex.acA1300-30gmの場合Line1)
-
-            3.概要
-                トリガモード ハードウェア設定
-
-            4.機能説明
-
-
-            5.戻り値
-
-
-            6.備考
-                なし
-        ------------------------------------------------------------------------------------------*/
+        /// <summary>
+        /// トリガーモードのハードウェア設定
+        /// </summary>
+        /// <param name="nstrTrigger">トリガ名(Ex.acA1300-30gmの場合Line1)</param>
+        /// <returns></returns>
         public int setTriggerModeHardware(string nstrTrigger)
         {
 
@@ -855,25 +712,10 @@ namespace ImageMatrox
             return 0;
         }
 
-        /*------------------------------------------------------------------------------------------
-            1.日本語名
-                ソフトウェアトリガ実行
-
-            2.パラメタ説明
-
-
-            3.概要
-                ソフトウェアトリガ実行
-
-            4.機能説明
-
-
-            5.戻り値
-
-
-            6.備考
-                なし
-        ------------------------------------------------------------------------------------------*/
+        /// <summary>
+        /// ソフトウェアトリガー実行
+        /// </summary>
+        /// <returns></returns>
         public int executeSoftwareTrigger()
         {
             if (m_bMainInitialFinished == false)

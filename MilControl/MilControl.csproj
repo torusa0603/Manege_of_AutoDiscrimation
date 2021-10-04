@@ -50,6 +50,9 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ImageMatrox">
+      <HintPath>..\Manege_of_AutoDiscrimation\bin\Release\ImageMatrox.dll</HintPath>
+    </Reference>
     <Reference Include="Matrox.MatroxImagingLibrary">
       <HintPath>C:\Program Files\Matrox Imaging\MIL\MIL.NET\Matrox.MatroxImagingLibrary.dll</HintPath>
     </Reference>

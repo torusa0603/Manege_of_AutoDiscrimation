@@ -84,7 +84,7 @@ namespace CameraControl
 		///  FormやPandlであれば使える。またストレッチ表示等は出来ない。
 		///  ( IntPtr )nullを渡すとMILの画面が勝手に立ち上がる。
 		/// </remarks>
-		public override bool open( IntPtr nhDispHandle )
+		public override bool open( IntPtr nhDispHandle , bool nbThroughSimple)
 		{
 			bool			b_ret	= true;
 			string 			str_log;

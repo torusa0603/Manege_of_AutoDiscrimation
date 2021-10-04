@@ -14,7 +14,7 @@ namespace CameraControl
 	{
 		#region 継承先で必須の抽象メソッド
 		abstract public bool close();
-		abstract public bool open( IntPtr nhDispHandle );
+		abstract public bool open( IntPtr nhDispHandle, bool nbThroughSimple);
 		abstract public bool save_image( string nstrFilename );
 
 		abstract public bool set_trigger_mode_off();

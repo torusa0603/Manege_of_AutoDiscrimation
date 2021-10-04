@@ -78,11 +78,5 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SampleInspection.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\MilControl\MilControl.csproj">
-      <Project>{e22bc9d4-901e-4a9a-ad37-29fc946a5887}</Project>
-      <Name>MilControl</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
