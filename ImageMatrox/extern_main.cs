@@ -28,25 +28,12 @@ namespace ImageMatrox
             token_source.Cancel();
         }
 
-        /*------------------------------------------------------------------------------------------
-	1.日本語名
-		画像処理ボードの初期化を行う関数
-
-	2.パラメタ説明
-		nhDispHandle	画像ウインドウのハンドル
-
-	3.概要
-		画像処理ボードの初期化を行う
-
-	4.機能説明
-		画像処理ボードの初期化を行う
-
-	5.戻り値
-		0:OK
-
-	6.備考
-		なし
-------------------------------------------------------------------------------------------*/
+        /// <summary>
+        /// 画像処理ボードの初期化
+        /// </summary>
+        /// <param name="nhDispHandle">画像ウインドウのハンドル</param>
+        /// <param name="nchrSettingPath"></param>
+        /// <returns>0:OK</returns>
         public int sifInitializeImageProcess(IntPtr nhDispHandle, string nchrSettingPath)
         {
             int i_ret = 0;
@@ -99,25 +86,9 @@ namespace ImageMatrox
             return i_ret;
         }
 
-        /*------------------------------------------------------------------------------------------
-	1.日本語名
-		画像処理ボードのクローズ処理を行う関数
-
-	2.パラメタ説明
-		なし
-
-	3.概要
-		画像処理ボードの初期化を行う
-
-	4.機能説明
-		画像処理ボードの初期化を行う
-
-	5.戻り値
-		なし
-
-	6.備考
-		なし
-------------------------------------------------------------------------------------------*/
+        /// <summary>
+        /// 画像処理ボードのクローズ処理
+        /// </summary>
         public void sifCloseImageProcess()
         {
             if (pMatroxImageProcess != null)
@@ -159,29 +130,14 @@ namespace ImageMatrox
             }
         }
 
-        /*------------------------------------------------------------------------------------------
-	1.日本語名
-		指定した画像上のポイントの輝度値を取得する
-
-	2.パラメタ説明
-		 nNowPoint	: 画像上のポイント
-		 RValue		: Rの輝度値
-		 GValue		: Gの輝度値
-		 BValue		: Bの輝度値
-				
-	3.概要
-		指定した画像上のポイントの輝度値を取得する
-
-	4.機能説明
-		指定した画像上のポイントの輝度値を取得する
-
-	5.戻り値
-		0: 指定された位置に画像が存在した
-		-1:指定された位置に画像が存在しない
-
-	6.備考
-		なし
-------------------------------------------------------------------------------------------*/
+        /// <summary>
+        /// 指定した画像上のポイントの輝度値を取得
+        /// </summary>
+        /// <param name="nNowPoint">画像上のポイント</param>
+        /// <param name="RValue">Rの輝度値</param>
+        /// <param name="GValue">Gの輝度値</param>
+        /// <param name="BValue">Bの輝度値</param>
+        /// <returns>0: 指定された位置に画像が存在した  -1:指定された位置に画像が存在しない</returns>
         public int sifGetPixelValueOnPosition(POINT nNowPoint, out int RValue, out int GValue, out int BValue)
         {
             int[] rgb = { 0, 0, 0 };
@@ -205,25 +161,10 @@ namespace ImageMatrox
 
         }
 
-        /*------------------------------------------------------------------------------------------
-            1.日本語名
-                スルーにする
-
-            2.パラメタ説明
-                 なし
-
-            3.概要
-                スルーにする
-
-            4.機能説明
-                スルーにする
-
-            5.戻り値
-                なし
-
-            6.備考
-                なし
-        ------------------------------------------------------------------------------------------*/
+        /// <summary>
+        /// カメラ画像をスルー状態にする
+        /// </summary>
+        /// <returns></returns>
         public int sifThrough()
         {
 
@@ -252,25 +193,10 @@ namespace ImageMatrox
             return 0;
         }
 
-        /*------------------------------------------------------------------------------------------
-            1.日本語名
-                フリーズする
-
-            2.パラメタ説明
-                 なし
-
-            3.概要
-                フリーズする
-
-            4.機能説明
-                フリーズする
-
-            5.戻り値
-                なし
-
-            6.備考
-                なし
-        ------------------------------------------------------------------------------------------*/
+        /// <summary>
+        /// カメラ画像をフリーズさせる
+        /// </summary>
+        /// <returns></returns>
         public int sifFreeze()
         {
             //	致命的なエラーチェック
@@ -284,25 +210,9 @@ namespace ImageMatrox
             return 0;
         }
 
-        /*------------------------------------------------------------------------------------------
-            1.日本語名
-                1枚画像をGrabする
-
-            2.パラメタ説明
-                 なし
-
-            3.概要
-                1枚画像をGrabする
-
-            4.機能説明
-                1枚画像をGrabする
-
-            5.戻り値
-                なし
-
-            6.備考
-                なし
-        ------------------------------------------------------------------------------------------*/
+        /// <summary>
+        /// 画像を一枚grabする
+        /// </summary>
         public void sifGetOneGrab()
         {
             //画像をフリーズする
@@ -311,52 +221,20 @@ namespace ImageMatrox
             pMatroxCamera.getOneGrab();
         }
 
-        /*------------------------------------------------------------------------------------------
-            1.日本語名
-                矩形を描画する
-
-            2.パラメタ説明
-                 nptLeftTopPoint	左上の画面座標
-                nptRightBottomPoint	右下の画面座標
-
-            3.概要
-                矩形を描画する
-
-            4.機能説明
-                矩形を描画する
-
-            5.戻り値
-                なし
-
-            6.備考
-                なし
-        ------------------------------------------------------------------------------------------*/
+        /// <summary>
+        /// 矩形を描画
+        /// </summary>
+        /// <param name="nptLeftTopPoint">左上の画面座標</param>
+        /// <param name="nptRightBottomPoint">右下の画面座標</param>
         public void sifDrawRectangle(POINT nptLeftTopPoint, POINT nptRightBottomPoint)
         {
             pMatroxGraphic.setGraphicColor((int)GRAPHICCOLOR_TYPE.GRAPHIC_COLOR_GREEN);
             pMatroxGraphic.DrawRectangle(nptLeftTopPoint, nptRightBottomPoint);
         }
 
-
-        /*------------------------------------------------------------------------------------------
-            1.日本語名
-                グラフィックをクリアする
-
-            2.パラメタ説明
-                 なし
-
-            3.概要
-                グラフィックをクリアする
-
-            4.機能説明
-                グラフィックをクリアする
-
-            5.戻り値
-                なし
-
-            6.備考
-                なし
-        ------------------------------------------------------------------------------------------*/
+        /// <summary>
+        /// グラフィックをクリア
+        /// </summary>
         public void sifDrawClear()
         {
             pMatroxGraphic.clearAllGraphic();
@@ -380,6 +258,13 @@ namespace ImageMatrox
             6.備考
                 なし
         ------------------------------------------------------------------------------------------*/
+        /// <summary>
+        /// 画像を保存
+        /// </summary>
+        /// <param name="nrctSaveArea"></param>
+        /// <param name="nAllSaveFlg"></param>
+        /// <param name="nchrFilePath"></param>
+        /// <param name="nbSaveMono"></param>
         public void sifSaveImage(RECT nrctSaveArea, bool nAllSaveFlg, string nchrFilePath, bool nbSaveMono)
         {
             string cs_file_path;
