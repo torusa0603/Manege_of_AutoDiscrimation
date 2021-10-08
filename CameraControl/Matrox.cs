@@ -28,7 +28,7 @@ namespace CameraControl
         #region ローカル変数 サンプル動作用
         private CancellationTokenSource m_CancellationImage = null;         // 撮影スレッド中止用
         private CancellationTokenSource m_CancellationProcess = null;           // 処理スレッド中止用
-        
+
         #endregion
 
 
@@ -122,6 +122,9 @@ namespace CameraControl
                         {
                             break;
                         }
+
+                        cImageMatrox.sifSetGainAndExposureTime(32, 200);
+
                         if (nbThroughSimple)
                         {
                             i_ret = cImageMatrox.sifThroughSimple();
@@ -130,7 +133,7 @@ namespace CameraControl
                         {
                             i_ret = cImageMatrox.sifThrough();
                         }
-                        
+
                         if (0 != i_ret)
                         {
                             break;
@@ -352,7 +355,6 @@ namespace CameraControl
             return b_ret;
         }
 
-
         /// <summary>
         /// 画像サイズの取得
         /// </summary>
@@ -385,7 +387,6 @@ namespace CameraControl
 
             return b_ret;
         }
-
 
         /// <summary>
         /// 画像データの取得
@@ -433,7 +434,6 @@ namespace CameraControl
         }
         #endregion
 
-
         #region サンプル動作 1
         /// <summary>
         /// サンプル動作1 スレッドを使い画像データの連続処理開始
@@ -470,7 +470,6 @@ namespace CameraControl
 
             return b_ret;
         }
-
 
         /// <summary>
         /// サンプル動作 1 連続処理終了(キャンセル)
@@ -510,41 +509,40 @@ namespace CameraControl
           {
               bool b_ret = true;
 
-                // ソフトトリガ設定
-                set_trigger_mode_software();
+              // ソフトトリガ設定
+              set_trigger_mode_software();
 
-                // 時間測定（確認用）
-                var sw_camera = new System.Diagnostics.Stopwatch();
+              // 時間測定（確認用）
+              var sw_camera = new System.Diagnostics.Stopwatch();
               var sw_trigger = new System.Diagnostics.Stopwatch();
               sw_camera.Restart();
-                // キャンセルされるまでループ
-                while (false == cancelToken.IsCancellationRequested)
+              // キャンセルされるまでループ
+              while (false == cancelToken.IsCancellationRequested)
               {
-                    // 撮影処理
-                    sw_camera.Restart();
+                  // 撮影処理
+                  sw_camera.Restart();
                   sw_trigger.Restart();
                   execute_software_trigger();
                   sw_trigger.Stop();
 
-                    // fps=30設定
-                    while (33 > sw_camera.ElapsedMilliseconds)
+                  // fps=30設定
+                  while (33 > sw_camera.ElapsedMilliseconds)
                   {
                       Thread.Sleep(0);
                   }
 
-                    // デバッグ表示
-                    string str_log = "time trigger = " + $"{ sw_trigger.ElapsedMilliseconds }msec" + " : time_camara = " + $"{ sw_camera.ElapsedMilliseconds }msec";
+                  // デバッグ表示
+                  string str_log = "time trigger = " + $"{ sw_trigger.ElapsedMilliseconds }msec" + " : time_camara = " + $"{ sw_camera.ElapsedMilliseconds }msec";
                   System.Diagnostics.Debug.WriteLine(str_log);
 
-                    // ストップウォッチリスタート
-                    sw_camera.Restart();
+                  // ストップウォッチリスタート
+                  sw_camera.Restart();
               }
-                // トリガオフ設定
-                set_trigger_mode_off();
+              // トリガオフ設定
+              set_trigger_mode_off();
               return b_ret;
           });
         }
-
 
         /// <summary>
         /// サンプル動作 1 連続処理開始
@@ -574,50 +572,50 @@ namespace CameraControl
               bool b_ret = true;
               Size size;
 
-                // 配列準備
-                get_image_size(out size);
+              // 配列準備
+              get_image_size(out size);
               int i_total_pixel_num = size.Width * size.Height;
               byte[] bt_pixel_value_buff = new byte[i_total_pixel_num];
-                // ビットマップ生成
-                Bitmap bmp = new Bitmap(size.Width, size.Height, PixelFormat.Format8bppIndexed);
-                // カラーパレットを設定
-                ColorPalette pal = bmp.Palette;
+              // ビットマップ生成
+              Bitmap bmp = new Bitmap(size.Width, size.Height, PixelFormat.Format8bppIndexed);
+              // カラーパレットを設定
+              ColorPalette pal = bmp.Palette;
               for (int i_loop = 0; i_loop < 256; i_loop++)
               {
                   pal.Entries[i_loop] = Color.FromArgb(i_loop, i_loop, i_loop);
               }
               bmp.Palette = pal;
 
-                // 時間測定（確認用）
-                var sw_camera = new System.Diagnostics.Stopwatch();
+              // 時間測定（確認用）
+              var sw_camera = new System.Diagnostics.Stopwatch();
               var sw_total = new System.Diagnostics.Stopwatch();
               sw_total.Restart();
-                // キャンセルされるまでループ
-                while (false == cancelToken.IsCancellationRequested)
+              // キャンセルされるまでループ
+              while (false == cancelToken.IsCancellationRequested)
               {
                   sw_camera.Restart();
-                    // ビットマップバイトデータの取得
-                    if (true == get_bitmap_data(i_total_pixel_num, bt_pixel_value_buff))
+                  // ビットマップバイトデータの取得
+                  if (true == get_bitmap_data(i_total_pixel_num, bt_pixel_value_buff))
                   {
-                        // BitmapDataに用意したbyte配列を一気に書き込む
-                        BitmapData bmpdata = bmp.LockBits(new Rectangle(0, 0, size.Width, size.Height),
-                                                                  ImageLockMode.WriteOnly,
-                                                                  PixelFormat.Format8bppIndexed
-                                                                  );
+                      // BitmapDataに用意したbyte配列を一気に書き込む
+                      BitmapData bmpdata = bmp.LockBits(new Rectangle(0, 0, size.Width, size.Height),
+                                                                ImageLockMode.WriteOnly,
+                                                                PixelFormat.Format8bppIndexed
+                                                                );
                       Marshal.Copy(bt_pixel_value_buff, 0, bmpdata.Scan0, bt_pixel_value_buff.Length);
                       bmp.UnlockBits(bmpdata);
                       sw_camera.Stop();
-                        // ビットマップファイル保存
-                        string str_file_name = get_file_name();
+                      // ビットマップファイル保存
+                      string str_file_name = get_file_name();
                       bmp.Save(str_file_name, System.Drawing.Imaging.ImageFormat.Bmp);
 
                       sw_total.Stop();
-                        // デバッグ表示
-                        string str_log = "time camara = " + $"{ sw_camera.ElapsedMilliseconds }msec" + " : time_total = " + $"{ sw_total.ElapsedMilliseconds }msec";
+                      // デバッグ表示
+                      string str_log = "time camara = " + $"{ sw_camera.ElapsedMilliseconds }msec" + " : time_total = " + $"{ sw_total.ElapsedMilliseconds }msec";
                       System.Diagnostics.Debug.WriteLine(str_log);
 
-                        // ストップウォッチリスタート
-                        sw_total.Restart();
+                      // ストップウォッチリスタート
+                      sw_total.Restart();
                   }
                   else
                   {

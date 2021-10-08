@@ -41,7 +41,7 @@ namespace ImageMatrox
         protected static bool m_bThroughFlg;          //	スルーならばTrue、フリーズならFalse
         protected static double m_dNowMag;                //	現在の表示画像の倍率
         protected static IntPtr m_hWnd;                 //	ウインドウのハンドル
-        protected static int m_bNowDiffMode;         //	現在差分表示モード(0:否, 1:肯_表示あり, 2:肯_表示なし)
+        protected static int m_iNowDiffMode;         //	現在差分表示モード(0:否, 1:肯_表示あり, 2:肯_表示なし, 3:)
         protected readonly MIL_INT TRANSPARENT_COLOR = MIL.M_RGB888(1, 1, 1);      //透過色
 
         protected static IntPtr m_hWndForInspectionResult;  //	ウインドウのハンドル(検査結果表示用)
@@ -70,10 +70,15 @@ namespace ImageMatrox
         private string m_strExePath = AppDomain.CurrentDomain.BaseDirectory.TrimEnd('\\');
         private Encoding m_Encoding = Encoding.GetEncoding("Shift_JIS");
 
-        
+        protected static bool m_bDiffState;
+        protected static bool m_bDiffPicDisciminateMode;
+
         public event EventHandlerVoid m_evDiffImage;
+        public static Action m_evDiffEnable_True;
+        public static Action m_evDiffEnable_False;
         GCHandle hUserData_Error;
         MIL_APP_HOOK_FUNCTION_PTR ProcessingFunctionPtr_Error;
+        protected static int m_iDiscriminateDiffPicValue;
 
         #endregion
 
@@ -111,7 +116,7 @@ namespace ImageMatrox
             m_iNowColor = 0;
             m_dNowMag = 1.0;
             m_dNowMagForInspectionResult = 1.0;
-            m_bNowDiffMode = 0;
+            m_iNowDiffMode = 0;
             m_dFrameRate = 10.0;
             m_bFatalErrorOccured = false;
             m_strIPAddress = "";
@@ -363,7 +368,7 @@ namespace ImageMatrox
                 //}
             }
 
-
+            m_bDiffPicDisciminateMode = false;
 
             m_hWnd = nhDispHandle;
 
@@ -1221,29 +1226,18 @@ namespace ImageMatrox
 
             return i_ret;
         }
-        /*------------------------------------------------------------------------------------------
-            1.日本語名
-                差分用オリジナル画像を現在表示されている画像で登録する
-
-            2.パラメタ説明
-
-
-            3.概要
-                差分用オリジナル画像を現在表示されている画像で登録する
-
-            4.機能説明
-                差分用オリジナル画像を現在表示されている画像で登録する
-
-            5.戻り値
-
-
-            6.備考
-                なし
-        ------------------------------------------------------------------------------------------*/
-        public int setDiffOrgImage(int nbNowDiffMode)
+        /// <summary>
+        /// 最新の取得画像バッファ(m_milShowImage)を差分用オリジナル画像バッファ(m_milDiffOrgImage)にコピーする
+        /// </summary>
+        /// <param name="nbNowDiffMode">フック関数内での差分画像の取り扱い方を決定する変数</param>
+        /// <returns></returns>
+        public int setDiffOrgImage(int? nbNowDiffMode)
         {
             MIL.MbufCopy(m_milShowImage, m_milDiffOrgImage);
-            m_bNowDiffMode = nbNowDiffMode;
+            if (nbNowDiffMode != null)
+            {
+                m_iNowDiffMode = (int)nbNowDiffMode;
+            }
             return 0;
         }
         /*------------------------------------------------------------------------------------------
@@ -1273,7 +1267,7 @@ namespace ImageMatrox
             {
                 return -1;
             }
-            m_bNowDiffMode = nbNowDiffMode;
+            m_iNowDiffMode = nbNowDiffMode;
             return 0;
         }
         /*------------------------------------------------------------------------------------------
@@ -1297,7 +1291,7 @@ namespace ImageMatrox
         ------------------------------------------------------------------------------------------*/
         public void resetDiffMode()
         {
-            m_bNowDiffMode = 0;
+            m_iNowDiffMode = 0;
         }
 
         
@@ -1879,9 +1873,21 @@ namespace ImageMatrox
         }
         public int IsDiffMode()
         {
-            return m_bNowDiffMode;
+            return m_iNowDiffMode;
         }
 
+        public void setDiffPicDiscriminationMode(int niScore)
+        {
+            m_bDiffState = false;
+            m_bDiffPicDisciminateMode = true;
+            m_iDiscriminateDiffPicValue = niScore;
+        }
+
+        public void resetDiffPicDiscriminationMode()
+        {
+            m_bDiffState = true;
+            m_bDiffPicDisciminateMode = false;
+        }
     }
 }
 

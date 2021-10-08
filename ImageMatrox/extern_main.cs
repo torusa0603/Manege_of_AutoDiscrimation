@@ -19,13 +19,18 @@ namespace ImageMatrox
 
         public event EventHandlerVoid DiffImageEvent;
         bool DiffImageEventEnable;
+        private int m_iTimerSleepTime;
+        private int m_iDiscriminateScore;
+
+        public Action m_evDiffEnable_True;
+        public Action m_evDiffEnable_False;
 
         /// <summary>
         /// デストラクタ
         /// </summary>
         ~extern_main()
         {
-            token_source.Cancel();
+            //token_source.Cancel();
         }
 
         /// <summary>
@@ -559,18 +564,23 @@ namespace ImageMatrox
             6.備考
                 なし
         ------------------------------------------------------------------------------------------*/
-        public void sifanalyzeDiffImage(int niSleepTime, int niScore)
+        public void sifanalyzeDiffImage(int niScore)
         {
-            token_source = new CancellationTokenSource();
-            cansel_token = token_source.Token;
-
-            //TimerCallback timerDelegate = new TimerCallback(analyzeDiffImage);
-            Thread.Sleep(1000);
-
             DiffImageEventEnable = true;
-            pMatroxCommon.setDiffOrgImage(0);
-            //Timer timer = new Timer(timerDelegate, null, niSleepTime, niSleepTime);
-            Task.Run(() => analyzeDiffImage(cansel_token, niSleepTime, niScore));
+            m_iDiscriminateScore = niScore;
+            CMatroxCommon.m_evDiffEnable_True += m_evDiffEnable_True;
+            CMatroxCommon.m_evDiffEnable_False += m_evDiffEnable_False;
+            //CMatroxCommon.m_evDiffEnable_True += ChangeDiffEnableToTrue;
+            //CMatroxCommon.m_evDiffEnable_False += ChangeDiffEnableToFlase;
+            pMatroxCommon.setDiffPicDiscriminationMode(m_iDiscriminateScore);
+            //token_source = new CancellationTokenSource();
+            //cansel_token = token_source.Token;
+            //Thread.Sleep(1000);
+
+            //DiffImageEventEnable = true;
+            //pMatroxCommon.setDiffOrgImage(0);
+
+            //Task.Run(() => analyzeDiffImage());
         }
 
         /*------------------------------------------------------------------------------------------
@@ -592,32 +602,22 @@ namespace ImageMatrox
             6.備考
                 なし
         ------------------------------------------------------------------------------------------*/
-        private void analyzeDiffImage(CancellationToken n_CaseToken, int niSleepTime, int niScore)
+        private void analyzeDiffImage(object e)
         {
-            while(true)
-            {
-                if (DiffImageEventEnable) 
-                {
-                    int i_ret = -1;
-                    i_ret = pMatroxImageProcess.discriminantDiffImage(niScore);
-                    if (i_ret == 0)
-                    {
-                        DiffImageEvent();
-                    }
-                    pMatroxCommon.setDiffOrgImage(0);
-                }
-                Thread.Sleep(niSleepTime);
-                if (n_CaseToken.IsCancellationRequested)
-                {
-                    // ループを終了します。
-                    break;
-                }
-            }
+            DiffImageEvent();
         }
 
         public void ChangeDiffImageEventEnable()
         {
             DiffImageEventEnable = !DiffImageEventEnable;
+            if (DiffImageEventEnable)
+            {
+                pMatroxCommon.setDiffPicDiscriminationMode(m_iDiscriminateScore);
+            }
+            else
+            {
+                pMatroxCommon.resetDiffPicDiscriminationMode();
+            }
         }
 
 

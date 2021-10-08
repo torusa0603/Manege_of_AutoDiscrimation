@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Matrox.MatroxImagingLibrary;
 using System.Runtime.InteropServices;
+using System.Drawing;
 
 
 namespace ImageMatrox
@@ -147,18 +148,31 @@ namespace ImageMatrox
                     MIL.MdigGetHookInfo(nEventId, MIL.M_MODIFIED_BUFFER + MIL.M_BUFFER_ID, ref mil_modified_image);
                     MIL.MbufCopy(mil_modified_image, CMatroxCamera.m_milOriginalImage);
                     MIL.MbufCopy(CMatroxCamera.m_milOriginalImage, CMatroxCamera.m_milShowImage);
-                    //	表示用画像バッファにコピーする
-                    if (p_matrox.IsDiffMode() == 0)
+                    if (CMatroxCamera.m_bDiffPicDisciminateMode)
                     {
-                        MIL.MbufCopy(mil_modified_image, CMatroxCamera.m_milMonoImage);
+                        if(CMatroxCamera.m_milDiffOrgImage != MIL.M_NULL)
+                        {
+                            p_matrox.makeDiffImage();
+                            MIL.MbufCopy(CMatroxCamera.m_milDiffDstImage, CMatroxCamera.m_milMonoImage);
+                            p_matrox.discriminateDiffPic();
+                        }
+                        p_matrox.setDiffOrgImage(null);
                     }
                     else
                     {
-                        p_matrox.makeDiffImage();
-                        MIL.MbufCopy(CMatroxCamera.m_milDiffDstImage, CMatroxCamera.m_milMonoImage);
-                        if (p_matrox.IsDiffMode() == 1)
+                        if (p_matrox.IsDiffMode() == 0)
                         {
-                            MIL.MbufCopy(CMatroxCamera.m_milDiffDstImage, CMatroxCamera.m_milShowImage);
+                            MIL.MbufCopy(mil_modified_image, CMatroxCamera.m_milMonoImage);
+                        }
+                        else
+                        {
+                            p_matrox.makeDiffImage();
+                            MIL.MbufCopy(CMatroxCamera.m_milDiffDstImage, CMatroxCamera.m_milMonoImage);
+                            if (p_matrox.IsDiffMode() == 1)
+                            {
+                                //	表示用画像バッファにコピーする
+                                MIL.MbufCopy(CMatroxCamera.m_milDiffDstImage, CMatroxCamera.m_milShowImage);
+                            }
                         }
                     }
 
@@ -178,6 +192,76 @@ namespace ImageMatrox
             }
             return (0);
         }
+
+        //private bool IsDiffPicDisciminateMode()
+        //{
+        //    return m_bDiffPicDisciminateMode;
+        //}
+
+        private void discriminateDiffPic()
+        {
+            bool b_dicriminate_result = discriminantDiffImage();
+            if (m_bDiffState != b_dicriminate_result)
+            {
+                m_bDiffState = b_dicriminate_result;
+                if (b_dicriminate_result)
+                {
+                    m_evDiffEnable_True?.Invoke();
+                }
+                else
+                {
+                    m_evDiffEnable_False?.Invoke();
+                }
+            }
+
+        }
+
+        private bool discriminantDiffImage()
+        {
+            bool i_ret = false;
+            MIL_ID mil_stat_result = MIL.M_NULL;
+            MIL_INT i_average_value = MIL.M_NULL;
+
+            MIL.MimAllocResult(m_milSys, MIL.M_DEFAULT, MIL.M_STAT_LIST, ref mil_stat_result);
+            MIL.MimStat(m_milMonoImage, mil_stat_result, MIL.M_MEAN, MIL.M_NULL, MIL.M_NULL, MIL.M_NULL);
+            MIL.MimGetResult(mil_stat_result, MIL.M_MEAN + MIL.M_TYPE_MIL_INT, ref i_average_value);
+            //	メモリ解放
+            MIL.MimFree(mil_stat_result);
+            // 差分が設定されている値に対して大きいかの判定を返す
+            if (m_iDiscriminateDiffPicValue < (int)i_average_value)
+            {
+                i_ret = true;
+            }
+            else
+            {
+                i_ret = false;
+            }
+            return i_ret;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         /// <summary>
         /// 画像を一枚取得する
@@ -217,25 +301,6 @@ namespace ImageMatrox
             return 0;
         }
 
-        /*------------------------------------------------------------------------------------------
-            1.日本語名
-                平均画像を取得する
-
-            2.パラメタ説明
-
-
-            3.概要
-                平均画像を取得する
-
-            4.機能説明
-                平均画像を取得する
-
-            5.戻り値
-                ０
-
-            6.備考
-                なし
-        ------------------------------------------------------------------------------------------*/
         /// <summary>
         /// 平均画像を取得する____
         /// メモリー上では"m_milAverageImageCalc"に保存される
