@@ -20,11 +20,5 @@ namespace ImageMatrox
         {
 
         }
-
-        /// <summary>
-        /// 差分画像を作成しその画像の輝度値の平均が指定の値よりも大きいかを判断する
-        /// </summary>
-        /// <param name="n_discriminantValue">差分が大きいと判断するスコア値</param>
-        /// <returns></returns>
     }
 }
