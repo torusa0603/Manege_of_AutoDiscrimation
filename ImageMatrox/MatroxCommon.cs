@@ -1881,12 +1881,14 @@ namespace ImageMatrox
             m_bDiffState = false;
             m_bDiffPicDisciminateMode = true;
             m_iDiscriminateDiffPicValue = niScore;
+            m_evDiffEnable_True?.Invoke();
         }
 
         public void resetDiffPicDiscriminationMode()
         {
             m_bDiffState = true;
             m_bDiffPicDisciminateMode = false;
+            m_evDiffEnable_False?.Invoke();
         }
     }
 }
