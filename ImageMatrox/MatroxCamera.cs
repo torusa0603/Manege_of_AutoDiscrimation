@@ -18,6 +18,8 @@ namespace ImageMatrox
         MIL_DIG_HOOK_FUNCTION_PTR ProcessingFunctionPtr;
         public bool m_bWritableShowImageBaffa;
         public bool m_ThroughSimple = false;
+        static DateTime? m_timeStart;
+        static DateTime m_timeEnd;
 
         public CMatroxCamera()
         {
@@ -29,6 +31,7 @@ namespace ImageMatrox
         /// <returns></returns>
         public int doThrough()
         {
+            m_timeStart = null;
             if (m_bMainInitialFinished == false)
             {
                 return -1;
@@ -46,7 +49,6 @@ namespace ImageMatrox
                 if (m_iBoardType != (int)MTX_TYPE.MTX_HOST)
                 {
                     m_bWritableShowImageBaffa = true;
-
                     hUserData_doThrough = GCHandle.Alloc(this);
                     ProcessingFunctionPtr = new MIL_DIG_HOOK_FUNCTION_PTR(ProcessingFunction);
                     //	フック関数を使用する
@@ -152,10 +154,14 @@ namespace ImageMatrox
                     {
                         if(CMatroxCamera.m_milDiffOrgImage != MIL.M_NULL)
                         {
+                            // 差分画像を作成
                             p_matrox.makeDiffImage();
+                            // 作成した差分画像をモノクロ画像バッファにコピー
                             MIL.MbufCopy(CMatroxCamera.m_milDiffDstImage, CMatroxCamera.m_milMonoImage);
+                            // コピーした差分画像を判定する
                             p_matrox.discriminateDiffPic();
                         }
+                        // 最新の画像バッファを差分画像元バッファにコピーする
                         p_matrox.setDiffOrgImage(null);
                     }
                     else
@@ -193,29 +199,55 @@ namespace ImageMatrox
             return (0);
         }
 
-        //private bool IsDiffPicDisciminateMode()
-        //{
-        //    return m_bDiffPicDisciminateMode;
-        //}
-
+        /// <summary>
+        /// 差分画像の判定を行い、イベントを発行する
+        /// </summary>
         private void discriminateDiffPic()
         {
+            //DateTime time_now = System.DateTime.Now;
+            //if (m_timeStart == null)
+            //{
+            //    CMatroxCamera.m_timeStart = time_now;
+            //}
+            //else
+            //{
+            //    CMatroxCamera.m_timeEnd = time_now;
+            //    TimeSpan? time_Width = m_timeEnd - m_timeStart;
+            //    Console.WriteLine(time_Width.ToString());
+            //    CMatroxCamera.m_timeStart = null;
+            //}
             bool b_dicriminate_result = discriminantDiffImage();
+            // 差分の有無が前回とは異なる場合の処理
             if (m_bDiffState != b_dicriminate_result)
             {
                 m_bDiffState = b_dicriminate_result;
                 if (b_dicriminate_result)
                 {
+                    // 差分が発生したことを知らせるイベント
                     m_evDiffEnable_True?.Invoke();
+
+                    //// 差分画像をファイルに出力する(確認用処理)
+                    //MIL_ID mil_save_image = MIL.M_NULL;
+                    //MIL.MbufAllocColor(m_milSys, 3, m_szImageSize.Width, m_szImageSize.Height, 8 + MIL.M_UNSIGNED, MIL.M_IMAGE + MIL.M_PROC, ref mil_save_image);
+                    //MIL.MbufCopy(m_milMonoImage, mil_save_image);
+                    //MIL.MbufExport(@"D:\Manege_of_AutoDiscrimation\Manege_of_AutoDiscrimation\bin\Debug\log\diffpic.png", MIL.M_BMP, mil_save_image);
+                    //MIL.MbufFree(mil_save_image);
+
+
                 }
                 else
                 {
+                    // 差分がなくなったことを知らせるイベント
                     m_evDiffEnable_False?.Invoke();
                 }
             }
 
         }
 
+        /// <summary>
+        /// 差分画像の平均輝度値から判定を行う
+        /// </summary>
+        /// <returns>判定結果</returns>
         private bool discriminantDiffImage()
         {
             bool i_ret = false;
