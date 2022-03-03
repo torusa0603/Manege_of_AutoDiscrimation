@@ -24,13 +24,14 @@ namespace Manege_of_AutoDiscrimation
         private LogBase.CLogBase m_cLogExecute = new LogBase.CLogBase(LogKind.Execute); // 実行ログ
         private LogBase.CLogBase m_cLogCamera = new LogBase.CLogBase(LogKind.Camera);   // カメラ制御クラス用ログ
         private CameraControl.CCameraControlBase m_cCameraControlBase = null;   //カメラ制御クラス
-        FormAnalysisResult m_formAnalyzeResult = null;  //解析結果表示フォーム
-        public Action evUpdataAnalyzePicture;   //マニュアルモード時解析イベントハンドラ
-        string str_python_folder_path = System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\PythonFile";   //pythonディレクトリ
+        public Action evAnalyzePicture;   //マニュアルモード時解析イベントハンドラ
+        string m_strPythonFolderPath = System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\PythonFile";   //pythonディレクトリ
+        Parameter m_Parameter;
         TimerCallback m_timerDelegate;
         System.Threading.Timer m_timer;
         int m_iTimerSleepTime;
         static bool m_bInoculationEnable; // 判定可能かどうかを示す
+        SocketCommunication m_cSocketCommunication; // ソケット通信用のクラス
         #endregion
 
         #region "   プログラム開始時処理                            "
@@ -51,8 +52,6 @@ namespace Manege_of_AutoDiscrimation
         /// <param name="e"></param>
         private void FormAutoDiscrimation_Load(object sender, EventArgs e)
         {
-            //CreateForm2();
-
             try
             {
                 // Paramクラスへの情報設定初期化
@@ -66,21 +65,13 @@ namespace Manege_of_AutoDiscrimation
                 }
                 // ログクラス初期設定
                 initLog();
-                // 画像処理コンボボックスの設定
-                comboBoxClass.SelectedItem = m_cParaFormMain.ComboBoxClass_SelectedItem;
-                // コンボボックスにカメラクラスのインスタンスを示すアイテムを追加
-                if (m_cParaFormMain.DebugCameraFlag != true)
-                {
-                    comboBoxClass.Items.Add("Matrox");
-                    comboBoxClass.SelectedItem = "Matrox";
-                }
-                else
-                {
-                    comboBoxClass.Items.Add("Virtual");
-                    comboBoxClass.SelectedItem = "Virtual";
-                }
                 // カメラオープンイベント
                 btnOpen_Click(sender, e);
+
+                // ソケットクラスオープン
+                m_cSocketCommunication = new SocketCommunication();
+                int i_port_number=0; // 後で決める
+                m_cSocketCommunication.Init(this,"", i_port_number);
             }
             catch (Exception ex)
             {
@@ -104,17 +95,7 @@ namespace Manege_of_AutoDiscrimation
         {
             try
             {
-                FormAutoDiscrimation.m_bInoculationEnable = true;
-                m_iTimerSleepTime = 1000;
-                m_timerDelegate = new TimerCallback(Inoculation);
-                m_timer = new System.Threading.Timer(m_timerDelegate, null, -1, m_iTimerSleepTime);
-                m_cCameraControlBase.cImageMatrox.m_evDiffEnable_True += ChangeDiffEnableToTrue;
-                m_cCameraControlBase.cImageMatrox.m_evDiffEnable_False += ChangeDiffEnableToFlase;
-                // 画像同士の差分を取るモードに変更
-                m_cCameraControlBase.cImageMatrox.sifanalyzeDiffImage(20);
-                // 解析結果フォームを作成
-                m_formAnalyzeResult = new FormAnalysisResult(str_python_folder_path, this, false);
-                m_formAnalyzeResult.Show();
+
             }
             catch (Exception ex)
             {
@@ -128,19 +109,6 @@ namespace Manege_of_AutoDiscrimation
         }
         #endregion
 
-
-        private void ChangeDiffEnableToTrue()
-        {
-            //Console.WriteLine("timer_start");
-            m_timer.Change(0, m_iTimerSleepTime);
-        }
-
-        private void ChangeDiffEnableToFlase()
-        {
-            //Console.WriteLine("timer_stop");
-            m_timer.Change(-1, m_iTimerSleepTime);
-        }
-
         /// <summary>
         /// 判定
         /// </summary>
@@ -152,20 +120,20 @@ namespace Manege_of_AutoDiscrimation
                 FormAutoDiscrimation.m_bInoculationEnable = false;
 
                 // 解析画像ファイル、結果csvファイルが既に存在している場合は消去する
-                if (File.Exists($@"{str_python_folder_path}\result\color_radius.csv"))
+                if (File.Exists($@"{m_strPythonFolderPath}\result\color_radius.csv"))
                 {
                     //Console.WriteLine("result_delete");
-                    File.Delete($@"{str_python_folder_path}\result\color_radius.csv");
+                    File.Delete($@"{m_strPythonFolderPath}\result\color_radius.csv");
                 }
-                if (File.Exists($@"{str_python_folder_path}\img\img.png"))
+                if (File.Exists($@"{m_strPythonFolderPath}\img\img.png"))
                 {
                     //Console.WriteLine("img_delete");
-                    File.Delete($@"{str_python_folder_path}\img\img.png");
+                    File.Delete($@"{m_strPythonFolderPath}\img\img.png");
                 }
                 // 解析画像ファイルを保存する
-                string str_picturefile_name = str_python_folder_path + "\\img\\img.png";
+                string str_picturefile_name = m_strPythonFolderPath + "\\img\\img.png";
                 m_cCameraControlBase.save_image(str_picturefile_name);
-                if (File.Exists($@"{str_python_folder_path}\img\img.png"))
+                if (File.Exists($@"{m_strPythonFolderPath}\img\img.png"))
                 {
                     // 実行させたいpythonファイルのパス
                     string myPythonApp = "PythonFile\\AutoDiscriminate.py";
@@ -177,13 +145,11 @@ namespace Manege_of_AutoDiscrimation
                             CreateNoWindow = true,
                             UseShellExecute = false,
                             RedirectStandardOutput = false,
-                            Arguments = $"{myPythonApp} {str_python_folder_path}"
+                            Arguments = $"{myPythonApp} {m_strPythonFolderPath}"
                         }
                     };
                     myProcess.Start();
                     // デバック用に残す
-                    //StreamReader myStreamReader = myProcess.StandardOutput;
-                    //string myString = myStreamReader.ReadLine();
                     // 処理の終了まで待つ
                     myProcess.WaitForExit();
                     // プロセスを閉じて終了
@@ -194,20 +160,9 @@ namespace Manege_of_AutoDiscrimation
                     FormAutoDiscrimation.m_bInoculationEnable = true;
                     return;
                 }
-                if (File.Exists($@"{str_python_folder_path}\result\color_radius.csv"))
+                if (File.Exists($@"{m_strPythonFolderPath}\result\color_radius.csv"))
                 {
-                    // 解析結果フォームが閉じていれば作成
-                    if ((m_formAnalyzeResult == null) || m_formAnalyzeResult.IsDisposed)
-                    {
-                        m_formAnalyzeResult = new FormAnalysisResult(str_python_folder_path, this, true);
-                        m_formAnalyzeResult.Show();
-                    }
-                    else
-                    {
-                        // 解析結果フォームを更新
-                        m_formAnalyzeResult.ShowAnalyzeResultAndPicture();
-                        //evUpdataAnalyzePicture();
-                    }
+                    UpdataAnalyzeResultAndPicture();
                 }
                 else
                 {
@@ -274,18 +229,7 @@ namespace Manege_of_AutoDiscrimation
                 // m_cCameraControlBaseをインスタンス
                 if (null == m_cCameraControlBase)
                 {
-                    if ("Virtual" == comboBoxClass.SelectedItem.ToString())
-                    {
-                        m_cCameraControlBase = new CameraControl.CCameraControlVirtual();
-                    }
-                    else if (true == comboBoxClass.SelectedItem.ToString().Contains("Matrox"))
-                    {
-                        m_cCameraControlBase = new CameraControl.CMatrox();
-                    }
-                    else
-                    {
-                        m_cCameraControlBase = new CameraControl.CCameraControlVirtual();
-                    }
+                    m_cCameraControlBase = new CameraControl.CMatrox();
                     // ログクラスのインスタンス
                     m_cCameraControlBase.setLogErrorInstance(LogKind.Error);
                     m_cCameraControlBase.setLogExecuteInstance(LogKind.Execute);
@@ -336,24 +280,6 @@ namespace Manege_of_AutoDiscrimation
         }
         #endregion
 
-        /// <summary>
-        /// パネルクリック時処理
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void pnlCaptureedPicture_Click(object sender, EventArgs e)
-        {
-            if (!(m_formAnalyzeResult == null))
-            {
-                // マニュアルモード時、解析を行う
-                if (!m_formAnalyzeResult.m_bMode)
-                {
-                    object ob_o = null;
-                    Inoculation(ob_o);
-                }
-            }
-        }
-
         private void FormAutoDiscrimation_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (m_timer != null)
@@ -362,5 +288,98 @@ namespace Manege_of_AutoDiscrimation
                 m_timer.Dispose();
             }
         }
+
+        public void UpdataAnalyzeResultAndPicture()
+        {
+            string str_csv_line;
+            string[] str_csv_values;
+            List<List<int>> int_csv_lists = new List<List<int>>(); // 解析結果を収納するリスト
+            int i = 0;
+            // 解析結果ファイルの内容を読み込む
+            //Console.WriteLine("result_use");
+            StreamReader sr_result = new StreamReader($@"{m_strPythonFolderPath}\result\color_radius.csv");
+            {
+                // 末尾まで繰り返す
+                while (!sr_result.EndOfStream)
+                {
+                    int[] int_csv_values;
+                    // CSVファイルの一行を読み込む
+                    str_csv_line = sr_result.ReadLine();
+                    // 読み込んだ一行をカンマ毎に分けて配列に格納する
+                    str_csv_values = str_csv_line.Split(',');
+                    int_csv_values = Array.ConvertAll(str_csv_values, int.Parse);
+                    // 配列からリストに格納する
+                    int_csv_lists.Add(new List<int>());
+                    int_csv_lists[i].AddRange(int_csv_values);
+                    i++;
+                }
+            }
+            sr_result.Dispose();
+            // 色ごとのリストを作成し、全体のリストからデータを代入する
+            List<int> int_red = int_csv_lists[0];
+            List<int> int_yellow = int_csv_lists[1];
+            List<int> int_green = int_csv_lists[2];
+            List<int> int_white = int_csv_lists[5];
+            // 色ごとのリストから各半径(5mm、8mm、10mm)に近い半径の球それぞれの個数を配列に代入する
+            // 赤
+            int[] int_red_5mm = new int[5];
+            int_red.CopyTo(0, int_red_5mm, 0, 5);
+            int[] int_red_8mm = new int[3];
+            int_red.CopyTo(5, int_red_8mm, 0, 3);
+            int[] int_red_10mm = new int[3];
+            int_red.CopyTo(8, int_red_10mm, 0, 3);
+            // 黄色
+            int[] int_yellow_5mm = new int[5];
+            int_yellow.CopyTo(0, int_yellow_5mm, 0, 5);
+            int[] int_yellow_8mm = new int[3];
+            int_yellow.CopyTo(5, int_yellow_8mm, 0, 3);
+            int[] int_yellow_10mm = new int[3];
+            int_yellow.CopyTo(8, int_yellow_10mm, 0, 3);
+            // 緑
+            int[] int_green_5mm = new int[5];
+            int_green.CopyTo(0, int_green_5mm, 0, 5);
+            int[] int_green_8mm = new int[3];
+            int_green.CopyTo(5, int_green_8mm, 0, 3);
+            int[] int_green_10mm = new int[3];
+            int_green.CopyTo(8, int_green_10mm, 0, 3);
+            // 白
+            int[] int_white_5mm = new int[5];
+            int_white.CopyTo(0, int_white_5mm, 0, 5);
+            int[] int_white_8mm = new int[3];
+            int_white.CopyTo(5, int_white_8mm, 0, 3);
+            int[] int_white_10mm = new int[3];
+            int_white.CopyTo(8, int_white_10mm, 0, 3);
+
+            DataTable table = new DataTable("Table");   // グリッドビューに表示するテーブル
+
+            Invoke((Action)(() =>
+            {
+                //Console.WriteLine("Invoke_Start");
+                // グリッドビューとチャートに表示されている内容をクリア
+                dataGridView1.Rows.Clear();
+                // 色-半径毎の個数を合計し、グリッドビューの行に代入する
+                dataGridView1.Rows.Add("赤", int_red_5mm.Sum(), int_red_8mm.Sum(), int_red_10mm.Sum(), int_red_5mm.Sum() + int_red_8mm.Sum() + int_red_10mm.Sum());
+                dataGridView1.Rows.Add("黄", int_yellow_5mm.Sum(), int_yellow_8mm.Sum(), int_yellow_10mm.Sum(), int_yellow_5mm.Sum() + int_yellow_8mm.Sum() + int_yellow_10mm.Sum());
+                dataGridView1.Rows.Add("緑", int_green_5mm.Sum(), int_green_8mm.Sum(), int_green_10mm.Sum(), int_green_5mm.Sum() + int_green_8mm.Sum() + int_green_10mm.Sum());
+                dataGridView1.Rows.Add("白", int_white_5mm.Sum(), int_white_8mm.Sum(), int_white_10mm.Sum(), int_white_5mm.Sum() + int_white_8mm.Sum() + int_white_10mm.Sum());
+                dataGridView1.Rows.Add("合計", int_red_5mm.Sum() + int_yellow_5mm.Sum() + int_green_5mm.Sum() + int_white_5mm.Sum()
+                    , int_red_8mm.Sum() + int_yellow_8mm.Sum() + int_green_8mm.Sum() + int_white_8mm.Sum()
+                    , int_red_10mm.Sum() + int_yellow_10mm.Sum() + int_green_10mm.Sum() + int_white_10mm.Sum()
+                    , int_red_5mm.Sum() + int_yellow_5mm.Sum() + int_green_5mm.Sum() + int_white_5mm.Sum()
+                    + int_red_8mm.Sum() + int_yellow_8mm.Sum() + int_green_8mm.Sum() + int_white_8mm.Sum()
+                    + int_red_10mm.Sum() + int_yellow_10mm.Sum() + int_green_10mm.Sum() + int_white_10mm.Sum());
+                pnlResult.Image = CreateImage($@"{m_strPythonFolderPath}\img\img.png");
+            }));
+        }
+
+        private static Image CreateImage(string n_stFileName)
+        {
+            FileStream st_fs = new FileStream(n_stFileName, FileMode.Open, FileAccess.Read);
+            Image img_dst_pic = Image.FromStream(st_fs);
+            st_fs.Close();
+            return img_dst_pic;
+        }
+
     }
+    
 }

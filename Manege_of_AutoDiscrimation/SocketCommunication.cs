@@ -104,7 +104,7 @@ namespace Manege_of_AutoDiscrimation
         /// 通信機能の初期化
         /// </summary>
         /// <param name="nParentForm"></param>
-        /// <returns></returns>
+        /// <returns>0:正常 -1:サーバー機能はない -2:既にソケットをオープンしている -3:ソケットオープンエラー</returns>
         public int Init(Form nParentForm, string nstrIPAddress, int niPortNo)
         {
             try
