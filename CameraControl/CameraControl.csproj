@@ -74,6 +74,7 @@
     <Compile Include="ImageMatrox.cs" />
     <Compile Include="Matrox.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Socket.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LogBase\LogBase.csproj">

@@ -1424,7 +1424,7 @@ namespace ImageMatrox
             MIL.MbufCopy(m_milInspectionResultImageTemp, mil_result_temp);
 
             //	オーバーレイを検査結果画像上にコピー
-            //	MbufTransfer( mil_temp, mil_result_temp, MIL.M_DEFAULT, MIL.M_DEFAULT, MIL.M_DEFAULT, MIL.M_DEFAULT, MIL.M_DEFAULT, MIL.M_DEFAULT, MIL.M_DEFAULT, MIL.M_DEFAULT, MIL.M_DEFAULT, MIL.M_DEFAULT, MIL.M_COMPOSITION, MIL.M_DEFAULT, MIL.M_RGB888(1,1,1), MIL.M_NULL );
+            MIL.MbufTransfer( mil_temp, mil_result_temp, MIL.M_DEFAULT, MIL.M_DEFAULT, MIL.M_DEFAULT, MIL.M_DEFAULT, MIL.M_DEFAULT, MIL.M_DEFAULT, MIL.M_DEFAULT, MIL.M_DEFAULT, MIL.M_DEFAULT, MIL.M_DEFAULT, MIL.M_COMPOSITION, MIL.M_DEFAULT, MIL.M_RGB888(1,1,1), MIL.M_NULL );
             MIL.MbufTransfer(m_milDraphicSaveImage, mil_result_temp, MIL.M_DEFAULT, MIL.M_DEFAULT, MIL.M_DEFAULT, MIL.M_DEFAULT, MIL.M_DEFAULT, MIL.M_DEFAULT, MIL.M_DEFAULT, MIL.M_DEFAULT, MIL.M_DEFAULT, MIL.M_DEFAULT, MIL.M_COMPOSITION, MIL.M_DEFAULT, MIL.M_RGB888(1, 1, 1), MIL.M_NULL);
 
             //	ファイル出力
@@ -1852,6 +1852,7 @@ namespace ImageMatrox
 
                 //	致命的なエラーかどうか判断する
                 //	MdigProcess、xxxAllocで発生するエラーは全て致命的とする
+                
                 str_function = ErrorMessageFunction.ToString();
                 //if (str_function.find("MdigProcess") != string::npos || str_function.find("Alloc") != string::npos)
                 if (str_function.IndexOf("Alloc") != -1)

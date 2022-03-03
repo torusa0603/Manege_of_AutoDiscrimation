@@ -120,7 +120,7 @@ namespace ImageMatrox
                 }
 
                 m_bThroughFlg = false;
-            }
+            }   
 
             return 0;
         }
