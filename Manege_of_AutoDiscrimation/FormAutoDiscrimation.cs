@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using System.IO;
 using System.Management;
+using CCSLightController;
 
 
 namespace Manege_of_AutoDiscrimation
@@ -32,6 +33,7 @@ namespace Manege_of_AutoDiscrimation
         int m_iTimerSleepTime;
         static bool m_bInoculationEnable; // 判定可能かどうかを示す
         SocketCommunication m_cSocketCommunication; // ソケット通信用のクラス
+        CBaseCCSLight m_cBaseCCSLight;
         #endregion
 
         #region "   プログラム開始時処理                            "
@@ -54,6 +56,9 @@ namespace Manege_of_AutoDiscrimation
         {
             try
             {
+                // パラメーターの読み込み
+
+
                 // Paramクラスへの情報設定初期化
                 m_cParaFormMain.setProductName(Application.ProductName);
                 m_cParaFormMain.setComment(Application.ExecutablePath);
@@ -85,7 +90,7 @@ namespace Manege_of_AutoDiscrimation
                 }
                 m_cSocketCommunication.evCommandReceive += CommandReceiveAction;
 
-
+                m_cBaseCCSLight = new CPODCommand();
             }
             catch (Exception ex)
             {
@@ -402,6 +407,7 @@ namespace Manege_of_AutoDiscrimation
                 case 0:
                     // スタート
                     // ライトを点ける
+                    ChangeLightState(true);
                     break;
                 case 1:
                     // 測定開始
@@ -410,8 +416,29 @@ namespace Manege_of_AutoDiscrimation
                 case 2:
                     // 終了
                     // ライトを消す
+                    ChangeLightState(false);
                     break;
             }
+        }
+
+        private int ChangeLightState(bool nbLightState)
+        {
+            int i_ret;
+            if (nbLightState)
+            {
+                i_ret = m_cBaseCCSLight.openLight(m_Parameter.LightIPAdress, m_Parameter.LightPortNumber);
+                i_ret = m_cBaseCCSLight.turnLight(true, CBaseCCSLight.Channel.ch1);
+                i_ret = m_cBaseCCSLight.setDimmerValue(m_Parameter.LightValue, CBaseCCSLight.Channel.ch1);
+            }
+            else
+            {
+                i_ret = m_cBaseCCSLight.turnLight(false, CBaseCCSLight.Channel.ch1);
+                i_ret = m_cBaseCCSLight.setDimmerValue(0, CBaseCCSLight.Channel.ch1);
+                i_ret = m_cBaseCCSLight.closeLight();
+            }
+            
+
+            return 0;
         }
     }
     
