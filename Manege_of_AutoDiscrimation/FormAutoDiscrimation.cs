@@ -65,13 +65,27 @@ namespace Manege_of_AutoDiscrimation
                 }
                 // ログクラス初期設定
                 initLog();
-                // カメラオープンイベント
-                btnOpen_Click(sender, e);
+
+                // カメラオープン
+                int i_ret=IniCamera();
+                if(i_ret != 0)
+                {
+                    MessageBox.Show("カメラオープンに失敗しました");
+                    this.Close();
+                }
 
                 // ソケットクラスオープン
                 m_cSocketCommunication = new SocketCommunication();
                 int i_port_number=0; // 後で決める
-                m_cSocketCommunication.Init(this,"", i_port_number);
+                i_ret= m_cSocketCommunication.Init(this,"", i_port_number);
+                if (i_ret != 0)
+                {
+                    MessageBox.Show("ソケットオープンに失敗しました");
+                    this.Close();
+                }
+                m_cSocketCommunication.evCommandReceive += CommandReceiveAction;
+
+
             }
             catch (Exception ex)
             {
@@ -112,7 +126,7 @@ namespace Manege_of_AutoDiscrimation
         /// <summary>
         /// 判定
         /// </summary>
-        private void Inoculation(object o)
+        private void Inoculation()
         {
             // 排他的処理
             if (FormAutoDiscrimation.m_bInoculationEnable)
@@ -216,13 +230,12 @@ namespace Manege_of_AutoDiscrimation
         }
         #endregion
 
-        #region "   画像処理/Openボタン                             "
+        #region "   カメラオープン                             "
         /// <summary>
         /// カメラオープン処理
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void btnOpen_Click(object sender, EventArgs e)
+        /// <returns>0:正常終了 -1:オープン失敗 </returns>
+        private int IniCamera()
         {
             try
             {
@@ -241,15 +254,17 @@ namespace Manege_of_AutoDiscrimation
                 // open (渡す事が出来るハンドルに制限有り。本アプリではパネルのハンドルを渡す)
                 if (m_cCameraControlBase.open(pnlCaptureedPicture.Handle, false) == false)
                 {
-                    MessageBox.Show("カメラオープンに失敗しました");
-                    this.Close();
+                    // エラー処理
+                    return -1;
                 }
             }
             catch (System.Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine(ex.Message);
-                MessageBox.Show(ex.Message);
+                // エラー処理
+                return -99;
             }
+
+            return 0;
         }
         #endregion
 
@@ -380,6 +395,24 @@ namespace Manege_of_AutoDiscrimation
             return img_dst_pic;
         }
 
+        private void CommandReceiveAction(int niCommand)
+        {
+            switch (niCommand)
+            {
+                case 0:
+                    // スタート
+                    // ライトを点ける
+                    break;
+                case 1:
+                    // 測定開始
+                    Inoculation();
+                    break;
+                case 2:
+                    // 終了
+                    // ライトを消す
+                    break;
+            }
+        }
     }
     
 }
