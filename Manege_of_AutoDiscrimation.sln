@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParamBase", "ParamBase\Para
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageMatrox", "ImageMatrox\ImageMatrox.csproj", "{BC35A99D-16AC-4FCE-93C1-161866A1D7CF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonSocket", "CommonSocket\CommonSocket.csproj", "{5AD2A3F8-8CC0-475C-841B-97549F7277F2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,6 +75,18 @@ Global
 		{BC35A99D-16AC-4FCE-93C1-161866A1D7CF}.Release|x64.Build.0 = Release|x64
 		{BC35A99D-16AC-4FCE-93C1-161866A1D7CF}.Release|x86.ActiveCfg = Release|Any CPU
 		{BC35A99D-16AC-4FCE-93C1-161866A1D7CF}.Release|x86.Build.0 = Release|Any CPU
+		{5AD2A3F8-8CC0-475C-841B-97549F7277F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5AD2A3F8-8CC0-475C-841B-97549F7277F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5AD2A3F8-8CC0-475C-841B-97549F7277F2}.Debug|x64.ActiveCfg = Debug|x64
+		{5AD2A3F8-8CC0-475C-841B-97549F7277F2}.Debug|x64.Build.0 = Debug|x64
+		{5AD2A3F8-8CC0-475C-841B-97549F7277F2}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5AD2A3F8-8CC0-475C-841B-97549F7277F2}.Debug|x86.Build.0 = Debug|Any CPU
+		{5AD2A3F8-8CC0-475C-841B-97549F7277F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5AD2A3F8-8CC0-475C-841B-97549F7277F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5AD2A3F8-8CC0-475C-841B-97549F7277F2}.Release|x64.ActiveCfg = Release|x64
+		{5AD2A3F8-8CC0-475C-841B-97549F7277F2}.Release|x64.Build.0 = Release|x64
+		{5AD2A3F8-8CC0-475C-841B-97549F7277F2}.Release|x86.ActiveCfg = Release|Any CPU
+		{5AD2A3F8-8CC0-475C-841B-97549F7277F2}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
