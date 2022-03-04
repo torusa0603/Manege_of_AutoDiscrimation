@@ -9,7 +9,6 @@ namespace Manege_of_AutoDiscrimation
     public class Parameter
     {
         public int PortNumber { get; set; } = 0;
-        public int ImageDisplayTime { get; set; } = 5;
         public int ConditionSize { get; set; } = 0;
         public int ConditionColor { get; set; } = 0;
         public int ConditionNumber { get; set; } = 3;

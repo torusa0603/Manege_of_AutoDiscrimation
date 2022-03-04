@@ -94,6 +94,12 @@
     <Compile Include="FormConditionSetting.designer.cs">
       <DependentUpon>FormConditionSetting.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormResultPicture.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormResultPicture.Designer.cs">
+      <DependentUpon>FormResultPicture.cs</DependentUpon>
+    </Compile>
     <Compile Include="Log\LogKind.cs" />
     <Compile Include="MainProcess.cs" />
     <Compile Include="Parameter.cs" />
@@ -107,6 +113,9 @@
     <EmbeddedResource Include="FormConditionSetting.resx">
       <DependentUpon>FormConditionSetting.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="FormResultPicture.resx">
+      <DependentUpon>FormResultPicture.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -115,6 +124,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -145,6 +155,12 @@
       <Name>ParamBase</Name>
       <Private>False</Private>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\loose.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\win.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

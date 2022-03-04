@@ -169,7 +169,25 @@ namespace Manege_of_AutoDiscrimation
                 }
                 if (File.Exists($@"{m_strPythonFolderPath}\result\color_radius.csv"))
                 {
-                    UpdataAnalyzeResultAndPicture();
+                    try
+                    {
+                        // 結果を表示する
+                        UpdataAnalyzeResultAndPicture();
+                        Control c_find_control = FindControl(this, $"txt_{m_csParameter.ConditionColor}_{m_csParameter.ConditionSize}");
+
+                        if (c_find_control != null)
+                        {
+                            // 勝利条件を満たしているかを渡す
+                            FormResultPicture form_result_picture = new FormResultPicture((Int16.Parse(c_find_control.Text) >= m_csParameter.ConditionNumber));
+                            form_result_picture.ShowDialog();
+                        }
+                    }
+                    catch
+                    {
+                        // 例外エラー
+                        FormAutoDiscrimation.m_bInoculationEnable = true;
+                        return;
+                    }
                 }
                 else
                 {
@@ -178,6 +196,7 @@ namespace Manege_of_AutoDiscrimation
                 }
                 GC.Collect();
                 //Console.WriteLine("timermethod_end");
+
                 FormAutoDiscrimation.m_bInoculationEnable = true;
             }
             else
@@ -445,6 +464,33 @@ namespace Manege_of_AutoDiscrimation
                 m_bInoculationEnable = true;
 
             }
+        }
+
+        private Control FindControl(Control hParent, string stName)
+        {
+            // hParent 内のすべてのコントロールを列挙する
+            foreach (Control cControl in hParent.Controls)
+            {
+                // 列挙したコントロールにコントロールが含まれている場合は再帰呼び出しする
+                if (cControl.HasChildren)
+                {
+                    Control cFindControl = FindControl(cControl, stName);
+
+                    // 再帰呼び出し先でコントロールが見つかった場合はそのまま返す
+                    if (cFindControl != null)
+                    {
+                        return cFindControl;
+                    }
+                }
+
+                // コントロール名が合致した場合はそのコントロールのインスタンスを返す
+                if (cControl.Name == stName)
+                {
+                    return cControl;
+                }
+            }
+
+            return null;
         }
     }
 }
