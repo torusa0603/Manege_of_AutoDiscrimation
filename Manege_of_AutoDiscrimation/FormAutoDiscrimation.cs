@@ -319,6 +319,7 @@ namespace Manege_of_AutoDiscrimation
                 }
             }
             sr_result.Dispose();
+
             // 色ごとのリストを作成し、全体のリストからデータを代入する
             List<int> int_red = int_csv_lists[0];
             List<int> int_yellow = int_csv_lists[1];
@@ -358,20 +359,19 @@ namespace Manege_of_AutoDiscrimation
 
             Invoke((Action)(() =>
             {
-                //Console.WriteLine("Invoke_Start");
-                // グリッドビューとチャートに表示されている内容をクリア
-                dataGridView1.Rows.Clear();
-                // 色-半径毎の個数を合計し、グリッドビューの行に代入する
-                dataGridView1.Rows.Add("赤", int_red_5mm.Sum(), int_red_8mm.Sum(), int_red_10mm.Sum(), int_red_5mm.Sum() + int_red_8mm.Sum() + int_red_10mm.Sum());
-                dataGridView1.Rows.Add("黄", int_yellow_5mm.Sum(), int_yellow_8mm.Sum(), int_yellow_10mm.Sum(), int_yellow_5mm.Sum() + int_yellow_8mm.Sum() + int_yellow_10mm.Sum());
-                dataGridView1.Rows.Add("緑", int_green_5mm.Sum(), int_green_8mm.Sum(), int_green_10mm.Sum(), int_green_5mm.Sum() + int_green_8mm.Sum() + int_green_10mm.Sum());
-                dataGridView1.Rows.Add("白", int_white_5mm.Sum(), int_white_8mm.Sum(), int_white_10mm.Sum(), int_white_5mm.Sum() + int_white_8mm.Sum() + int_white_10mm.Sum());
-                dataGridView1.Rows.Add("合計", int_red_5mm.Sum() + int_yellow_5mm.Sum() + int_green_5mm.Sum() + int_white_5mm.Sum()
-                    , int_red_8mm.Sum() + int_yellow_8mm.Sum() + int_green_8mm.Sum() + int_white_8mm.Sum()
-                    , int_red_10mm.Sum() + int_yellow_10mm.Sum() + int_green_10mm.Sum() + int_white_10mm.Sum()
-                    , int_red_5mm.Sum() + int_yellow_5mm.Sum() + int_green_5mm.Sum() + int_white_5mm.Sum()
-                    + int_red_8mm.Sum() + int_yellow_8mm.Sum() + int_green_8mm.Sum() + int_white_8mm.Sum()
-                    + int_red_10mm.Sum() + int_yellow_10mm.Sum() + int_green_10mm.Sum() + int_white_10mm.Sum());
+                txtRezult_0_0.Text = int_red_5mm.Sum().ToString();
+                txtRezult_0_1.Text = int_red_8mm.Sum().ToString();
+                txtRezult_0_2.Text = int_red_10mm.Sum().ToString();
+                txtRezult_1_0.Text = int_yellow_5mm.Sum().ToString();
+                txtRezult_1_1.Text = int_yellow_8mm.Sum().ToString();
+                txtRezult_1_2.Text = int_yellow_10mm.Sum().ToString();
+                txtRezult_2_0.Text = int_green_5mm.Sum().ToString();
+                txtRezult_2_1.Text = int_green_8mm.Sum().ToString();
+                txtRezult_2_2.Text = int_green_10mm.Sum().ToString();
+                txtRezult_3_0.Text = int_white_5mm.Sum().ToString();
+                txtRezult_3_1.Text = int_white_8mm.Sum().ToString();
+                txtRezult_3_2.Text = int_white_10mm.Sum().ToString();
+
                 pnlResult.Image = CreateImage($@"{m_strPythonFolderPath}\img\img.png");
             }));
         }
@@ -441,7 +441,6 @@ namespace Manege_of_AutoDiscrimation
 
                 label1.Text = $"{CDefine.CCondition.Color[m_csParameter.ConditionColor]}色で" +
                     $"{CDefine.CCondition.Size[m_csParameter.ConditionSize]}の球を{m_csParameter.ConditionNumber}個撮ろう！";
-
                 // 測定可能にする
                 m_bInoculationEnable = true;
 
