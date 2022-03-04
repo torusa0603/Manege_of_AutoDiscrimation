@@ -440,6 +440,22 @@ namespace Manege_of_AutoDiscrimation
 
             return 0;
         }
+
+        private void textBox1_MouseUp(object sender, MouseEventArgs e)
+        {
+            // 右クリック時のみ起動
+            if(e.Button == MouseButtons.Right)
+            {
+                // 設定フォームを立ち上げる
+                FormConditionSetting formConditionSetting = new FormConditionSetting();
+                formConditionSetting.ShowDialog();
+                formConditionSetting.Dispose();
+            }
+            else
+            {
+                return;
+            }
+        }
     }
     
 }
