@@ -27,11 +27,8 @@ namespace Manege_of_AutoDiscrimation
         private CameraControl.CCameraControlBase m_cCameraControlBase = null;   //カメラ制御クラス
         public Action evAnalyzePicture;   //マニュアルモード時解析イベントハンドラ
         string m_strPythonFolderPath = System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\PythonFile";   //pythonディレクトリ
-        Parameter m_Parameter;
-        TimerCallback m_timerDelegate;
-        System.Threading.Timer m_timer;
-        int m_iTimerSleepTime;
-        static bool m_bInoculationEnable; // 判定可能かどうかを示す
+        public static Parameter m_csParameter;
+        static bool m_bInoculationEnable = true; // 判定可能かどうかを示す
         SocketCommunication m_cSocketCommunication; // ソケット通信用のクラス
         CBaseCCSLight m_cBaseCCSLight;
         #endregion
@@ -57,7 +54,7 @@ namespace Manege_of_AutoDiscrimation
             try
             {
                 // パラメーターの読み込み
-
+                m_csParameter = new Parameter();
 
                 // Paramクラスへの情報設定初期化
                 m_cParaFormMain.setProductName(Application.ProductName);
@@ -72,17 +69,17 @@ namespace Manege_of_AutoDiscrimation
                 initLog();
 
                 // カメラオープン
-                int i_ret=IniCamera();
-                if(i_ret != 0)
+                int i_ret = IniCamera();
+                if (i_ret != 0)
                 {
                     MessageBox.Show("カメラオープンに失敗しました");
-                    this.Close();
+                    //this.Close();
                 }
 
                 // ソケットクラスオープン
                 m_cSocketCommunication = new SocketCommunication();
-                int i_port_number=0; // 後で決める
-                i_ret= m_cSocketCommunication.Init(this,"", i_port_number);
+                int i_port_number = 0; // 後で決める
+                i_ret = m_cSocketCommunication.Init(this, "", i_port_number);
                 if (i_ret != 0)
                 {
                     MessageBox.Show("ソケットオープンに失敗しました");
@@ -91,6 +88,9 @@ namespace Manege_of_AutoDiscrimation
                 m_cSocketCommunication.evCommandReceive += CommandReceiveAction;
 
                 m_cBaseCCSLight = new CPODCommand();
+
+                label1.Text = $"{CDefine.CCondition.Color[m_csParameter.ConditionColor]}色で" +
+                    $"{CDefine.CCondition.Size[m_csParameter.ConditionSize]}の球を{m_csParameter.ConditionNumber}個撮ろう！";
             }
             catch (Exception ex)
             {
@@ -112,19 +112,7 @@ namespace Manege_of_AutoDiscrimation
         /// <param name="e"></param>
         private void FormAutoDiscrimation_Shown(object sender, EventArgs e)
         {
-            try
-            {
 
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-                return;
-            }
-            finally
-            {
-                
-            }
         }
         #endregion
 
@@ -302,11 +290,7 @@ namespace Manege_of_AutoDiscrimation
 
         private void FormAutoDiscrimation_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (m_timer != null)
-            {
-                // タイマーを破棄
-                m_timer.Dispose();
-            }
+            m_cSocketCommunication.Close();
         }
 
         public void UpdataAnalyzeResultAndPicture()
@@ -426,9 +410,9 @@ namespace Manege_of_AutoDiscrimation
             int i_ret;
             if (nbLightState)
             {
-                i_ret = m_cBaseCCSLight.openLight(m_Parameter.LightIPAdress, m_Parameter.LightPortNumber);
+                i_ret = m_cBaseCCSLight.openLight(m_csParameter.LightIPAdress, m_csParameter.LightPortNumber);
                 i_ret = m_cBaseCCSLight.turnLight(true, CBaseCCSLight.Channel.ch1);
-                i_ret = m_cBaseCCSLight.setDimmerValue(m_Parameter.LightValue, CBaseCCSLight.Channel.ch1);
+                i_ret = m_cBaseCCSLight.setDimmerValue(m_csParameter.LightValue, CBaseCCSLight.Channel.ch1);
             }
             else
             {
@@ -436,26 +420,32 @@ namespace Manege_of_AutoDiscrimation
                 i_ret = m_cBaseCCSLight.setDimmerValue(0, CBaseCCSLight.Channel.ch1);
                 i_ret = m_cBaseCCSLight.closeLight();
             }
-            
+
 
             return 0;
         }
 
-        private void textBox1_MouseUp(object sender, MouseEventArgs e)
+        private void label1_DoubleClick(object sender, EventArgs e)
         {
-            // 右クリック時のみ起動
-            if(e.Button == MouseButtons.Right)
+
+            // 測定可能=測定を行っていない場合のみ可能
+            if (m_bInoculationEnable)
             {
+                // 測定不可にする
+                m_bInoculationEnable = false;
+
                 // 設定フォームを立ち上げる
                 FormConditionSetting formConditionSetting = new FormConditionSetting();
                 formConditionSetting.ShowDialog();
                 formConditionSetting.Dispose();
-            }
-            else
-            {
-                return;
+
+                label1.Text = $"{CDefine.CCondition.Color[m_csParameter.ConditionColor]}色で" +
+                    $"{CDefine.CCondition.Size[m_csParameter.ConditionSize]}の球を{m_csParameter.ConditionNumber}個撮ろう！";
+
+                // 測定可能にする
+                m_bInoculationEnable = true;
+
             }
         }
     }
-    
 }

@@ -41,12 +41,8 @@ namespace Manege_of_AutoDiscrimation
             // 
             // cmbColor
             // 
+            this.cmbColor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbColor.FormattingEnabled = true;
-            this.cmbColor.Items.AddRange(new object[] {
-            "赤",
-            "黄",
-            "緑",
-            "白"});
             this.cmbColor.Location = new System.Drawing.Point(86, 21);
             this.cmbColor.Name = "cmbColor";
             this.cmbColor.Size = new System.Drawing.Size(76, 20);
@@ -61,16 +57,14 @@ namespace Manege_of_AutoDiscrimation
             0,
             0});
             this.nudNumber.Name = "nudNumber";
+            this.nudNumber.ReadOnly = true;
             this.nudNumber.Size = new System.Drawing.Size(76, 19);
             this.nudNumber.TabIndex = 1;
             // 
             // cmbSize
             // 
+            this.cmbSize.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbSize.FormattingEnabled = true;
-            this.cmbSize.Items.AddRange(new object[] {
-            "5mm",
-            "8mm",
-            "10mm"});
             this.cmbSize.Location = new System.Drawing.Point(85, 63);
             this.cmbSize.Name = "cmbSize";
             this.cmbSize.Size = new System.Drawing.Size(77, 20);
@@ -112,6 +106,7 @@ namespace Manege_of_AutoDiscrimation
             this.btnSetting.TabIndex = 6;
             this.btnSetting.Text = "設定";
             this.btnSetting.UseVisualStyleBackColor = false;
+            this.btnSetting.Click += new System.EventHandler(this.btnSetting_Click);
             // 
             // FormConditionSetting
             // 
