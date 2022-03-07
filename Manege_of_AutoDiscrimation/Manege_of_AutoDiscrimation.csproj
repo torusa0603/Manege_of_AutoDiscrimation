@@ -57,10 +57,15 @@
   <ItemGroup>
     <Reference Include="CCSLightController">
       <HintPath>..\bin\Debug\Library\CCSLightController.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="ImageMatrox, Version=1.0.0.0, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\Debug\ImageMatrox.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\bin\Debug\Library\Newtonsoft.Json.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="SPCommonSocket">
@@ -102,8 +107,10 @@
     </Compile>
     <Compile Include="Log\LogKind.cs" />
     <Compile Include="MainProcess.cs" />
-    <Compile Include="Parameter.cs" />
+    <Compile Include="Param\JsonIO.cs" />
+    <Compile Include="Param\Parameter.cs" />
     <Compile Include="Param\ParaFormMain.cs" />
+    <Compile Include="Param\ParameterIO.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SocketCommunication.cs" />

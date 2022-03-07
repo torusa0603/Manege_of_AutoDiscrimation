@@ -31,26 +31,27 @@
             this.pnlCaptureedPicture = new System.Windows.Forms.Panel();
             this.pnlResult = new System.Windows.Forms.PictureBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.txtColorRed = new System.Windows.Forms.TextBox();
-            this.txtRezult_0_0 = new System.Windows.Forms.TextBox();
-            this.txtColoWhite = new System.Windows.Forms.TextBox();
-            this.txtColoGreen = new System.Windows.Forms.TextBox();
-            this.txtColoYellow = new System.Windows.Forms.TextBox();
-            this.txtRezult_0_1 = new System.Windows.Forms.TextBox();
-            this.txtRezult_0_2 = new System.Windows.Forms.TextBox();
-            this.txtSizeSmall = new System.Windows.Forms.TextBox();
-            this.txtSizeMiddle = new System.Windows.Forms.TextBox();
-            this.txtSizeLarge = new System.Windows.Forms.TextBox();
-            this.txtRezult_1_0 = new System.Windows.Forms.TextBox();
-            this.txtRezult_1_1 = new System.Windows.Forms.TextBox();
-            this.txtRezult_1_2 = new System.Windows.Forms.TextBox();
-            this.txtRezult_2_0 = new System.Windows.Forms.TextBox();
-            this.txtRezult_2_1 = new System.Windows.Forms.TextBox();
-            this.txtRezult_2_2 = new System.Windows.Forms.TextBox();
-            this.txtRezult_3_0 = new System.Windows.Forms.TextBox();
-            this.txtRezult_3_1 = new System.Windows.Forms.TextBox();
-            this.txtRezult_3_2 = new System.Windows.Forms.TextBox();
             this.grbResult = new System.Windows.Forms.GroupBox();
+            this.lblResult_Red = new System.Windows.Forms.Label();
+            this.lblResult_White = new System.Windows.Forms.Label();
+            this.lblResult_Green = new System.Windows.Forms.Label();
+            this.lblResult_Yellow = new System.Windows.Forms.Label();
+            this.lblResult_Small = new System.Windows.Forms.Label();
+            this.lblResult_Large = new System.Windows.Forms.Label();
+            this.lblResult_Middle = new System.Windows.Forms.Label();
+            this.lblResult_0_0 = new System.Windows.Forms.Label();
+            this.lblResult_2_0 = new System.Windows.Forms.Label();
+            this.lblResult_1_0 = new System.Windows.Forms.Label();
+            this.lblResult_3_0 = new System.Windows.Forms.Label();
+            this.lblResult_0_1 = new System.Windows.Forms.Label();
+            this.lblResult_1_1 = new System.Windows.Forms.Label();
+            this.lblResult_2_1 = new System.Windows.Forms.Label();
+            this.lblResult_3_1 = new System.Windows.Forms.Label();
+            this.lblResult_0_2 = new System.Windows.Forms.Label();
+            this.lblResult_1_2 = new System.Windows.Forms.Label();
+            this.lblResult_2_2 = new System.Windows.Forms.Label();
+            this.lblResult_3_2 = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pnlResult)).BeginInit();
             this.grbResult.SuspendLayout();
             this.SuspendLayout();
@@ -82,211 +83,27 @@
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.label1.DoubleClick += new System.EventHandler(this.label1_DoubleClick);
             // 
-            // txtColorRed
-            // 
-            this.txtColorRed.Font = new System.Drawing.Font("MS UI Gothic", 36F);
-            this.txtColorRed.ForeColor = System.Drawing.Color.Red;
-            this.txtColorRed.Location = new System.Drawing.Point(94, 162);
-            this.txtColorRed.Name = "txtColorRed";
-            this.txtColorRed.Size = new System.Drawing.Size(120, 55);
-            this.txtColorRed.TabIndex = 10;
-            this.txtColorRed.Text = "赤";
-            this.txtColorRed.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // txtRezult_0_0
-            // 
-            this.txtRezult_0_0.Font = new System.Drawing.Font("MS UI Gothic", 36F);
-            this.txtRezult_0_0.Location = new System.Drawing.Point(220, 162);
-            this.txtRezult_0_0.Name = "txtRezult_0_0";
-            this.txtRezult_0_0.Size = new System.Drawing.Size(120, 55);
-            this.txtRezult_0_0.TabIndex = 11;
-            this.txtRezult_0_0.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // txtColoWhite
-            // 
-            this.txtColoWhite.Font = new System.Drawing.Font("MS UI Gothic", 36F);
-            this.txtColoWhite.ForeColor = System.Drawing.Color.Gray;
-            this.txtColoWhite.Location = new System.Drawing.Point(94, 345);
-            this.txtColoWhite.Name = "txtColoWhite";
-            this.txtColoWhite.Size = new System.Drawing.Size(120, 55);
-            this.txtColoWhite.TabIndex = 12;
-            this.txtColoWhite.Text = "白";
-            this.txtColoWhite.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // txtColoGreen
-            // 
-            this.txtColoGreen.Font = new System.Drawing.Font("MS UI Gothic", 36F);
-            this.txtColoGreen.ForeColor = System.Drawing.Color.Lime;
-            this.txtColoGreen.Location = new System.Drawing.Point(94, 284);
-            this.txtColoGreen.Name = "txtColoGreen";
-            this.txtColoGreen.Size = new System.Drawing.Size(120, 55);
-            this.txtColoGreen.TabIndex = 13;
-            this.txtColoGreen.Text = "緑";
-            this.txtColoGreen.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // txtColoYellow
-            // 
-            this.txtColoYellow.Font = new System.Drawing.Font("MS UI Gothic", 36F);
-            this.txtColoYellow.ForeColor = System.Drawing.Color.Gold;
-            this.txtColoYellow.Location = new System.Drawing.Point(94, 223);
-            this.txtColoYellow.Name = "txtColoYellow";
-            this.txtColoYellow.Size = new System.Drawing.Size(120, 55);
-            this.txtColoYellow.TabIndex = 14;
-            this.txtColoYellow.Text = "黄";
-            this.txtColoYellow.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // txtRezult_0_1
-            // 
-            this.txtRezult_0_1.Font = new System.Drawing.Font("MS UI Gothic", 36F);
-            this.txtRezult_0_1.Location = new System.Drawing.Point(346, 162);
-            this.txtRezult_0_1.Name = "txtRezult_0_1";
-            this.txtRezult_0_1.Size = new System.Drawing.Size(120, 55);
-            this.txtRezult_0_1.TabIndex = 15;
-            this.txtRezult_0_1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // txtRezult_0_2
-            // 
-            this.txtRezult_0_2.Font = new System.Drawing.Font("MS UI Gothic", 36F);
-            this.txtRezult_0_2.Location = new System.Drawing.Point(472, 162);
-            this.txtRezult_0_2.Name = "txtRezult_0_2";
-            this.txtRezult_0_2.Size = new System.Drawing.Size(120, 55);
-            this.txtRezult_0_2.TabIndex = 16;
-            this.txtRezult_0_2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // txtSizeSmall
-            // 
-            this.txtSizeSmall.Font = new System.Drawing.Font("MS UI Gothic", 24F);
-            this.txtSizeSmall.Location = new System.Drawing.Point(220, 101);
-            this.txtSizeSmall.Multiline = true;
-            this.txtSizeSmall.Name = "txtSizeSmall";
-            this.txtSizeSmall.Size = new System.Drawing.Size(120, 55);
-            this.txtSizeSmall.TabIndex = 17;
-            this.txtSizeSmall.Text = "小";
-            this.txtSizeSmall.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // txtSizeMiddle
-            // 
-            this.txtSizeMiddle.Font = new System.Drawing.Font("MS UI Gothic", 30F);
-            this.txtSizeMiddle.Location = new System.Drawing.Point(346, 101);
-            this.txtSizeMiddle.Multiline = true;
-            this.txtSizeMiddle.Name = "txtSizeMiddle";
-            this.txtSizeMiddle.Size = new System.Drawing.Size(120, 55);
-            this.txtSizeMiddle.TabIndex = 18;
-            this.txtSizeMiddle.Text = "中";
-            this.txtSizeMiddle.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // txtSizeLarge
-            // 
-            this.txtSizeLarge.Font = new System.Drawing.Font("MS UI Gothic", 36F);
-            this.txtSizeLarge.Location = new System.Drawing.Point(472, 101);
-            this.txtSizeLarge.Name = "txtSizeLarge";
-            this.txtSizeLarge.Size = new System.Drawing.Size(120, 55);
-            this.txtSizeLarge.TabIndex = 19;
-            this.txtSizeLarge.Text = "大";
-            this.txtSizeLarge.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // txtRezult_1_0
-            // 
-            this.txtRezult_1_0.Font = new System.Drawing.Font("MS UI Gothic", 36F);
-            this.txtRezult_1_0.Location = new System.Drawing.Point(220, 223);
-            this.txtRezult_1_0.Name = "txtRezult_1_0";
-            this.txtRezult_1_0.Size = new System.Drawing.Size(120, 55);
-            this.txtRezult_1_0.TabIndex = 20;
-            this.txtRezult_1_0.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // txtRezult_1_1
-            // 
-            this.txtRezult_1_1.Font = new System.Drawing.Font("MS UI Gothic", 36F);
-            this.txtRezult_1_1.Location = new System.Drawing.Point(346, 223);
-            this.txtRezult_1_1.Name = "txtRezult_1_1";
-            this.txtRezult_1_1.Size = new System.Drawing.Size(120, 55);
-            this.txtRezult_1_1.TabIndex = 21;
-            this.txtRezult_1_1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // txtRezult_1_2
-            // 
-            this.txtRezult_1_2.Font = new System.Drawing.Font("MS UI Gothic", 36F);
-            this.txtRezult_1_2.Location = new System.Drawing.Point(472, 223);
-            this.txtRezult_1_2.Name = "txtRezult_1_2";
-            this.txtRezult_1_2.Size = new System.Drawing.Size(120, 55);
-            this.txtRezult_1_2.TabIndex = 22;
-            this.txtRezult_1_2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // txtRezult_2_0
-            // 
-            this.txtRezult_2_0.Font = new System.Drawing.Font("MS UI Gothic", 36F);
-            this.txtRezult_2_0.Location = new System.Drawing.Point(220, 284);
-            this.txtRezult_2_0.Name = "txtRezult_2_0";
-            this.txtRezult_2_0.Size = new System.Drawing.Size(120, 55);
-            this.txtRezult_2_0.TabIndex = 23;
-            this.txtRezult_2_0.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // txtRezult_2_1
-            // 
-            this.txtRezult_2_1.Font = new System.Drawing.Font("MS UI Gothic", 36F);
-            this.txtRezult_2_1.Location = new System.Drawing.Point(346, 284);
-            this.txtRezult_2_1.Name = "txtRezult_2_1";
-            this.txtRezult_2_1.Size = new System.Drawing.Size(120, 55);
-            this.txtRezult_2_1.TabIndex = 24;
-            this.txtRezult_2_1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // txtRezult_2_2
-            // 
-            this.txtRezult_2_2.Font = new System.Drawing.Font("MS UI Gothic", 36F);
-            this.txtRezult_2_2.Location = new System.Drawing.Point(472, 284);
-            this.txtRezult_2_2.Name = "txtRezult_2_2";
-            this.txtRezult_2_2.Size = new System.Drawing.Size(120, 55);
-            this.txtRezult_2_2.TabIndex = 25;
-            this.txtRezult_2_2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // txtRezult_3_0
-            // 
-            this.txtRezult_3_0.Font = new System.Drawing.Font("MS UI Gothic", 36F);
-            this.txtRezult_3_0.Location = new System.Drawing.Point(220, 345);
-            this.txtRezult_3_0.Name = "txtRezult_3_0";
-            this.txtRezult_3_0.Size = new System.Drawing.Size(120, 55);
-            this.txtRezult_3_0.TabIndex = 26;
-            this.txtRezult_3_0.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // txtRezult_3_1
-            // 
-            this.txtRezult_3_1.Font = new System.Drawing.Font("MS UI Gothic", 36F);
-            this.txtRezult_3_1.Location = new System.Drawing.Point(346, 345);
-            this.txtRezult_3_1.Name = "txtRezult_3_1";
-            this.txtRezult_3_1.Size = new System.Drawing.Size(120, 55);
-            this.txtRezult_3_1.TabIndex = 27;
-            this.txtRezult_3_1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // txtRezult_3_2
-            // 
-            this.txtRezult_3_2.Font = new System.Drawing.Font("MS UI Gothic", 36F);
-            this.txtRezult_3_2.Location = new System.Drawing.Point(472, 345);
-            this.txtRezult_3_2.Name = "txtRezult_3_2";
-            this.txtRezult_3_2.Size = new System.Drawing.Size(120, 55);
-            this.txtRezult_3_2.TabIndex = 28;
-            this.txtRezult_3_2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
             // grbResult
             // 
-            this.grbResult.Controls.Add(this.txtRezult_1_2);
-            this.grbResult.Controls.Add(this.txtRezult_3_2);
-            this.grbResult.Controls.Add(this.txtColorRed);
-            this.grbResult.Controls.Add(this.txtRezult_3_1);
-            this.grbResult.Controls.Add(this.txtRezult_0_0);
-            this.grbResult.Controls.Add(this.txtRezult_3_0);
-            this.grbResult.Controls.Add(this.txtColoWhite);
-            this.grbResult.Controls.Add(this.txtRezult_2_2);
-            this.grbResult.Controls.Add(this.txtColoGreen);
-            this.grbResult.Controls.Add(this.txtRezult_2_1);
-            this.grbResult.Controls.Add(this.txtColoYellow);
-            this.grbResult.Controls.Add(this.txtRezult_2_0);
-            this.grbResult.Controls.Add(this.txtRezult_0_1);
-            this.grbResult.Controls.Add(this.txtRezult_0_2);
-            this.grbResult.Controls.Add(this.txtRezult_1_1);
-            this.grbResult.Controls.Add(this.txtSizeSmall);
-            this.grbResult.Controls.Add(this.txtRezult_1_0);
-            this.grbResult.Controls.Add(this.txtSizeMiddle);
-            this.grbResult.Controls.Add(this.txtSizeLarge);
+            this.grbResult.Controls.Add(this.lblResult_3_2);
+            this.grbResult.Controls.Add(this.lblResult_2_2);
+            this.grbResult.Controls.Add(this.lblResult_1_2);
+            this.grbResult.Controls.Add(this.lblResult_0_2);
+            this.grbResult.Controls.Add(this.lblResult_3_1);
+            this.grbResult.Controls.Add(this.lblResult_2_1);
+            this.grbResult.Controls.Add(this.lblResult_1_1);
+            this.grbResult.Controls.Add(this.lblResult_0_1);
+            this.grbResult.Controls.Add(this.lblResult_3_0);
+            this.grbResult.Controls.Add(this.lblResult_1_0);
+            this.grbResult.Controls.Add(this.lblResult_2_0);
+            this.grbResult.Controls.Add(this.lblResult_White);
+            this.grbResult.Controls.Add(this.lblResult_Green);
+            this.grbResult.Controls.Add(this.lblResult_Yellow);
+            this.grbResult.Controls.Add(this.lblResult_Large);
+            this.grbResult.Controls.Add(this.lblResult_Middle);
+            this.grbResult.Controls.Add(this.lblResult_0_0);
+            this.grbResult.Controls.Add(this.lblResult_Small);
+            this.grbResult.Controls.Add(this.lblResult_Red);
             this.grbResult.Font = new System.Drawing.Font("MS UI Gothic", 48F);
             this.grbResult.Location = new System.Drawing.Point(1108, 567);
             this.grbResult.Name = "grbResult";
@@ -295,6 +112,232 @@
             this.grbResult.TabStop = false;
             this.grbResult.Text = "判定結果";
             // 
+            // lblResult_Red
+            // 
+            this.lblResult_Red.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblResult_Red.Font = new System.Drawing.Font("MS UI Gothic", 30F);
+            this.lblResult_Red.ForeColor = System.Drawing.Color.Red;
+            this.lblResult_Red.Location = new System.Drawing.Point(94, 161);
+            this.lblResult_Red.Name = "lblResult_Red";
+            this.lblResult_Red.Size = new System.Drawing.Size(120, 56);
+            this.lblResult_Red.TabIndex = 30;
+            this.lblResult_Red.Text = "赤";
+            this.lblResult_Red.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblResult_White
+            // 
+            this.lblResult_White.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblResult_White.Font = new System.Drawing.Font("MS UI Gothic", 30F);
+            this.lblResult_White.ForeColor = System.Drawing.Color.Gray;
+            this.lblResult_White.Location = new System.Drawing.Point(94, 347);
+            this.lblResult_White.Name = "lblResult_White";
+            this.lblResult_White.Size = new System.Drawing.Size(120, 56);
+            this.lblResult_White.TabIndex = 31;
+            this.lblResult_White.Text = "白";
+            this.lblResult_White.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblResult_Green
+            // 
+            this.lblResult_Green.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblResult_Green.Font = new System.Drawing.Font("MS UI Gothic", 30F);
+            this.lblResult_Green.ForeColor = System.Drawing.Color.Lime;
+            this.lblResult_Green.Location = new System.Drawing.Point(94, 284);
+            this.lblResult_Green.Name = "lblResult_Green";
+            this.lblResult_Green.Size = new System.Drawing.Size(120, 56);
+            this.lblResult_Green.TabIndex = 32;
+            this.lblResult_Green.Text = "緑";
+            this.lblResult_Green.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblResult_Yellow
+            // 
+            this.lblResult_Yellow.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblResult_Yellow.Font = new System.Drawing.Font("MS UI Gothic", 30F);
+            this.lblResult_Yellow.ForeColor = System.Drawing.Color.Gold;
+            this.lblResult_Yellow.Location = new System.Drawing.Point(94, 222);
+            this.lblResult_Yellow.Name = "lblResult_Yellow";
+            this.lblResult_Yellow.Size = new System.Drawing.Size(120, 56);
+            this.lblResult_Yellow.TabIndex = 33;
+            this.lblResult_Yellow.Text = "黄";
+            this.lblResult_Yellow.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblResult_Small
+            // 
+            this.lblResult_Small.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblResult_Small.Font = new System.Drawing.Font("MS UI Gothic", 24F);
+            this.lblResult_Small.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.lblResult_Small.Location = new System.Drawing.Point(220, 101);
+            this.lblResult_Small.Name = "lblResult_Small";
+            this.lblResult_Small.Size = new System.Drawing.Size(120, 56);
+            this.lblResult_Small.TabIndex = 34;
+            this.lblResult_Small.Text = "小";
+            this.lblResult_Small.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblResult_Large
+            // 
+            this.lblResult_Large.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblResult_Large.Font = new System.Drawing.Font("MS UI Gothic", 36F);
+            this.lblResult_Large.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.lblResult_Large.Location = new System.Drawing.Point(472, 101);
+            this.lblResult_Large.Name = "lblResult_Large";
+            this.lblResult_Large.Size = new System.Drawing.Size(120, 56);
+            this.lblResult_Large.TabIndex = 35;
+            this.lblResult_Large.Text = "大";
+            this.lblResult_Large.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblResult_Middle
+            // 
+            this.lblResult_Middle.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblResult_Middle.Font = new System.Drawing.Font("MS UI Gothic", 30F);
+            this.lblResult_Middle.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.lblResult_Middle.Location = new System.Drawing.Point(346, 101);
+            this.lblResult_Middle.Name = "lblResult_Middle";
+            this.lblResult_Middle.Size = new System.Drawing.Size(120, 56);
+            this.lblResult_Middle.TabIndex = 36;
+            this.lblResult_Middle.Text = "中";
+            this.lblResult_Middle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblResult_0_0
+            // 
+            this.lblResult_0_0.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblResult_0_0.Font = new System.Drawing.Font("MS UI Gothic", 30F);
+            this.lblResult_0_0.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.lblResult_0_0.Location = new System.Drawing.Point(220, 161);
+            this.lblResult_0_0.Name = "lblResult_0_0";
+            this.lblResult_0_0.Size = new System.Drawing.Size(120, 56);
+            this.lblResult_0_0.TabIndex = 37;
+            this.lblResult_0_0.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblResult_2_0
+            // 
+            this.lblResult_2_0.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblResult_2_0.Font = new System.Drawing.Font("MS UI Gothic", 30F);
+            this.lblResult_2_0.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.lblResult_2_0.Location = new System.Drawing.Point(220, 284);
+            this.lblResult_2_0.Name = "lblResult_2_0";
+            this.lblResult_2_0.Size = new System.Drawing.Size(120, 56);
+            this.lblResult_2_0.TabIndex = 38;
+            this.lblResult_2_0.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblResult_1_0
+            // 
+            this.lblResult_1_0.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblResult_1_0.Font = new System.Drawing.Font("MS UI Gothic", 30F);
+            this.lblResult_1_0.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.lblResult_1_0.Location = new System.Drawing.Point(220, 222);
+            this.lblResult_1_0.Name = "lblResult_1_0";
+            this.lblResult_1_0.Size = new System.Drawing.Size(120, 56);
+            this.lblResult_1_0.TabIndex = 39;
+            this.lblResult_1_0.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblResult_3_0
+            // 
+            this.lblResult_3_0.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblResult_3_0.Font = new System.Drawing.Font("MS UI Gothic", 30F);
+            this.lblResult_3_0.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.lblResult_3_0.Location = new System.Drawing.Point(220, 347);
+            this.lblResult_3_0.Name = "lblResult_3_0";
+            this.lblResult_3_0.Size = new System.Drawing.Size(120, 56);
+            this.lblResult_3_0.TabIndex = 40;
+            this.lblResult_3_0.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblResult_0_1
+            // 
+            this.lblResult_0_1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblResult_0_1.Font = new System.Drawing.Font("MS UI Gothic", 30F);
+            this.lblResult_0_1.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.lblResult_0_1.Location = new System.Drawing.Point(346, 161);
+            this.lblResult_0_1.Name = "lblResult_0_1";
+            this.lblResult_0_1.Size = new System.Drawing.Size(120, 56);
+            this.lblResult_0_1.TabIndex = 41;
+            this.lblResult_0_1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblResult_1_1
+            // 
+            this.lblResult_1_1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblResult_1_1.Font = new System.Drawing.Font("MS UI Gothic", 30F);
+            this.lblResult_1_1.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.lblResult_1_1.Location = new System.Drawing.Point(346, 222);
+            this.lblResult_1_1.Name = "lblResult_1_1";
+            this.lblResult_1_1.Size = new System.Drawing.Size(120, 56);
+            this.lblResult_1_1.TabIndex = 42;
+            this.lblResult_1_1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblResult_2_1
+            // 
+            this.lblResult_2_1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblResult_2_1.Font = new System.Drawing.Font("MS UI Gothic", 30F);
+            this.lblResult_2_1.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.lblResult_2_1.Location = new System.Drawing.Point(346, 284);
+            this.lblResult_2_1.Name = "lblResult_2_1";
+            this.lblResult_2_1.Size = new System.Drawing.Size(120, 56);
+            this.lblResult_2_1.TabIndex = 43;
+            this.lblResult_2_1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblResult_3_1
+            // 
+            this.lblResult_3_1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblResult_3_1.Font = new System.Drawing.Font("MS UI Gothic", 30F);
+            this.lblResult_3_1.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.lblResult_3_1.Location = new System.Drawing.Point(346, 347);
+            this.lblResult_3_1.Name = "lblResult_3_1";
+            this.lblResult_3_1.Size = new System.Drawing.Size(120, 56);
+            this.lblResult_3_1.TabIndex = 44;
+            this.lblResult_3_1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblResult_0_2
+            // 
+            this.lblResult_0_2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblResult_0_2.Font = new System.Drawing.Font("MS UI Gothic", 30F);
+            this.lblResult_0_2.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.lblResult_0_2.Location = new System.Drawing.Point(472, 161);
+            this.lblResult_0_2.Name = "lblResult_0_2";
+            this.lblResult_0_2.Size = new System.Drawing.Size(120, 56);
+            this.lblResult_0_2.TabIndex = 45;
+            this.lblResult_0_2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblResult_1_2
+            // 
+            this.lblResult_1_2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblResult_1_2.Font = new System.Drawing.Font("MS UI Gothic", 30F);
+            this.lblResult_1_2.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.lblResult_1_2.Location = new System.Drawing.Point(472, 222);
+            this.lblResult_1_2.Name = "lblResult_1_2";
+            this.lblResult_1_2.Size = new System.Drawing.Size(120, 56);
+            this.lblResult_1_2.TabIndex = 46;
+            this.lblResult_1_2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblResult_2_2
+            // 
+            this.lblResult_2_2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblResult_2_2.Font = new System.Drawing.Font("MS UI Gothic", 30F);
+            this.lblResult_2_2.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.lblResult_2_2.Location = new System.Drawing.Point(472, 284);
+            this.lblResult_2_2.Name = "lblResult_2_2";
+            this.lblResult_2_2.Size = new System.Drawing.Size(120, 56);
+            this.lblResult_2_2.TabIndex = 47;
+            this.lblResult_2_2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblResult_3_2
+            // 
+            this.lblResult_3_2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblResult_3_2.Font = new System.Drawing.Font("MS UI Gothic", 30F);
+            this.lblResult_3_2.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.lblResult_3_2.Location = new System.Drawing.Point(472, 347);
+            this.lblResult_3_2.Name = "lblResult_3_2";
+            this.lblResult_3_2.Size = new System.Drawing.Size(120, 56);
+            this.lblResult_3_2.TabIndex = 48;
+            this.lblResult_3_2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(427, 884);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 30;
+            this.button1.Text = "test";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // FormAutoDiscrimation
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -302,6 +345,7 @@
             this.AutoSize = true;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1920, 1041);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.grbResult);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.pnlResult);
@@ -316,7 +360,6 @@
             this.Shown += new System.EventHandler(this.FormAutoDiscrimation_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.pnlResult)).EndInit();
             this.grbResult.ResumeLayout(false);
-            this.grbResult.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -325,26 +368,27 @@
         private System.Windows.Forms.Panel pnlCaptureedPicture;
         private System.Windows.Forms.PictureBox pnlResult;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox txtColorRed;
-        private System.Windows.Forms.TextBox txtRezult_0_0;
-        private System.Windows.Forms.TextBox txtColoWhite;
-        private System.Windows.Forms.TextBox txtColoGreen;
-        private System.Windows.Forms.TextBox txtColoYellow;
-        private System.Windows.Forms.TextBox txtRezult_0_1;
-        private System.Windows.Forms.TextBox txtRezult_0_2;
-        private System.Windows.Forms.TextBox txtSizeSmall;
-        private System.Windows.Forms.TextBox txtSizeMiddle;
-        private System.Windows.Forms.TextBox txtSizeLarge;
-        private System.Windows.Forms.TextBox txtRezult_1_0;
-        private System.Windows.Forms.TextBox txtRezult_1_1;
-        private System.Windows.Forms.TextBox txtRezult_1_2;
-        private System.Windows.Forms.TextBox txtRezult_2_0;
-        private System.Windows.Forms.TextBox txtRezult_2_1;
-        private System.Windows.Forms.TextBox txtRezult_2_2;
-        private System.Windows.Forms.TextBox txtRezult_3_0;
-        private System.Windows.Forms.TextBox txtRezult_3_1;
-        private System.Windows.Forms.TextBox txtRezult_3_2;
         private System.Windows.Forms.GroupBox grbResult;
+        private System.Windows.Forms.Label lblResult_Red;
+        private System.Windows.Forms.Label lblResult_3_2;
+        private System.Windows.Forms.Label lblResult_2_2;
+        private System.Windows.Forms.Label lblResult_1_2;
+        private System.Windows.Forms.Label lblResult_0_2;
+        private System.Windows.Forms.Label lblResult_3_1;
+        private System.Windows.Forms.Label lblResult_2_1;
+        private System.Windows.Forms.Label lblResult_1_1;
+        private System.Windows.Forms.Label lblResult_0_1;
+        private System.Windows.Forms.Label lblResult_3_0;
+        private System.Windows.Forms.Label lblResult_1_0;
+        private System.Windows.Forms.Label lblResult_2_0;
+        private System.Windows.Forms.Label lblResult_White;
+        private System.Windows.Forms.Label lblResult_Green;
+        private System.Windows.Forms.Label lblResult_Yellow;
+        private System.Windows.Forms.Label lblResult_Large;
+        private System.Windows.Forms.Label lblResult_Middle;
+        private System.Windows.Forms.Label lblResult_0_0;
+        private System.Windows.Forms.Label lblResult_Small;
+        private System.Windows.Forms.Button button1;
     }
 }
 

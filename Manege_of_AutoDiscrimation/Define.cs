@@ -14,6 +14,7 @@ namespace Manege_of_AutoDiscrimation
             public static string[] Size = new string[] { "小", "中", "大" };
             public static int NumberMax = 5;
         }
-        
+
+        public const string PRMFolder = "prm";
     }
 }

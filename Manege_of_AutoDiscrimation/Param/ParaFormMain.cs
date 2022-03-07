@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.IO;
 
-namespace Manege_of_AutoDiscrimation
+namespace Manege_of_AutoDiscrimation.Param
 {
 	class CParaFormMain : ParamBase.CParaBase
 	{

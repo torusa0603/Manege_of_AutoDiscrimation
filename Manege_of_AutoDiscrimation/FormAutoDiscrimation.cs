@@ -12,6 +12,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Management;
 using CCSLightController;
+using Manege_of_AutoDiscrimation.Param;
 
 
 namespace Manege_of_AutoDiscrimation
@@ -31,6 +32,7 @@ namespace Manege_of_AutoDiscrimation
         static bool m_bInoculationEnable = true; // 判定可能かどうかを示す
         SocketCommunication m_cSocketCommunication; // ソケット通信用のクラス
         CBaseCCSLight m_cBaseCCSLight;
+        bool m_server_close = false;
         #endregion
 
         #region "   プログラム開始時処理                            "
@@ -55,6 +57,12 @@ namespace Manege_of_AutoDiscrimation
             {
                 // パラメーターの読み込み
                 m_csParameter = new Parameter();
+                int i_ret =CParameterIO.ReadParameter($@".\{CDefine.PRMFolder}\Parameter.json",ref m_csParameter);
+                if(i_ret != 0)
+                {
+                    MessageBox.Show("パラメーターファイルがありませんでした。");
+                    this.Close();
+                }
 
                 // Paramクラスへの情報設定初期化
                 m_cParaFormMain.setProductName(Application.ProductName);
@@ -69,7 +77,7 @@ namespace Manege_of_AutoDiscrimation
                 initLog();
 
                 // カメラオープン
-                int i_ret = IniCamera();
+                i_ret = IniCamera();
                 if (i_ret != 0)
                 {
                     MessageBox.Show("カメラオープンに失敗しました");
@@ -78,7 +86,7 @@ namespace Manege_of_AutoDiscrimation
 
                 // ソケットクラスオープン
                 m_cSocketCommunication = new SocketCommunication();
-                int i_port_number = 0; // 後で決める
+                int i_port_number = 11021; // 後で決める
                 i_ret = m_cSocketCommunication.Init(this, "", i_port_number);
                 if (i_ret != 0)
                 {
@@ -86,6 +94,7 @@ namespace Manege_of_AutoDiscrimation
                     this.Close();
                 }
                 m_cSocketCommunication.evCommandReceive += CommandReceiveAction;
+                m_cSocketCommunication.evSocketClose += ClosedServer;
 
                 m_cBaseCCSLight = new CPODCommand();
 
@@ -112,7 +121,7 @@ namespace Manege_of_AutoDiscrimation
         /// <param name="e"></param>
         private void FormAutoDiscrimation_Shown(object sender, EventArgs e)
         {
-
+            CParameterIO.SaveParameter($@".\{CDefine.PRMFolder}\Parameter.json", m_csParameter);
         }
         #endregion
 
@@ -309,6 +318,7 @@ namespace Manege_of_AutoDiscrimation
 
         private void FormAutoDiscrimation_FormClosing(object sender, FormClosingEventArgs e)
         {
+            m_server_close = true;
             m_cSocketCommunication.Close();
         }
 
@@ -378,18 +388,18 @@ namespace Manege_of_AutoDiscrimation
 
             Invoke((Action)(() =>
             {
-                txtRezult_0_0.Text = int_red_5mm.Sum().ToString();
-                txtRezult_0_1.Text = int_red_8mm.Sum().ToString();
-                txtRezult_0_2.Text = int_red_10mm.Sum().ToString();
-                txtRezult_1_0.Text = int_yellow_5mm.Sum().ToString();
-                txtRezult_1_1.Text = int_yellow_8mm.Sum().ToString();
-                txtRezult_1_2.Text = int_yellow_10mm.Sum().ToString();
-                txtRezult_2_0.Text = int_green_5mm.Sum().ToString();
-                txtRezult_2_1.Text = int_green_8mm.Sum().ToString();
-                txtRezult_2_2.Text = int_green_10mm.Sum().ToString();
-                txtRezult_3_0.Text = int_white_5mm.Sum().ToString();
-                txtRezult_3_1.Text = int_white_8mm.Sum().ToString();
-                txtRezult_3_2.Text = int_white_10mm.Sum().ToString();
+                lblResult_0_0.Text = int_red_5mm.Sum().ToString();
+                lblResult_0_1.Text = int_red_8mm.Sum().ToString();
+                lblResult_0_2.Text = int_red_10mm.Sum().ToString();
+                lblResult_1_0.Text = int_yellow_5mm.Sum().ToString();
+                lblResult_1_1.Text = int_yellow_8mm.Sum().ToString();
+                lblResult_1_2.Text = int_yellow_10mm.Sum().ToString();
+                lblResult_2_0.Text = int_green_5mm.Sum().ToString();
+                lblResult_2_1.Text = int_green_8mm.Sum().ToString();
+                lblResult_2_2.Text = int_green_10mm.Sum().ToString();
+                lblResult_3_0.Text = int_white_5mm.Sum().ToString();
+                lblResult_3_1.Text = int_white_8mm.Sum().ToString();
+                lblResult_3_2.Text = int_white_10mm.Sum().ToString();
 
                 pnlResult.Image = CreateImage($@"{m_strPythonFolderPath}\img\img.png");
             }));
@@ -407,20 +417,32 @@ namespace Manege_of_AutoDiscrimation
         {
             switch (niCommand)
             {
-                case 0:
+                case 1:
                     // スタート
                     // ライトを点ける
                     ChangeLightState(true);
                     break;
-                case 1:
+                case 2:
                     // 測定開始
                     Inoculation();
                     break;
-                case 2:
+                case 0:
                     // 終了
                     // ライトを消す
                     ChangeLightState(false);
                     break;
+            }
+        }
+
+        private void ClosedServer()
+        {
+            if (!m_server_close)
+            {
+                m_cSocketCommunication = null;
+
+                m_cSocketCommunication = new SocketCommunication();
+                int i_port_number = 11021; // 後で決める
+                int i_ret = m_cSocketCommunication.Init(this, "", i_port_number);
             }
         }
 
@@ -491,6 +513,11 @@ namespace Manege_of_AutoDiscrimation
             }
 
             return null;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Inoculation();
         }
     }
 }

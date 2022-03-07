@@ -81,11 +81,17 @@ namespace Manege_of_AutoDiscrimation
                     evCommandReceive?.Invoke(m_lstCommand.IndexOf(str_temp));
                 }
             }
-            //  コマンドエラーであればエラーを返す
+
             if (i_ret != 0)
             {
+                //  コマンドエラーであればエラーを返す
                 SendCommandError(i_ret);
             }
+            else
+            {
+                SendCommand(1);
+            }
+            m_bReplyDone = true;
         }
 
         /// <summary>
