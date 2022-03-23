@@ -22,6 +22,7 @@ namespace Manege_of_AutoDiscrimation
             this.cmbColor.SelectedIndex= FormAutoDiscrimation.m_csParameter.ConditionColor;
             this.cmbSize.SelectedIndex =FormAutoDiscrimation.m_csParameter.ConditionSize ;
             this.nudNumber.Value       =FormAutoDiscrimation.m_csParameter.ConditionNumber;
+            this.nudDisplayTime.Value = FormAutoDiscrimation.m_csParameter.ResultFormDisplayTime;
         }
 
         private void btnSetting_Click(object sender, EventArgs e)
@@ -30,6 +31,7 @@ namespace Manege_of_AutoDiscrimation
             FormAutoDiscrimation.m_csParameter.ConditionColor=this.cmbColor.SelectedIndex;
             FormAutoDiscrimation.m_csParameter.ConditionSize = this.cmbSize.SelectedIndex;
             FormAutoDiscrimation.m_csParameter.ConditionNumber = (int)this.nudNumber.Value;
+            FormAutoDiscrimation.m_csParameter.ResultFormDisplayTime=(int)this.nudDisplayTime.Value;
 
             // フォームを閉じる
             this.Close();

@@ -32,11 +32,51 @@ namespace Manege_of_AutoDiscrimation
             timer1.Start();
         }
 
+        public void DisplayLabel()
+        {
+            timer1.Stop();
+            picResult.Visible = false;
+            this.Size = new Size(431, 203);
+            timer2.Start();
+        }
+
         private void timer1_Tick(object sender, EventArgs e)
         {
             timer1.Stop();
             // 一定時間経過後に閉じる
             this.Close();
+        }
+
+        private void timer2_Tick(object sender, EventArgs e)
+        {
+            Invoke((Action)(() =>
+            {
+                if (lblCheck.Text == "検査中")
+                {
+                    lblCheck.Text = "検査中.";
+                }
+                else if (lblCheck.Text == "検査中.")
+                {
+                    lblCheck.Text = "検査中..";
+                }
+                else if (lblCheck.Text == "検査中..")
+                {
+                    lblCheck.Text = "検査中...";
+                }
+                else if (lblCheck.Text == "検査中...")
+                {
+                    lblCheck.Text = "検査中";
+                }
+
+                // 描画させる
+                lblCheck.Update();
+            }));
+        }
+
+        private void FormResultPicture_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            timer1.Stop();
+            timer2.Stop();
         }
     }
 }

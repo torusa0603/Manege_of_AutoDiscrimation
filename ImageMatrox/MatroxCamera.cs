@@ -468,14 +468,45 @@ namespace ImageMatrox
             if ((str_vendor_name.ToString()).IndexOf("Basler") != -1)
             {
                 int i_gain_raw = (int)ndGain;
-                MIL.MdigControlFeature(m_milDigitizer, MIL.M_FEATURE_VALUE, "GainRaw", MIL.M_TYPE_MIL_INT32, ref i_gain_raw);
-                MIL.MdigControlFeature(m_milDigitizer, MIL.M_FEATURE_VALUE, "ExposureTimeAbs", MIL.M_TYPE_DOUBLE, ref ndExposureTime);
+                MIL.MdigControlFeature(m_milDigitizer, MIL.M_FEATURE_VALUE, "Gain", MIL.M_TYPE_MIL_INT32, ref i_gain_raw);
+                MIL.MdigControlFeature(m_milDigitizer, MIL.M_FEATURE_VALUE, "ExposureTime", MIL.M_TYPE_DOUBLE, ref ndExposureTime);
+                //int i_offset_x = m_ptImageOffset.X;
+                //int i_offset_y = m_ptImageOffset.Y;
+                //MIL.MdigControlFeature(m_milDigitizer, MIL.M_FEATURE_VALUE, "OffsetX", MIL.M_TYPE_MIL_INT32, ref i_offset_x);
+                //MIL.MdigControlFeature(m_milDigitizer, MIL.M_FEATURE_VALUE, "OffsetY", MIL.M_TYPE_MIL_INT32, ref i_offset_y);
             }
             // Point grey
             else
             {
                 MIL.MdigControlFeature(m_milDigitizer, MIL.M_FEATURE_VALUE, "Gain", MIL.M_TYPE_DOUBLE, ref ndGain);
                 MIL.MdigControlFeature(m_milDigitizer, MIL.M_FEATURE_VALUE, "ExposureTime", MIL.M_TYPE_DOUBLE, ref ndExposureTime);
+            }
+
+            return 0;
+        }
+
+        public int setFrameRate(double ndFrameRate)
+        {
+            if (m_bMainInitialFinished == false)
+            {
+                return -1;
+            }
+            else if (m_iBoardType != (int)MTX_TYPE.MTX_GIGE)
+            {
+                return 0;
+            }
+
+            StringBuilder str_vendor_name = new StringBuilder(256);
+            MIL.MdigInquireFeature(m_milDigitizer, MIL.M_FEATURE_VALUE, "DeviceVendorName", MIL.M_TYPE_STRING, str_vendor_name);
+
+            //	Basler
+            if ((str_vendor_name.ToString()).IndexOf("Basler") != -1)
+            {
+                MIL.MdigControlFeature(m_milDigitizer, MIL.M_FEATURE_VALUE, "AcquisitionFrameRate", MIL.M_TYPE_DOUBLE, ref ndFrameRate);
+            }
+            // Point grey
+            else
+            {
             }
 
             return 0;

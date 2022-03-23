@@ -670,6 +670,13 @@ namespace ImageMatrox
             return pMatroxCamera.setGainAndExposureTime(ndGain, ndExposureTime);
         }
 
+
+        public int sifSetFrameRate(double ndFrameRate)
+        {
+            return pMatroxCamera.setFrameRate(ndFrameRate);
+        }
+        
+
         /*------------------------------------------------------------------------------------------
             1.日本語名
                 平均画像をGrabする。ファイルに保存

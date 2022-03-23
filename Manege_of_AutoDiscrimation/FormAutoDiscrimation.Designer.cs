@@ -29,31 +29,30 @@
         private void InitializeComponent()
         {
             this.pnlCaptureedPicture = new System.Windows.Forms.Panel();
-            this.pnlResult = new System.Windows.Forms.PictureBox();
             this.label1 = new System.Windows.Forms.Label();
             this.grbResult = new System.Windows.Forms.GroupBox();
-            this.lblResult_Red = new System.Windows.Forms.Label();
+            this.lblResult_3_2 = new System.Windows.Forms.Label();
+            this.lblResult_2_2 = new System.Windows.Forms.Label();
+            this.lblResult_1_2 = new System.Windows.Forms.Label();
+            this.lblResult_0_2 = new System.Windows.Forms.Label();
+            this.lblResult_3_1 = new System.Windows.Forms.Label();
+            this.lblResult_2_1 = new System.Windows.Forms.Label();
+            this.lblResult_1_1 = new System.Windows.Forms.Label();
+            this.lblResult_0_1 = new System.Windows.Forms.Label();
+            this.lblResult_3_0 = new System.Windows.Forms.Label();
+            this.lblResult_1_0 = new System.Windows.Forms.Label();
+            this.lblResult_2_0 = new System.Windows.Forms.Label();
             this.lblResult_White = new System.Windows.Forms.Label();
             this.lblResult_Green = new System.Windows.Forms.Label();
             this.lblResult_Yellow = new System.Windows.Forms.Label();
-            this.lblResult_Small = new System.Windows.Forms.Label();
             this.lblResult_Large = new System.Windows.Forms.Label();
             this.lblResult_Middle = new System.Windows.Forms.Label();
             this.lblResult_0_0 = new System.Windows.Forms.Label();
-            this.lblResult_2_0 = new System.Windows.Forms.Label();
-            this.lblResult_1_0 = new System.Windows.Forms.Label();
-            this.lblResult_3_0 = new System.Windows.Forms.Label();
-            this.lblResult_0_1 = new System.Windows.Forms.Label();
-            this.lblResult_1_1 = new System.Windows.Forms.Label();
-            this.lblResult_2_1 = new System.Windows.Forms.Label();
-            this.lblResult_3_1 = new System.Windows.Forms.Label();
-            this.lblResult_0_2 = new System.Windows.Forms.Label();
-            this.lblResult_1_2 = new System.Windows.Forms.Label();
-            this.lblResult_2_2 = new System.Windows.Forms.Label();
-            this.lblResult_3_2 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.pnlResult)).BeginInit();
+            this.lblResult_Small = new System.Windows.Forms.Label();
+            this.lblResult_Red = new System.Windows.Forms.Label();
+            this.pnlResult = new System.Windows.Forms.PictureBox();
             this.grbResult.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pnlResult)).BeginInit();
             this.SuspendLayout();
             // 
             // pnlCaptureedPicture
@@ -62,14 +61,6 @@
             this.pnlCaptureedPicture.Name = "pnlCaptureedPicture";
             this.pnlCaptureedPicture.Size = new System.Drawing.Size(960, 540);
             this.pnlCaptureedPicture.TabIndex = 3;
-            // 
-            // pnlResult
-            // 
-            this.pnlResult.Location = new System.Drawing.Point(960, 0);
-            this.pnlResult.Name = "pnlResult";
-            this.pnlResult.Size = new System.Drawing.Size(960, 540);
-            this.pnlResult.TabIndex = 6;
-            this.pnlResult.TabStop = false;
             // 
             // label1
             // 
@@ -112,17 +103,126 @@
             this.grbResult.TabStop = false;
             this.grbResult.Text = "判定結果";
             // 
-            // lblResult_Red
+            // lblResult_3_2
             // 
-            this.lblResult_Red.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblResult_Red.Font = new System.Drawing.Font("MS UI Gothic", 30F);
-            this.lblResult_Red.ForeColor = System.Drawing.Color.Red;
-            this.lblResult_Red.Location = new System.Drawing.Point(94, 161);
-            this.lblResult_Red.Name = "lblResult_Red";
-            this.lblResult_Red.Size = new System.Drawing.Size(120, 56);
-            this.lblResult_Red.TabIndex = 30;
-            this.lblResult_Red.Text = "赤";
-            this.lblResult_Red.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblResult_3_2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblResult_3_2.Font = new System.Drawing.Font("MS UI Gothic", 30F);
+            this.lblResult_3_2.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.lblResult_3_2.Location = new System.Drawing.Point(472, 347);
+            this.lblResult_3_2.Name = "lblResult_3_2";
+            this.lblResult_3_2.Size = new System.Drawing.Size(120, 56);
+            this.lblResult_3_2.TabIndex = 48;
+            this.lblResult_3_2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblResult_2_2
+            // 
+            this.lblResult_2_2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblResult_2_2.Font = new System.Drawing.Font("MS UI Gothic", 30F);
+            this.lblResult_2_2.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.lblResult_2_2.Location = new System.Drawing.Point(472, 284);
+            this.lblResult_2_2.Name = "lblResult_2_2";
+            this.lblResult_2_2.Size = new System.Drawing.Size(120, 56);
+            this.lblResult_2_2.TabIndex = 47;
+            this.lblResult_2_2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblResult_1_2
+            // 
+            this.lblResult_1_2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblResult_1_2.Font = new System.Drawing.Font("MS UI Gothic", 30F);
+            this.lblResult_1_2.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.lblResult_1_2.Location = new System.Drawing.Point(472, 222);
+            this.lblResult_1_2.Name = "lblResult_1_2";
+            this.lblResult_1_2.Size = new System.Drawing.Size(120, 56);
+            this.lblResult_1_2.TabIndex = 46;
+            this.lblResult_1_2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblResult_0_2
+            // 
+            this.lblResult_0_2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblResult_0_2.Font = new System.Drawing.Font("MS UI Gothic", 30F);
+            this.lblResult_0_2.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.lblResult_0_2.Location = new System.Drawing.Point(472, 161);
+            this.lblResult_0_2.Name = "lblResult_0_2";
+            this.lblResult_0_2.Size = new System.Drawing.Size(120, 56);
+            this.lblResult_0_2.TabIndex = 45;
+            this.lblResult_0_2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblResult_3_1
+            // 
+            this.lblResult_3_1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblResult_3_1.Font = new System.Drawing.Font("MS UI Gothic", 30F);
+            this.lblResult_3_1.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.lblResult_3_1.Location = new System.Drawing.Point(346, 347);
+            this.lblResult_3_1.Name = "lblResult_3_1";
+            this.lblResult_3_1.Size = new System.Drawing.Size(120, 56);
+            this.lblResult_3_1.TabIndex = 44;
+            this.lblResult_3_1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblResult_2_1
+            // 
+            this.lblResult_2_1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblResult_2_1.Font = new System.Drawing.Font("MS UI Gothic", 30F);
+            this.lblResult_2_1.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.lblResult_2_1.Location = new System.Drawing.Point(346, 284);
+            this.lblResult_2_1.Name = "lblResult_2_1";
+            this.lblResult_2_1.Size = new System.Drawing.Size(120, 56);
+            this.lblResult_2_1.TabIndex = 43;
+            this.lblResult_2_1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblResult_1_1
+            // 
+            this.lblResult_1_1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblResult_1_1.Font = new System.Drawing.Font("MS UI Gothic", 30F);
+            this.lblResult_1_1.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.lblResult_1_1.Location = new System.Drawing.Point(346, 222);
+            this.lblResult_1_1.Name = "lblResult_1_1";
+            this.lblResult_1_1.Size = new System.Drawing.Size(120, 56);
+            this.lblResult_1_1.TabIndex = 42;
+            this.lblResult_1_1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblResult_0_1
+            // 
+            this.lblResult_0_1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblResult_0_1.Font = new System.Drawing.Font("MS UI Gothic", 30F);
+            this.lblResult_0_1.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.lblResult_0_1.Location = new System.Drawing.Point(346, 161);
+            this.lblResult_0_1.Name = "lblResult_0_1";
+            this.lblResult_0_1.Size = new System.Drawing.Size(120, 56);
+            this.lblResult_0_1.TabIndex = 41;
+            this.lblResult_0_1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblResult_3_0
+            // 
+            this.lblResult_3_0.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblResult_3_0.Font = new System.Drawing.Font("MS UI Gothic", 30F);
+            this.lblResult_3_0.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.lblResult_3_0.Location = new System.Drawing.Point(220, 347);
+            this.lblResult_3_0.Name = "lblResult_3_0";
+            this.lblResult_3_0.Size = new System.Drawing.Size(120, 56);
+            this.lblResult_3_0.TabIndex = 40;
+            this.lblResult_3_0.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblResult_1_0
+            // 
+            this.lblResult_1_0.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblResult_1_0.Font = new System.Drawing.Font("MS UI Gothic", 30F);
+            this.lblResult_1_0.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.lblResult_1_0.Location = new System.Drawing.Point(220, 222);
+            this.lblResult_1_0.Name = "lblResult_1_0";
+            this.lblResult_1_0.Size = new System.Drawing.Size(120, 56);
+            this.lblResult_1_0.TabIndex = 39;
+            this.lblResult_1_0.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblResult_2_0
+            // 
+            this.lblResult_2_0.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblResult_2_0.Font = new System.Drawing.Font("MS UI Gothic", 30F);
+            this.lblResult_2_0.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.lblResult_2_0.Location = new System.Drawing.Point(220, 284);
+            this.lblResult_2_0.Name = "lblResult_2_0";
+            this.lblResult_2_0.Size = new System.Drawing.Size(120, 56);
+            this.lblResult_2_0.TabIndex = 38;
+            this.lblResult_2_0.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lblResult_White
             // 
@@ -160,18 +260,6 @@
             this.lblResult_Yellow.Text = "黄";
             this.lblResult_Yellow.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // lblResult_Small
-            // 
-            this.lblResult_Small.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblResult_Small.Font = new System.Drawing.Font("MS UI Gothic", 24F);
-            this.lblResult_Small.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.lblResult_Small.Location = new System.Drawing.Point(220, 101);
-            this.lblResult_Small.Name = "lblResult_Small";
-            this.lblResult_Small.Size = new System.Drawing.Size(120, 56);
-            this.lblResult_Small.TabIndex = 34;
-            this.lblResult_Small.Text = "小";
-            this.lblResult_Small.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // lblResult_Large
             // 
             this.lblResult_Large.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -207,136 +295,38 @@
             this.lblResult_0_0.TabIndex = 37;
             this.lblResult_0_0.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // lblResult_2_0
+            // lblResult_Small
             // 
-            this.lblResult_2_0.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblResult_2_0.Font = new System.Drawing.Font("MS UI Gothic", 30F);
-            this.lblResult_2_0.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.lblResult_2_0.Location = new System.Drawing.Point(220, 284);
-            this.lblResult_2_0.Name = "lblResult_2_0";
-            this.lblResult_2_0.Size = new System.Drawing.Size(120, 56);
-            this.lblResult_2_0.TabIndex = 38;
-            this.lblResult_2_0.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblResult_Small.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblResult_Small.Font = new System.Drawing.Font("MS UI Gothic", 24F);
+            this.lblResult_Small.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.lblResult_Small.Location = new System.Drawing.Point(220, 101);
+            this.lblResult_Small.Name = "lblResult_Small";
+            this.lblResult_Small.Size = new System.Drawing.Size(120, 56);
+            this.lblResult_Small.TabIndex = 34;
+            this.lblResult_Small.Text = "小";
+            this.lblResult_Small.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // lblResult_1_0
+            // lblResult_Red
             // 
-            this.lblResult_1_0.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblResult_1_0.Font = new System.Drawing.Font("MS UI Gothic", 30F);
-            this.lblResult_1_0.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.lblResult_1_0.Location = new System.Drawing.Point(220, 222);
-            this.lblResult_1_0.Name = "lblResult_1_0";
-            this.lblResult_1_0.Size = new System.Drawing.Size(120, 56);
-            this.lblResult_1_0.TabIndex = 39;
-            this.lblResult_1_0.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblResult_Red.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblResult_Red.Font = new System.Drawing.Font("MS UI Gothic", 30F);
+            this.lblResult_Red.ForeColor = System.Drawing.Color.Red;
+            this.lblResult_Red.Location = new System.Drawing.Point(94, 161);
+            this.lblResult_Red.Name = "lblResult_Red";
+            this.lblResult_Red.Size = new System.Drawing.Size(120, 56);
+            this.lblResult_Red.TabIndex = 30;
+            this.lblResult_Red.Text = "赤";
+            this.lblResult_Red.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // lblResult_3_0
+            // pnlResult
             // 
-            this.lblResult_3_0.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblResult_3_0.Font = new System.Drawing.Font("MS UI Gothic", 30F);
-            this.lblResult_3_0.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.lblResult_3_0.Location = new System.Drawing.Point(220, 347);
-            this.lblResult_3_0.Name = "lblResult_3_0";
-            this.lblResult_3_0.Size = new System.Drawing.Size(120, 56);
-            this.lblResult_3_0.TabIndex = 40;
-            this.lblResult_3_0.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lblResult_0_1
-            // 
-            this.lblResult_0_1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblResult_0_1.Font = new System.Drawing.Font("MS UI Gothic", 30F);
-            this.lblResult_0_1.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.lblResult_0_1.Location = new System.Drawing.Point(346, 161);
-            this.lblResult_0_1.Name = "lblResult_0_1";
-            this.lblResult_0_1.Size = new System.Drawing.Size(120, 56);
-            this.lblResult_0_1.TabIndex = 41;
-            this.lblResult_0_1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lblResult_1_1
-            // 
-            this.lblResult_1_1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblResult_1_1.Font = new System.Drawing.Font("MS UI Gothic", 30F);
-            this.lblResult_1_1.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.lblResult_1_1.Location = new System.Drawing.Point(346, 222);
-            this.lblResult_1_1.Name = "lblResult_1_1";
-            this.lblResult_1_1.Size = new System.Drawing.Size(120, 56);
-            this.lblResult_1_1.TabIndex = 42;
-            this.lblResult_1_1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lblResult_2_1
-            // 
-            this.lblResult_2_1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblResult_2_1.Font = new System.Drawing.Font("MS UI Gothic", 30F);
-            this.lblResult_2_1.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.lblResult_2_1.Location = new System.Drawing.Point(346, 284);
-            this.lblResult_2_1.Name = "lblResult_2_1";
-            this.lblResult_2_1.Size = new System.Drawing.Size(120, 56);
-            this.lblResult_2_1.TabIndex = 43;
-            this.lblResult_2_1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lblResult_3_1
-            // 
-            this.lblResult_3_1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblResult_3_1.Font = new System.Drawing.Font("MS UI Gothic", 30F);
-            this.lblResult_3_1.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.lblResult_3_1.Location = new System.Drawing.Point(346, 347);
-            this.lblResult_3_1.Name = "lblResult_3_1";
-            this.lblResult_3_1.Size = new System.Drawing.Size(120, 56);
-            this.lblResult_3_1.TabIndex = 44;
-            this.lblResult_3_1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lblResult_0_2
-            // 
-            this.lblResult_0_2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblResult_0_2.Font = new System.Drawing.Font("MS UI Gothic", 30F);
-            this.lblResult_0_2.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.lblResult_0_2.Location = new System.Drawing.Point(472, 161);
-            this.lblResult_0_2.Name = "lblResult_0_2";
-            this.lblResult_0_2.Size = new System.Drawing.Size(120, 56);
-            this.lblResult_0_2.TabIndex = 45;
-            this.lblResult_0_2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lblResult_1_2
-            // 
-            this.lblResult_1_2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblResult_1_2.Font = new System.Drawing.Font("MS UI Gothic", 30F);
-            this.lblResult_1_2.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.lblResult_1_2.Location = new System.Drawing.Point(472, 222);
-            this.lblResult_1_2.Name = "lblResult_1_2";
-            this.lblResult_1_2.Size = new System.Drawing.Size(120, 56);
-            this.lblResult_1_2.TabIndex = 46;
-            this.lblResult_1_2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lblResult_2_2
-            // 
-            this.lblResult_2_2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblResult_2_2.Font = new System.Drawing.Font("MS UI Gothic", 30F);
-            this.lblResult_2_2.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.lblResult_2_2.Location = new System.Drawing.Point(472, 284);
-            this.lblResult_2_2.Name = "lblResult_2_2";
-            this.lblResult_2_2.Size = new System.Drawing.Size(120, 56);
-            this.lblResult_2_2.TabIndex = 47;
-            this.lblResult_2_2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lblResult_3_2
-            // 
-            this.lblResult_3_2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblResult_3_2.Font = new System.Drawing.Font("MS UI Gothic", 30F);
-            this.lblResult_3_2.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.lblResult_3_2.Location = new System.Drawing.Point(472, 347);
-            this.lblResult_3_2.Name = "lblResult_3_2";
-            this.lblResult_3_2.Size = new System.Drawing.Size(120, 56);
-            this.lblResult_3_2.TabIndex = 48;
-            this.lblResult_3_2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(427, 884);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 30;
-            this.button1.Text = "test";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.pnlResult.Location = new System.Drawing.Point(960, 0);
+            this.pnlResult.Name = "pnlResult";
+            this.pnlResult.Size = new System.Drawing.Size(960, 540);
+            this.pnlResult.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pnlResult.TabIndex = 31;
+            this.pnlResult.TabStop = false;
             // 
             // FormAutoDiscrimation
             // 
@@ -345,10 +335,9 @@
             this.AutoSize = true;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1920, 1041);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.pnlResult);
             this.Controls.Add(this.grbResult);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.pnlResult);
             this.Controls.Add(this.pnlCaptureedPicture);
             this.ForeColor = System.Drawing.SystemColors.ControlText;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -358,15 +347,14 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormAutoDiscrimation_FormClosing);
             this.Load += new System.EventHandler(this.FormAutoDiscrimation_Load);
             this.Shown += new System.EventHandler(this.FormAutoDiscrimation_Shown);
-            ((System.ComponentModel.ISupportInitialize)(this.pnlResult)).EndInit();
             this.grbResult.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pnlResult)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
         private System.Windows.Forms.Panel pnlCaptureedPicture;
-        private System.Windows.Forms.PictureBox pnlResult;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.GroupBox grbResult;
         private System.Windows.Forms.Label lblResult_Red;
@@ -388,7 +376,7 @@
         private System.Windows.Forms.Label lblResult_Middle;
         private System.Windows.Forms.Label lblResult_0_0;
         private System.Windows.Forms.Label lblResult_Small;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.PictureBox pnlResult;
     }
 }
 

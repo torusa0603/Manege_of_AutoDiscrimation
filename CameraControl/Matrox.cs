@@ -123,7 +123,7 @@ namespace CameraControl
                             break;
                         }
 
-                        cImageMatrox.sifSetGainAndExposureTime(32, 200);
+                        //cImageMatrox.sifSetGainAndExposureTime(32, 200);
 
                         if (nbThroughSimple)
                         {

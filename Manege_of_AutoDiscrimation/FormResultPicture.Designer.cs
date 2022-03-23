@@ -32,6 +32,8 @@ namespace Manege_of_AutoDiscrimation
             this.components = new System.ComponentModel.Container();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.picResult = new System.Windows.Forms.PictureBox();
+            this.lblCheck = new System.Windows.Forms.Label();
+            this.timer2 = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.picResult)).BeginInit();
             this.SuspendLayout();
             // 
@@ -41,20 +43,39 @@ namespace Manege_of_AutoDiscrimation
             // 
             // picResult
             // 
-            this.picResult.Location = new System.Drawing.Point(0, 0);
+            this.picResult.Location = new System.Drawing.Point(0, -1);
             this.picResult.Name = "picResult";
-            this.picResult.Size = new System.Drawing.Size(799, 450);
+            this.picResult.Size = new System.Drawing.Size(852, 712);
+            this.picResult.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.picResult.TabIndex = 0;
             this.picResult.TabStop = false;
+            // 
+            // lblCheck
+            // 
+            this.lblCheck.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblCheck.Font = new System.Drawing.Font("MS UI Gothic", 48F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.lblCheck.Location = new System.Drawing.Point(34, 47);
+            this.lblCheck.Name = "lblCheck";
+            this.lblCheck.Size = new System.Drawing.Size(323, 76);
+            this.lblCheck.TabIndex = 1;
+            this.lblCheck.Text = "検査中";
+            this.lblCheck.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // timer2
+            // 
+            this.timer2.Interval = 200;
+            this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
             // 
             // FormResultPicture
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(853, 711);
             this.Controls.Add(this.picResult);
+            this.Controls.Add(this.lblCheck);
             this.Name = "FormResultPicture";
             this.Text = "FormResultPicture";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormResultPicture_FormClosed);
             ((System.ComponentModel.ISupportInitialize)(this.picResult)).EndInit();
             this.ResumeLayout(false);
 
@@ -63,5 +84,7 @@ namespace Manege_of_AutoDiscrimation
         #endregion
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.PictureBox picResult;
+        private System.Windows.Forms.Label lblCheck;
+        private System.Windows.Forms.Timer timer2;
     }
 }

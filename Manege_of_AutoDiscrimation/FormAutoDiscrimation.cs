@@ -15,10 +15,12 @@ using CCSLightController;
 using Manege_of_AutoDiscrimation.Param;
 
 
+
 namespace Manege_of_AutoDiscrimation
 {
     public partial class FormAutoDiscrimation : Form
     {
+
         #region"メンバー変数"
         CParaFormMain m_cParaFormMain = CParaFormMain.getInstance();
         // Log処理
@@ -57,8 +59,8 @@ namespace Manege_of_AutoDiscrimation
             {
                 // パラメーターの読み込み
                 m_csParameter = new Parameter();
-                int i_ret =CParameterIO.ReadParameter($@".\{CDefine.PRMFolder}\Parameter.json",ref m_csParameter);
-                if(i_ret != 0)
+                int i_ret = CParameterIO.ReadParameter(CDefine.PRMFile, ref m_csParameter);
+                if (i_ret != 0)
                 {
                     MessageBox.Show("パラメーターファイルがありませんでした。");
                     this.Close();
@@ -87,7 +89,7 @@ namespace Manege_of_AutoDiscrimation
                 // ソケットクラスオープン
                 m_cSocketCommunication = new SocketCommunication();
                 int i_port_number = 11021; // 後で決める
-                i_ret = m_cSocketCommunication.Init(this, "", i_port_number);
+                i_ret = m_cSocketCommunication.Init(this, "", m_csParameter.PortNumber);
                 if (i_ret != 0)
                 {
                     MessageBox.Show("ソケットオープンに失敗しました");
@@ -100,6 +102,13 @@ namespace Manege_of_AutoDiscrimation
 
                 label1.Text = $"{CDefine.CCondition.Color[m_csParameter.ConditionColor]}色で" +
                     $"{CDefine.CCondition.Size[m_csParameter.ConditionSize]}の球を{m_csParameter.ConditionNumber}個撮ろう！";
+
+                // ライト通信をはじめに開通しておく
+                i_ret = m_cBaseCCSLight.openLight(m_csParameter.LightIPAdress, m_csParameter.LightPortNumber);
+                i_ret = m_cBaseCCSLight.closeLight();
+
+                //this.FormBorderStyle = FormBorderStyle.None;
+                this.WindowState = FormWindowState.Maximized;
             }
             catch (Exception ex)
             {
@@ -121,7 +130,7 @@ namespace Manege_of_AutoDiscrimation
         /// <param name="e"></param>
         private void FormAutoDiscrimation_Shown(object sender, EventArgs e)
         {
-            CParameterIO.SaveParameter($@".\{CDefine.PRMFolder}\Parameter.json", m_csParameter);
+            
         }
         #endregion
 
@@ -130,87 +139,119 @@ namespace Manege_of_AutoDiscrimation
         /// </summary>
         private void Inoculation()
         {
-            // 排他的処理
-            if (FormAutoDiscrimation.m_bInoculationEnable)
+            // 検査中である画面を表示
+            FormResultPicture form_result_picture = new FormResultPicture(false);
+            form_result_picture.Show();
+            form_result_picture.DisplayLabel();
+            try
             {
-                FormAutoDiscrimation.m_bInoculationEnable = false;
+                // 排他的処理
+                if (FormAutoDiscrimation.m_bInoculationEnable)
+                {
+                    FormAutoDiscrimation.m_bInoculationEnable = false;
 
-                // 解析画像ファイル、結果csvファイルが既に存在している場合は消去する
-                if (File.Exists($@"{m_strPythonFolderPath}\result\color_radius.csv"))
-                {
-                    //Console.WriteLine("result_delete");
-                    File.Delete($@"{m_strPythonFolderPath}\result\color_radius.csv");
-                }
-                if (File.Exists($@"{m_strPythonFolderPath}\img\img.png"))
-                {
-                    //Console.WriteLine("img_delete");
-                    File.Delete($@"{m_strPythonFolderPath}\img\img.png");
-                }
-                // 解析画像ファイルを保存する
-                string str_picturefile_name = m_strPythonFolderPath + "\\img\\img.png";
-                m_cCameraControlBase.save_image(str_picturefile_name);
-                if (File.Exists($@"{m_strPythonFolderPath}\img\img.png"))
-                {
-                    // 実行させたいpythonファイルのパス
-                    string myPythonApp = "PythonFile\\AutoDiscriminate.py";
-                    // プロセスを起動
-                    Process myProcess = new Process
+                    // 解析画像ファイル、結果csvファイルが既に存在している場合は消去する
+                    if (File.Exists($@"{m_strPythonFolderPath}\result\color_radius.csv"))
                     {
-                        StartInfo = new ProcessStartInfo("python.exe")
-                        {
-                            CreateNoWindow = true,
-                            UseShellExecute = false,
-                            RedirectStandardOutput = false,
-                            Arguments = $"{myPythonApp} {m_strPythonFolderPath}"
-                        }
-                    };
-                    myProcess.Start();
-                    // デバック用に残す
-                    // 処理の終了まで待つ
-                    myProcess.WaitForExit();
-                    // プロセスを閉じて終了
-                    myProcess.Close();
-                }
-                else
-                {
-                    FormAutoDiscrimation.m_bInoculationEnable = true;
-                    return;
-                }
-                if (File.Exists($@"{m_strPythonFolderPath}\result\color_radius.csv"))
-                {
-                    try
-                    {
-                        // 結果を表示する
-                        UpdataAnalyzeResultAndPicture();
-                        Control c_find_control = FindControl(this, $"txt_{m_csParameter.ConditionColor}_{m_csParameter.ConditionSize}");
-
-                        if (c_find_control != null)
-                        {
-                            // 勝利条件を満たしているかを渡す
-                            FormResultPicture form_result_picture = new FormResultPicture((Int16.Parse(c_find_control.Text) >= m_csParameter.ConditionNumber));
-                            form_result_picture.ShowDialog();
-                        }
+                        //Console.WriteLine("result_delete");
+                        File.Delete($@"{m_strPythonFolderPath}\result\color_radius.csv");
                     }
-                    catch
+                    if (File.Exists($@"{m_strPythonFolderPath}\img\img.png"))
                     {
-                        // 例外エラー
+                        //Console.WriteLine("img_delete");
+                        File.Delete($@"{m_strPythonFolderPath}\img\img.png");
+                    }
+                    // 解析画像ファイルを保存する
+                    string str_picturefile_name = m_strPythonFolderPath + "\\img\\img.png";
+                    m_cCameraControlBase.save_image(str_picturefile_name);
+                    m_cLogExecute.outputLog(m_strPythonFolderPath);
+                    m_cLogExecute.outputLog(str_picturefile_name);
+                    if (File.Exists($@"{m_strPythonFolderPath}\img\img.png"))
+                    {
+                        GC.Collect();
+                        // 実行させたいpythonファイルのパス
+                        string myPythonApp = "PythonFile\\AutoDiscriminate.py";
+                        // プロセスを起動
+                        Process myProcess = new Process
+                        {
+                            StartInfo = new ProcessStartInfo("python.exe")
+                            {
+                                CreateNoWindow = true,
+                                UseShellExecute = false,
+                                RedirectStandardOutput = false,
+                                Arguments = $"{myPythonApp} {m_strPythonFolderPath}"
+                            }
+                        };
+                        m_cLogExecute.outputLog("Debug");
+                        myProcess.Start();
+                        m_cLogExecute.outputLog("Debug2");
+                        // デバック用に残す
+                        // 処理の終了まで待つ
+                        myProcess.WaitForExit();
+                        m_cLogExecute.outputLog("Debug3");
+                        // プロセスを閉じて終了
+                        myProcess.Close();
+                        m_cLogExecute.outputLog("Debug4");
+                    }
+                    else
+                    {
+                        m_cLogExecute.outputLog("Debug5_3");
                         FormAutoDiscrimation.m_bInoculationEnable = true;
+                        form_result_picture.Close();
                         return;
                     }
+                    if (File.Exists($@"{m_strPythonFolderPath}\result\color_radius.csv"))
+                    {
+                        m_cLogExecute.outputLog("Debug5_1");
+                        try
+                        {
+                            // 結果を表示する
+                            UpdataAnalyzeResultAndPicture();
+                            Control c_find_control = FindControl(this, $"lblResult_{m_csParameter.ConditionColor}_{m_csParameter.ConditionSize}");
+
+                            form_result_picture.Close();
+                            form_result_picture = null;
+
+                            if (c_find_control != null)
+                            {
+                                // 勝利条件を満たしているかを渡す
+                                form_result_picture = new FormResultPicture((Int16.Parse(c_find_control.Text) >= m_csParameter.ConditionNumber));
+                                form_result_picture.ShowDialog();
+                            }
+                        }
+                        catch
+                        {
+                            // 例外エラー
+                            FormAutoDiscrimation.m_bInoculationEnable = true;
+                            form_result_picture.Close();
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        m_cLogExecute.outputLog("Debug5_2");
+                        FormAutoDiscrimation.m_bInoculationEnable = true;
+                        form_result_picture.Close();
+                        return;
+                    }
+                    GC.Collect();
+                    form_result_picture.Close();
+                    //Console.WriteLine("timermethod_end");
+
+                    FormAutoDiscrimation.m_bInoculationEnable = true;
                 }
                 else
                 {
-                    FormAutoDiscrimation.m_bInoculationEnable = true;
-                    return;
+                    // フラグが立っていなければ何もせずに終了させる
                 }
-                GC.Collect();
-                //Console.WriteLine("timermethod_end");
-
-                FormAutoDiscrimation.m_bInoculationEnable = true;
             }
-            else
+            catch (System.Exception ex)
             {
-                // フラグが立っていなければ何もせずに終了させる
+                m_cLogExecute.outputLog("Debug_all");
+                // 例外エラー
+                FormAutoDiscrimation.m_bInoculationEnable = true;
+                form_result_picture.Close();
+                return;
             }
         }
 
@@ -318,8 +359,16 @@ namespace Manege_of_AutoDiscrimation
 
         private void FormAutoDiscrimation_FormClosing(object sender, FormClosingEventArgs e)
         {
+            CParameterIO.SaveParameter(CDefine.PRMFile, m_csParameter);
             m_server_close = true;
             m_cSocketCommunication.Close();
+            if (m_cBaseCCSLight != null)
+            {
+                m_cBaseCCSLight.openLight(m_csParameter.LightIPAdress, m_csParameter.LightPortNumber);
+                ChangeLightState(false);
+
+                m_cBaseCCSLight = null;
+            }
         }
 
         public void UpdataAnalyzeResultAndPicture()
@@ -350,39 +399,39 @@ namespace Manege_of_AutoDiscrimation
             sr_result.Dispose();
 
             // 色ごとのリストを作成し、全体のリストからデータを代入する
-            List<int> int_red = int_csv_lists[0];
+            List<int> int_red = int_csv_lists[3];
             List<int> int_yellow = int_csv_lists[1];
             List<int> int_green = int_csv_lists[2];
             List<int> int_white = int_csv_lists[5];
             // 色ごとのリストから各半径(5mm、8mm、10mm)に近い半径の球それぞれの個数を配列に代入する
             // 赤
             int[] int_red_5mm = new int[5];
-            int_red.CopyTo(0, int_red_5mm, 0, 5);
+            int_red.CopyTo(3, int_red_5mm, 0, 4);
             int[] int_red_8mm = new int[3];
-            int_red.CopyTo(5, int_red_8mm, 0, 3);
+            int_red.CopyTo(7, int_red_8mm, 0, 2);
             int[] int_red_10mm = new int[3];
-            int_red.CopyTo(8, int_red_10mm, 0, 3);
+            int_red.CopyTo(9, int_red_10mm, 0, 2);
             // 黄色
             int[] int_yellow_5mm = new int[5];
-            int_yellow.CopyTo(0, int_yellow_5mm, 0, 5);
+            int_yellow.CopyTo(3, int_yellow_5mm, 0, 4);
             int[] int_yellow_8mm = new int[3];
-            int_yellow.CopyTo(5, int_yellow_8mm, 0, 3);
+            int_yellow.CopyTo(7, int_yellow_8mm, 0, 2);
             int[] int_yellow_10mm = new int[3];
-            int_yellow.CopyTo(8, int_yellow_10mm, 0, 3);
+            int_yellow.CopyTo(9, int_yellow_10mm, 0, 2);
             // 緑
             int[] int_green_5mm = new int[5];
-            int_green.CopyTo(0, int_green_5mm, 0, 5);
+            int_green.CopyTo(3, int_green_5mm, 0, 4);
             int[] int_green_8mm = new int[3];
-            int_green.CopyTo(5, int_green_8mm, 0, 3);
+            int_green.CopyTo(7, int_green_8mm, 0, 2);
             int[] int_green_10mm = new int[3];
-            int_green.CopyTo(8, int_green_10mm, 0, 3);
+            int_green.CopyTo(9, int_green_10mm, 0, 2);
             // 白
             int[] int_white_5mm = new int[5];
-            int_white.CopyTo(0, int_white_5mm, 0, 5);
+            int_white.CopyTo(3, int_white_5mm, 0, 4);
             int[] int_white_8mm = new int[3];
-            int_white.CopyTo(5, int_white_8mm, 0, 3);
+            int_white.CopyTo(7, int_white_8mm, 0, 2);
             int[] int_white_10mm = new int[3];
-            int_white.CopyTo(8, int_white_10mm, 0, 3);
+            int_white.CopyTo(9, int_white_10mm, 0, 2);
 
             DataTable table = new DataTable("Table");   // グリッドビューに表示するテーブル
 
@@ -436,14 +485,7 @@ namespace Manege_of_AutoDiscrimation
 
         private void ClosedServer()
         {
-            if (!m_server_close)
-            {
-                m_cSocketCommunication = null;
 
-                m_cSocketCommunication = new SocketCommunication();
-                int i_port_number = 11021; // 後で決める
-                int i_ret = m_cSocketCommunication.Init(this, "", i_port_number);
-            }
         }
 
         private int ChangeLightState(bool nbLightState)
@@ -479,6 +521,8 @@ namespace Manege_of_AutoDiscrimation
                 FormConditionSetting formConditionSetting = new FormConditionSetting();
                 formConditionSetting.ShowDialog();
                 formConditionSetting.Dispose();
+
+                CParameterIO.SaveParameter(CDefine.PRMFile, m_csParameter);
 
                 label1.Text = $"{CDefine.CCondition.Color[m_csParameter.ConditionColor]}色で" +
                     $"{CDefine.CCondition.Size[m_csParameter.ConditionSize]}の球を{m_csParameter.ConditionNumber}個撮ろう！";

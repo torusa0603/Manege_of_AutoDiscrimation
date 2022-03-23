@@ -34,6 +34,7 @@ namespace ImageMatrox
         protected static MIL_ID m_milOverLay;         //	オーバーレイバッファ
         protected static string m_strCameraFilePath;  //	DCFファイル名
         protected static Size m_szImageSize;          //	画像サイズ
+        protected static Point m_ptImageOffset;          //	画像オフセット
         protected static Size m_szImageSizeForCamera;
         protected static int m_iBoardType;            //	使用ボードタイプ
         protected static int m_iNowColor;         //	現在のカラー
@@ -57,6 +58,16 @@ namespace ImageMatrox
         protected static double m_dFrameRate;         //	カメラのフレームレート(FPS)
         protected static string m_strIPAddress;           //  カメラのIPアドレス
         protected static double m_dGain;         //	カメラのゲイン
+        protected static double m_dExposureTime; // 露光時間
+        protected static double m_dBlackLevel;  // ブラックレベル
+        // 各カラー(R,G,B)毎の係数
+        protected static class ColorRatio
+        {
+            public static double Red = 1.0;
+            public static double Blue = 1.0;
+            public static double Green = 1.0;
+        }
+
 
 
         protected static int m_iEachLightPatternMatching; //照明毎にパターンマッチングを行うか否か　1:照明毎にパターンマッチング行う　0:一つの照明のみでパターンマッチング
@@ -281,12 +292,13 @@ namespace ImageMatrox
 
             if (m_iBoardType != (int)MTX_TYPE.MTX_HOST)
             {
-                //　取込オフセットを0にする
-                MIL.MdigControl(m_milDigitizer, MIL.M_SOURCE_OFFSET_X, 0);
-                MIL.MdigControl(m_milDigitizer, MIL.M_SOURCE_OFFSET_Y, 0);
                 //　取込幅をデフォルトの取込幅にする
                 MIL.MdigControl(m_milDigitizer, MIL.M_SOURCE_SIZE_X, (double)m_szImageSize.Width);
                 MIL.MdigControl(m_milDigitizer, MIL.M_SOURCE_SIZE_Y, (double)m_szImageSize.Height);
+
+                //　取込オフセットを0にする
+                MIL.MdigControl(m_milDigitizer, MIL.M_SOURCE_OFFSET_X, m_ptImageOffset.X);
+                MIL.MdigControl(m_milDigitizer, MIL.M_SOURCE_OFFSET_Y, m_ptImageOffset.Y);
             }
 
             //	画像バッファクリア
@@ -349,19 +361,27 @@ namespace ImageMatrox
                 ////	Point grey initial
                 //else
                 //{
-                //    double d_blackLevel = 30.0;
-                //    double d_gain = m_dGain;
-                //    double d_frame_rate = m_dFrameRate;
-                //    double d_exposure_time = (1.0 / m_dFrameRate) * 1.0e6 - 1000.0;
 
-                //    MIL.MdigControlFeature(m_milDigitizer, MIL.M_FEATURE_VALUE_AS_STRING, ("GainAuto"), MIL.M_TYPE_ENUMERATION, ("Off"));
-                //    MIL.MdigControlFeature(m_milDigitizer, MIL.M_FEATURE_VALUE_AS_STRING, ("ExposureAuto"), MIL.M_TYPE_ENUMERATION, ("Off"));
-                //    MIL.MdigControlFeature(m_milDigitizer, MIL.M_FEATURE_VALUE_AS_STRING, ("AcquisitionFrameRateAuto"), MIL.M_TYPE_ENUMERATION, ("Off"));
+                //MIL.MdigControlFeature(m_milDigitizer, MIL.M_FEATURE_VALUE_AS_STRING, ("GainAuto"), MIL.M_TYPE_ENUMERATION, ("Off"));
+                //MIL.MdigControlFeature(m_milDigitizer, MIL.M_FEATURE_VALUE_AS_STRING, ("ExposureAuto"), MIL.M_TYPE_ENUMERATION, ("Off"));
+                //MIL.MdigControlFeature(m_milDigitizer, MIL.M_FEATURE_VALUE_AS_STRING, ("AcquisitionFrameRateAuto"), MIL.M_TYPE_ENUMERATION, ("Off"));
 
-                //    MIL.MdigControlFeature(m_milDigitizer, MIL.M_FEATURE_VALUE, ("BlackLevel"), MIL.M_TYPE_DOUBLE, ref d_blackLevel);
-                //    MIL.MdigControlFeature(m_milDigitizer, MIL.M_FEATURE_VALUE, ("Gain"), MIL.M_TYPE_DOUBLE, ref d_gain);
-                //    MIL.MdigControlFeature(m_milDigitizer, MIL.M_FEATURE_VALUE, ("AcquisitionFrameRate"), MIL.M_TYPE_DOUBLE, ref d_frame_rate);
-                //    MIL.MdigControlFeature(m_milDigitizer, MIL.M_FEATURE_VALUE, ("ExposureTime"), MIL.M_TYPE_DOUBLE, ref d_exposure_time);
+
+
+                MIL.MdigControlFeature(m_milDigitizer, MIL.M_FEATURE_VALUE, ("BlackLevel"), MIL.M_TYPE_DOUBLE, ref m_dBlackLevel);
+                MIL.MdigControlFeature(m_milDigitizer, MIL.M_FEATURE_VALUE, ("Gain"), MIL.M_TYPE_DOUBLE, ref m_dGain);
+                MIL.MdigControlFeature(m_milDigitizer, MIL.M_FEATURE_VALUE, ("AcquisitionFrameRate"), MIL.M_TYPE_DOUBLE, ref m_dFrameRate);
+                MIL.MdigControlFeature(m_milDigitizer, MIL.M_FEATURE_VALUE, ("ExposureTime"), MIL.M_TYPE_DOUBLE, ref m_dExposureTime);
+
+                MIL.MdigControlFeature(m_milDigitizer, MIL.M_FEATURE_VALUE_AS_STRING, ("BalanceWhiteAuto"), MIL.M_TYPE_ENUMERATION, ("Off"));
+
+                MIL.MdigControlFeature(m_milDigitizer, MIL.M_FEATURE_VALUE_AS_STRING, ("BalanceRatioSelector"), MIL.M_TYPE_ENUMERATION, ("Red"));
+                MIL.MdigControlFeature(m_milDigitizer, MIL.M_FEATURE_VALUE, ("BalanceRatio"), MIL.M_TYPE_DOUBLE, ref ColorRatio.Red);
+                MIL.MdigControlFeature(m_milDigitizer, MIL.M_FEATURE_VALUE_AS_STRING, ("BalanceRatioSelector"), MIL.M_TYPE_ENUMERATION, ("Blue"));
+                MIL.MdigControlFeature(m_milDigitizer, MIL.M_FEATURE_VALUE, ("BalanceRatio"), MIL.M_TYPE_DOUBLE, ref ColorRatio.Blue);
+                MIL.MdigControlFeature(m_milDigitizer, MIL.M_FEATURE_VALUE_AS_STRING, ("BalanceRatioSelector"), MIL.M_TYPE_ENUMERATION, ("Green"));
+                MIL.MdigControlFeature(m_milDigitizer, MIL.M_FEATURE_VALUE, ("BalanceRatio"), MIL.M_TYPE_DOUBLE, ref ColorRatio.Green);
+
 
                 //    MIL.MdigControlFeature(m_milDigitizer, MIL.M_FEATURE_VALUE, ("PixelFormat"), MIL.M_TYPE_STRING, ("Mono8"));
 
@@ -415,6 +435,12 @@ namespace ImageMatrox
             m_strCameraFilePath = "PRM\\" + m_strCameraFilePath;
 
             //	画像サイズ
+            GetPrivateProfileString("Matrox", "OffsetX", "0", buff, 256, m_strIniFilePAth);
+            m_ptImageOffset.X = Int32.Parse(buff.ToString());
+            GetPrivateProfileString("Matrox", "OffsetY", "0", buff, 256, m_strIniFilePAth);
+            m_ptImageOffset.Y = Int32.Parse(buff.ToString());
+
+            //	画像サイズ
             GetPrivateProfileString("Matrox", "sizeX", "800", buff, 256, m_strIniFilePAth);
             m_szImageSize.Width = Int32.Parse(buff.ToString());
             GetPrivateProfileString("Matrox", "sizeY", "640", buff, 256, m_strIniFilePAth);
@@ -438,6 +464,46 @@ namespace ImageMatrox
             if (m_dGain <= 0.0)
             {
                 m_dGain = 10.0;
+            }
+
+            //	露光時間
+            GetPrivateProfileString("Matrox", "ExposureTime", "10", buff, 256, m_strIniFilePAth);
+            m_dExposureTime = Int64.Parse(buff.ToString());
+            if (m_dExposureTime <= 0.0)
+            {
+                m_dExposureTime = 10.0;
+            }
+
+            // ブラックレベル
+            GetPrivateProfileString("Matrox", "BlackLevel", "0", buff, 256, m_strIniFilePAth);
+            m_dBlackLevel = Int64.Parse(buff.ToString());
+            if (m_dBlackLevel <= 0.0)
+            {
+                m_dBlackLevel = 0.0;
+            }
+
+            // 赤色係数(ホワイトバランス)
+            GetPrivateProfileString("Matrox", "Color_Red", "1.0", buff, 256, m_strIniFilePAth);
+            ColorRatio.Red = double.Parse(buff.ToString());
+            if (ColorRatio.Red <= 0.0)
+            {
+                ColorRatio.Red = 0.0;
+            }
+
+            // 青色係数(ホワイトバランス)
+            GetPrivateProfileString("Matrox", "Color_Blue", "1.0", buff, 256, m_strIniFilePAth);
+            ColorRatio.Blue = double.Parse(buff.ToString());
+            if (ColorRatio.Blue <= 0.0)
+            {
+                ColorRatio.Blue = 0.0;
+            }
+
+            // 緑色係数(ホワイトバランス)
+            GetPrivateProfileString("Matrox", "Color_Green", "1.0", buff, 256, m_strIniFilePAth);
+            ColorRatio.Green = double.Parse(buff.ToString());
+            if (ColorRatio.Green <= 0.0)
+            {
+                ColorRatio.Green = 0.0;
             }
 
             //  カメラのIPアドレス

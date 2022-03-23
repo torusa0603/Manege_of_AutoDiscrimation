@@ -16,5 +16,7 @@ namespace Manege_of_AutoDiscrimation
         }
 
         public const string PRMFolder = "prm";
+
+        public static readonly string PRMFile = $@".\{CDefine.PRMFolder}\Parameter.json";
     }
 }
