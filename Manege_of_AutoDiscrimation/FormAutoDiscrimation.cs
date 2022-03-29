@@ -108,6 +108,7 @@ namespace Manege_of_AutoDiscrimation
                 i_ret = m_cBaseCCSLight.closeLight();
 
                 //this.FormBorderStyle = FormBorderStyle.None;
+                // 全画面表示する
                 this.WindowState = FormWindowState.Maximized;
             }
             catch (Exception ex)
@@ -140,9 +141,8 @@ namespace Manege_of_AutoDiscrimation
         private void Inoculation()
         {
             // 検査中である画面を表示
-            FormResultPicture form_result_picture = new FormResultPicture(false);
+            FormResultPicture form_result_picture = new FormResultPicture(null);
             form_result_picture.Show();
-            form_result_picture.DisplayLabel();
             try
             {
                 // 排他的処理
@@ -399,7 +399,7 @@ namespace Manege_of_AutoDiscrimation
             sr_result.Dispose();
 
             // 色ごとのリストを作成し、全体のリストからデータを代入する
-            List<int> int_red = int_csv_lists[3];
+            List<int> int_red = int_csv_lists[0];
             List<int> int_yellow = int_csv_lists[1];
             List<int> int_green = int_csv_lists[2];
             List<int> int_white = int_csv_lists[5];
@@ -410,28 +410,28 @@ namespace Manege_of_AutoDiscrimation
             int[] int_red_8mm = new int[3];
             int_red.CopyTo(7, int_red_8mm, 0, 2);
             int[] int_red_10mm = new int[3];
-            int_red.CopyTo(9, int_red_10mm, 0, 2);
+            int_red.CopyTo(9, int_red_10mm, 0, 3);
             // 黄色
             int[] int_yellow_5mm = new int[5];
             int_yellow.CopyTo(3, int_yellow_5mm, 0, 4);
             int[] int_yellow_8mm = new int[3];
             int_yellow.CopyTo(7, int_yellow_8mm, 0, 2);
             int[] int_yellow_10mm = new int[3];
-            int_yellow.CopyTo(9, int_yellow_10mm, 0, 2);
+            int_yellow.CopyTo(9, int_yellow_10mm, 0, 3);
             // 緑
             int[] int_green_5mm = new int[5];
             int_green.CopyTo(3, int_green_5mm, 0, 4);
             int[] int_green_8mm = new int[3];
             int_green.CopyTo(7, int_green_8mm, 0, 2);
             int[] int_green_10mm = new int[3];
-            int_green.CopyTo(9, int_green_10mm, 0, 2);
+            int_green.CopyTo(9, int_green_10mm, 0, 3);
             // 白
             int[] int_white_5mm = new int[5];
             int_white.CopyTo(3, int_white_5mm, 0, 4);
             int[] int_white_8mm = new int[3];
             int_white.CopyTo(7, int_white_8mm, 0, 2);
             int[] int_white_10mm = new int[3];
-            int_white.CopyTo(9, int_white_10mm, 0, 2);
+            int_white.CopyTo(9, int_white_10mm, 0, 3);
 
             DataTable table = new DataTable("Table");   // グリッドビューに表示するテーブル
 

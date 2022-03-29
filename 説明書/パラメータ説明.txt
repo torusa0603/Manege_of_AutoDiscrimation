@@ -1,0 +1,27 @@
+変更する可能性があるパラメータの説明のみ記載する
+ここに載っていないパラメータに関してはアプリ内から変更可能、もしくは変更する必要がない
+
+prm\ImageProcess.ini
+	sizeX				画像サイズ幅
+	sizeY				画像サイズ高さ
+	OffsetX				オフセット量x
+	OffsetY				オフセット量y
+	FrameRate			フレームレート
+	Gain				ゲイン値
+	ExposureTime			露光時間
+	BlackLevel			ブラックレベル
+	CameraIPAddress			カメラのIPアドレス
+
+prm\ParaFormMain.xml
+	PythonPictureFolder		Pythonと共有で使用する画像を保存するフォルダー
+
+prm\Parameter.json
+	PortNumber			ソケット通信時に使用するポート番号
+	LightValue			光量
+	LightIPAdress			照明のIPアドレス
+	LightPortNumber			照明のポート番号
+
+PythonFile\Setting.json
+	NumberPerOneMiliMeter     一ピクセルの長さ重み(mm/pix) → 検査結果が大きく出る場合はこの値を大きくする
+	MaxRadius                 最大半径値(mm)
+	i_circle_level_threshold  円形度(%) → 円周から予測される面積と実際の面積との比
