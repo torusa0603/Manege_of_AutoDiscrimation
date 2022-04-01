@@ -240,12 +240,12 @@
             // 
             this.lblResult_Green.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblResult_Green.Font = new System.Drawing.Font("MS UI Gothic", 30F);
-            this.lblResult_Green.ForeColor = System.Drawing.Color.Lime;
+            this.lblResult_Green.ForeColor = System.Drawing.Color.DodgerBlue;
             this.lblResult_Green.Location = new System.Drawing.Point(94, 284);
             this.lblResult_Green.Name = "lblResult_Green";
             this.lblResult_Green.Size = new System.Drawing.Size(120, 56);
             this.lblResult_Green.TabIndex = 32;
-            this.lblResult_Green.Text = "緑";
+            this.lblResult_Green.Text = "青";
             this.lblResult_Green.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lblResult_Yellow

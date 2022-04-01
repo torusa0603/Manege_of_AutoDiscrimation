@@ -401,7 +401,7 @@ namespace Manege_of_AutoDiscrimation
             // 色ごとのリストを作成し、全体のリストからデータを代入する
             List<int> int_red = int_csv_lists[0];
             List<int> int_yellow = int_csv_lists[1];
-            List<int> int_green = int_csv_lists[2];
+            List<int> int_green = int_csv_lists[3];
             List<int> int_white = int_csv_lists[5];
             // 色ごとのリストから各半径(5mm、8mm、10mm)に近い半径の球それぞれの個数を配列に代入する
             // 赤
