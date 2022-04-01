@@ -45,7 +45,7 @@ namespace Manege_of_AutoDiscrimation
             // 
             this.picResult.Location = new System.Drawing.Point(0, -1);
             this.picResult.Name = "picResult";
-            this.picResult.Size = new System.Drawing.Size(852, 712);
+            this.picResult.Size = new System.Drawing.Size(1904, 1042);
             this.picResult.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.picResult.TabIndex = 0;
             this.picResult.TabStop = false;
@@ -70,7 +70,7 @@ namespace Manege_of_AutoDiscrimation
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(853, 711);
+            this.ClientSize = new System.Drawing.Size(421, 184);
             this.Controls.Add(this.picResult);
             this.Controls.Add(this.lblCheck);
             this.Name = "FormResultPicture";

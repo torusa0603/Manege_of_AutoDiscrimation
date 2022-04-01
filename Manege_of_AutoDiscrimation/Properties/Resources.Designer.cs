@@ -63,9 +63,29 @@ namespace Manege_of_AutoDiscrimation.Properties {
         /// <summary>
         ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
         /// </summary>
+        internal static System.Drawing.Bitmap Good {
+            get {
+                object obj = ResourceManager.GetObject("Good", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+        /// </summary>
         internal static System.Drawing.Bitmap loose {
             get {
                 object obj = ResourceManager.GetObject("loose", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static System.Drawing.Bitmap NextChallenge {
+            get {
+                object obj = ResourceManager.GetObject("NextChallenge", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
