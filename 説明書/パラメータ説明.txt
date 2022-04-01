@@ -24,4 +24,5 @@ prm\Parameter.json
 PythonFile\Setting.json
 	NumberPerOneMiliMeter     	一ピクセルの長さ重み(mm/pix) → 検査結果が大きく出る場合はこの値を大きくする
 	MaxRadius                 	最大半径値(mm)
-	i_circle_level_threshold  	円形度(%) → 円周から予測される面積と実際の面積との比
+	circle_level_threshold  	円形度(%) → 円周から予測される面積と実際の面積との比
+	white_satuation			この値以下の彩度値をもつピクセルは白ピクセルと判別する
