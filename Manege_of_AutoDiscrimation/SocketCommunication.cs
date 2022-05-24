@@ -32,6 +32,7 @@ namespace Manege_of_AutoDiscrimation
             "Stop",                 //  [StartUpPG] 処理停止コマンド文字列
             "Start",                //  [StartUpPG] 処理開始コマンド文字列
             "StartB",               //  [StartUpPG] 処理 B 開始コマンド文字列
+            "DiscrimateEnd"         //  [Python] 検査終了文字列
         };
 
         private SPCommonSocket.CSocketCommunicationBase m_cSocket;      //  ソケット通信クラス
@@ -89,7 +90,7 @@ namespace Manege_of_AutoDiscrimation
             }
             else
             {
-                SendCommand(1);
+                SendCommand(100);
             }
             m_bReplyDone = true;
         }
@@ -109,14 +110,26 @@ namespace Manege_of_AutoDiscrimation
         /// <summary>
         /// 通信機能の初期化
         /// </summary>
-        /// <param name="nParentForm"></param>
+        /// <param name="nParentForm">フォーム</param>
+        /// <param name="nstrIPAddress">アドレス</param>
+        /// <param name="niPortNo">ポート番号</param>
+        /// <param name="niType">1:サーバー、それ以外はクライアント</param>
         /// <returns>0:正常 -1:サーバー機能はない -2:既にソケットをオープンしている -3:ソケットオープンエラー</returns>
-        public int Init(Form nParentForm, string nstrIPAddress, int niPortNo)
+        public int Init(Form nParentForm, string nstrIPAddress, int niPortNo, int niType)
         {
             try
             {
-                //  ソケット通信クラスオブジェクト作成(サーバーとして)
-                m_cSocket = new SPCommonSocket.CSocketCommunicationBase(SPCommonSocket.CSocketCommunicationBase.SERVER, nParentForm);
+                if(niType == SPCommonSocket.CSocketCommunicationBase.SERVER)
+                {
+                    //  ソケット通信クラスオブジェクト作成(サーバーとして)
+                    m_cSocket = new SPCommonSocket.CSocketCommunicationBase(SPCommonSocket.CSocketCommunicationBase.SERVER, nParentForm);
+                }
+                else
+                {
+                    //  ソケット通信クラスオブジェクト作成(クライアントとして)
+                    m_cSocket = new SPCommonSocket.CSocketCommunicationBase(SPCommonSocket.CSocketCommunicationBase.CLIENT);
+                }
+                
                 //  ソケットオープン
                 int i_ret = m_cSocket.OpenSocket(niPortNo);
                 //  ソケットが正常にオープンされた
@@ -186,7 +199,7 @@ namespace Manege_of_AutoDiscrimation
         /// <summary>
         /// [StartUpPG] 応答を返す
         /// </summary>
-        /// <param name="niParam">1:start, 0:</param>
+        /// <param name="niParam">100:OK, 0:</param>
         /// <returns></returns>
         public int SendCommand(int niParam)
         {
@@ -196,9 +209,13 @@ namespace Manege_of_AutoDiscrimation
                 //string str_send_command = m_cstrCommandPrefix + m_lstCommand[m_ciStartUpPGStart] + m_cstrCommandTermination;
 
                 string strRet = m_cstrCommandError;
-                if (niParam > 0)
+                if (niParam == 100)
                 {
                     strRet = m_cstrCommandOK;
+                }
+                else
+                {
+                    strRet = m_lstCommand[niParam];
                 }
 
                 //  送信文字列作成 /OK\n

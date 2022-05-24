@@ -1,0 +1,930 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MatroxCS</name>
+    </assembly>
+    <members>
+        <member name="M:MatroxCS.Algorithm.FujiwaDenki_CheckInoculant.Execute(MatroxCS.Algorithm.CRequiredParameterForAlgorithm,System.Collections.Generic.List{System.Object})">
+            <summary>
+            接種材検査装置用アルゴリズム
+            </summary>
+            <param name="ncRequiredParameterForAlgorithm"></param>
+            <param name="noValue">{0:(int)判定閾値, 1:(bool)初期化フラグ, 2:(int)取得したい画像枚数, 3:(string)保存先フォルダー}</param>
+            <returns></returns>
+        </member>
+        <member name="M:MatroxCS.Algorithm.FujiwaDenki_CheckInoculant.DisplayProcessBuff(Matrox.MatroxImagingLibrary.MIL_ID)">
+            <summary>
+            フィルタリング用画像バッファを表示させる
+            </summary>
+            <param name="nmilDisplayBuff">表示画像バッファ</param>
+            <returns>0:正常終了、-999:異常終了</returns>
+        </member>
+        <member name="M:MatroxCS.Algorithm.FujiwaDenki_CheckInoculant.CutoutProcessBaffa(System.Drawing.Point,System.Drawing.Size)">
+            <summary>
+            画像を切り抜き、その画像をフィルタリング用画像とする
+            </summary>
+            <param name="npntOffset">切り抜き座標</param>
+            <param name="niImageSize">切り抜きサイズ</param>
+            <returns></returns>
+        </member>
+        <member name="M:MatroxCS.Algorithm.FujiwaDenki_CheckInoculant.CountWhitePixels(Matrox.MatroxImagingLibrary.MIL_ID)">
+            <summary>
+            白色のピクセル数を計測する
+            </summary>
+            <param name="nmilFilterProcessingMono">指定二値化画像</param>
+            <returns>白色ピクセル数</returns>
+        </member>
+        <member name="T:MatroxCS.Algorithm.CRequiredParameterForAlgorithm">
+            <summary>
+            検査アルゴリズム必須引数
+            </summary>
+        </member>
+        <member name="F:MatroxCS.Algorithm.CRequiredParameterForAlgorithm.m_szProcessingImageSize">
+            <summary>
+            検査画像サイズ
+            </summary>
+        </member>
+        <member name="F:MatroxCS.Algorithm.CRequiredParameterForAlgorithm.ProcessingImageBuffer">
+            <summary>
+            検査画像バッファ
+            </summary>
+        </member>
+        <member name="F:MatroxCS.Algorithm.CRequiredParameterForAlgorithm.DisplayImageBuffer">
+            <summary>
+            検査結果画像表示バッファ(表示しない場合はnull)
+            </summary>
+        </member>
+        <member name="M:MatroxCS.CBase.Initial(System.Int32)">
+            <summary>
+            初期化
+            </summary>
+            <param name="niBoardType">ボードの種類</param>
+            <param name="nstrExeFolderPath">アプリケーション実行パス</param>
+            <returns>0:正常終了、-1:アプリケーションID取得失敗、-2:指定ボード種類に該当なし、-3:システムID取得失敗、-999:異常終了</returns>
+        </member>
+        <member name="M:MatroxCS.CBase.GetFatalErrorOccured">
+            <summary>
+            致命的なエラーの有無を取得
+            </summary>
+            <returns>true:あり、false:なし</returns>
+        </member>
+        <member name="M:MatroxCS.CBase.End">
+            <summary>
+            ベースクラスの終了処理
+            </summary>
+            <returns>0:正常終了、-999:異常終了</returns>
+        </member>
+        <member name="M:MatroxCS.CBase.HookErrorHandler(Matrox.MatroxImagingLibrary.MIL_INT,Matrox.MatroxImagingLibrary.MIL_ID,System.IntPtr)">
+            <summary>
+            エラーフック関数
+            </summary>
+            <param name="nlHookType"></param>
+            <param name="nEventId"></param>
+            <param name="npUserDataPtr"></param>
+            <returns>MIL.M_NULL</returns>
+        </member>
+        <member name="M:MatroxCS.Camera.CBaslerCamera.SetGain(System.Double@)">
+            <summary>
+            ゲインを設定する
+            </summary>
+            <param name="ndGain">ゲイン値</param>
+            <returns></returns>
+        </member>
+        <member name="M:MatroxCS.Camera.CBaslerCamera.SetExposureTime(System.Double@)">
+            <summary>
+            露光時間を設定する
+            </summary>
+            <param name="ndExposureTime">露光時間</param>
+            <returns></returns>
+        </member>
+        <member name="M:MatroxCS.Camera.CBaslerCamera.GetGainMargin">
+            <summary>
+            ゲイン値の範囲を取得
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MatroxCS.Camera.CBaslerCamera.GetExposureTimeMargin">
+            <summary>
+            露光時間の範囲を取得
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MatroxCS.Camera.CBaumerCamera.SetGain(System.Double@)">
+            <summary>
+            ゲインを設定する
+            </summary>
+            <param name="ndGain">ゲイン値</param>
+            <returns></returns>
+        </member>
+        <member name="M:MatroxCS.Camera.CBaumerCamera.SetExposureTime(System.Double@)">
+            <summary>
+            露光時間を設定する
+            </summary>
+            <param name="ndExposureTime">露光時間</param>
+            <returns></returns>
+        </member>
+        <member name="M:MatroxCS.Camera.CBaumerCamera.GetGainMargin">
+            <summary>
+            ゲイン値の範囲を取得
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MatroxCS.Camera.CBaumerCamera.GetExposureTimeMargin">
+            <summary>
+            露光時間の範囲を取得
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MatroxCS.Camera.CCameraBase.#ctor(MatroxCS.Parameter.CCameraInfo,System.Int32)">
+            <summary>
+            コンストラクタ
+            </summary>
+            <param name="ncCameraInfo">カメラ情報</param>
+        </member>
+        <member name="M:MatroxCS.Camera.CCameraBase.OpenCamera">
+            <summary>
+            カメラオープン
+            </summary>
+            <returns>0:正常終了、-1:デジタイザー取得失敗、-2:グラブ専用バッファ取得失敗、-999:異常終了</returns>
+        </member>
+        <member name="M:MatroxCS.Camera.CCameraBase.CloseCamera">
+            <summary>
+            カメラクローズ
+            </summary>
+            <returns>0:正常終了、-999:異常終了</returns>
+        </member>
+        <member name="M:MatroxCS.Camera.CCameraBase.ChangeThroughState">
+            <summary>
+            スルーを行う
+            </summary>
+            <returns>0:正常終了、-999:異常終了</returns>
+        </member>
+        <member name="M:MatroxCS.Camera.CCameraBase.ChangeFreezeState">
+            <summary>
+            フリーズを行う
+            </summary>
+            <returns>0:正常終了、-999:異常終了</returns>
+        </member>
+        <member name="M:MatroxCS.Camera.CCameraBase.SetShowImage(Matrox.MatroxImagingLibrary.MIL_ID)">
+            <summary>
+            画面に表示するための画像バッファを設定する
+            </summary>
+            <param name="nmilShowImage">表示用画像バッファ</param>
+            <returns>0:正常終了、-1:画像バッファのサイズエラー、-999:異常終了</returns>
+        </member>
+        <member name="M:MatroxCS.Camera.CCameraBase.InquireBufferSize(Matrox.MatroxImagingLibrary.MIL_ID)">
+            <summary>
+            指定画像バッファのサイズを回答する
+            </summary>
+            <param name="nmilBuffer">指定画像バッファ</param>
+            <returns>画像バッファサイズ</returns>
+        </member>
+        <member name="M:MatroxCS.Camera.CCameraBase.ClearShowImage">
+            <summary>
+            保持している表示用バッファをnullにする
+            </summary>
+        </member>
+        <member name="M:MatroxCS.Camera.CCameraBase.GetShowImage">
+            <summary>
+            画像取得用バッファを取得
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MatroxCS.Camera.CCameraBase.GetID">
+            <summary>
+            カメラID取得
+            </summary>
+            <returns>カメラID</returns>
+        </member>
+        <member name="M:MatroxCS.Camera.CCameraBase.GetImageSize">
+            <summary>
+            カメラ画像サイズ取得
+            </summary>
+            <returns>カメラ画像サイズ</returns>
+        </member>
+        <member name="M:MatroxCS.Camera.CCameraBase.MakeDiffImage(Matrox.MatroxImagingLibrary.MIL_ID,Matrox.MatroxImagingLibrary.MIL_ID)">
+            <summary>
+            差分画像を作成する
+            </summary>
+            <param name="nmilDiffOrgImage1">差分元画像バッファ1</param>
+            <param name="nmilDiffOrgImage2">差分元画像バッファ2</param>
+            <returns>0:正常終了、-999:異常終了</returns>
+        </member>
+        <member name="M:MatroxCS.Camera.CCameraBase.SetDiffPictureMode(System.Boolean)">
+            <summary>
+            差分画像モードをオンにする
+            </summary>
+            <param name="nbShowDiffPic">差分画像を表示を行うか</param>
+            <returns>0:正常終了、-1:差分元画像バッファ取得失敗、-2:差分結果画像バッファ取得失敗</returns>
+        </member>
+        <member name="M:MatroxCS.Camera.CCameraBase.ResetDiffPictureMode">
+            <summary>
+            差分画像モードをオフにする
+            </summary>
+        </member>
+        <member name="M:MatroxCS.Camera.CCameraBase.GetContrast(System.Drawing.Point,System.Drawing.Size,System.Double@)">
+            <summary>
+            選択範囲のコントラストを計測
+            </summary>
+            <param name="npntOffsest"></param>
+            <param name="nszInoculationArea"></param>
+            <param name="ndResult"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MatroxCS.Camera.CCameraBase.ProcessingFunction(Matrox.MatroxImagingLibrary.MIL_INT,Matrox.MatroxImagingLibrary.MIL_ID,System.IntPtr)">
+            <summary>
+            画像取得関数
+            </summary>
+            <param name="nlHookType"></param>
+            <param name="nEventId"></param>
+            <param name="npUserDataPtr"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MatroxCS.Camera.CCameraBase.Heartbeat(System.Object,System.EventArgs)">
+            <summary>
+            一定時間、カメラ画像を取得できなかった場合に起動
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:MatroxCS.Camera.CCameraBase.SetGain(System.Double@)">
+            <summary>
+            ゲインを設定する
+            </summary>
+            <param name="ndGain">ゲイン値</param>
+            <returns></returns>
+        </member>
+        <member name="M:MatroxCS.Camera.CCameraBase.SetExposureTime(System.Double@)">
+            <summary>
+            露光時間を設定する
+            </summary>
+            <param name="ndExposureTime">露光時間</param>
+            <returns></returns>
+        </member>
+        <member name="M:MatroxCS.Camera.CCameraBase.SetProcessBuffer(Matrox.MatroxImagingLibrary.MIL_ID,System.Drawing.Size,Matrox.MatroxImagingLibrary.MIL_ID@)">
+            <summary>
+            加工用の画像バッファにコピーする
+            </summary>
+            <param name="nmilCopySorceBuff">コピー元バッファ</param>
+            <param name="niSorceImageSize">コピー元バッファのサイズ</param>
+            <param name="nmilCopyDestBuff">保存先バッファ</param>
+            <returns>0:正常終了、-999:異常終了</returns>
+        </member>
+        <member name="M:MatroxCS.Camera.CCameraBase.CutoutProcessBuffer(System.Drawing.Point,System.Drawing.Size,Matrox.MatroxImagingLibrary.MIL_ID@)">
+            <summary>
+            画像を切り抜く
+            </summary>
+            <param name="npntOffset">切り抜き座標</param>
+            <param name="niImageSize">切り抜きサイズ</param>
+            <param name="nmilCutBuff">切り抜き元兼切り抜き後の画像</param>
+            <returns>0:正常終了、-999:異常終了</returns>
+        </member>
+        <member name="M:MatroxCS.Camera.CSonyCamera.SetGain(System.Double@)">
+            <summary>
+            ゲインを設定する
+            </summary>
+            <param name="ndGain">ゲイン値</param>
+            <returns></returns>
+        </member>
+        <member name="M:MatroxCS.Camera.CSonyCamera.SetExposureTime(System.Double@)">
+            <summary>
+            露光時間を設定する
+            </summary>
+            <param name="ndExposureTime">露光時間</param>
+            <returns></returns>
+        </member>
+        <member name="M:MatroxCS.Camera.CSonyCamera.GetGainMargin">
+            <summary>
+            ゲイン値の範囲を取得
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MatroxCS.Camera.CSonyCamera.GetExposureTimeMargin">
+            <summary>
+            露光時間の範囲を取得
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:MatroxCS.CDefine.SpecificErrorCode">
+            <summary>
+            固有エラー番号
+            </summary>
+        </member>
+        <member name="F:MatroxCS.CDefine.SpecificErrorCode.FATAL_ERROR_OCCURED">
+            <summary>
+            MILの処理中に発生した致命的エラー
+            </summary>
+        </member>
+        <member name="F:MatroxCS.CDefine.SpecificErrorCode.UNCOMPLETED_OPENING_ERROR">
+            <summary>
+            初期化完了前に処理を実行した時のエラー
+            </summary>
+        </member>
+        <member name="F:MatroxCS.CDefine.SpecificErrorCode.EXCEPTION_ERROR">
+            <summary>
+            try-catchで捉えた予期せぬエラー
+            </summary>
+        </member>
+        <member name="F:MatroxCS.CDefine.EXE_FOLDER_PATH">
+            <summary>
+            アプリケーション実行パス
+            </summary>
+        </member>
+        <member name="T:MatroxCS.CDefine.LogKey">
+            <summary>
+            辞書型ログインスタンスのキー値
+            </summary>
+        </member>
+        <member name="F:MatroxCS.CDefine.LogKey.MIL_ERROR">
+            <summary>
+            MILエラー用オブジェクトに対応するキー名
+            </summary>
+        </member>
+        <member name="F:MatroxCS.CDefine.LogKey.DLL_ERROR">
+            <summary>
+            DLL由来エラー用オブジェクトに対応するキー名
+            </summary>
+        </member>
+        <member name="F:MatroxCS.CDefine.LogKey.OPERATE">
+            <summary>
+            操作履歴用オブジェクトに対応するキー名
+            </summary>
+        </member>
+        <member name="T:MatroxCS.CDefine.CCameraGeneralLimit">
+            <summary>
+            カメラに関する全般設定項目の限界値
+            </summary>
+        </member>
+        <member name="F:MatroxCS.CDefine.CCameraGeneralLimit.MAX_CAMERA_NUMBER">
+            <summary>
+            カメラ個数の上限
+            </summary>
+        </member>
+        <member name="F:MatroxCS.CDefine.CCameraGeneralLimit.MAX_HEART_BEAT_TIME">
+            <summary>
+            ハートビート時間の上限
+            </summary>
+        </member>
+        <member name="T:MatroxCS.CDefine.CCameraInfoLimit">
+            <summary>
+            個々のカメラに対する設定項目の限界値
+            </summary>
+        </member>
+        <member name="F:MatroxCS.CDefine.CCameraInfoLimit.MAX_WIDTH">
+            <summary>
+            取得画像幅の上限
+            </summary>
+        </member>
+        <member name="F:MatroxCS.CDefine.CCameraInfoLimit.MAX_HEIGHT">
+            <summary>
+            取得画像高さの上限
+            </summary>
+        </member>
+        <member name="T:MatroxCS.CDefine.MTX_TYPE">
+            <summary>
+            ボードの種類毎に割り振られた整数値(0: MORPHIS、1: SOLIOSXCL、2: SOLIOSXA、3: METEOR2MC、4: GIGE、100: HOST)
+            </summary>
+        </member>
+        <member name="M:MatroxCS.CFileIO.Load(Matrox.MatroxImagingLibrary.MIL_ID,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="nstrFilePath"></param>
+            <returns>0:正常終了、-1:拡張子エラー</returns>
+        </member>
+        <member name="M:MatroxCS.CFileIO.Save(Matrox.MatroxImagingLibrary.MIL_ID,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="nstrFilePath"></param>
+            <returns>0:正常終了、-1:拡張子エラー、-2:パス内にファイル名無し</returns>
+        </member>
+        <member name="M:MatroxCS.CFileIO.ExtractExtention(System.String,System.String@)">
+            <summary>
+            ファイルパスから拡張子を抽出する
+            </summary>
+            <param name="nstrImageFilePath">ファイルパス</param>
+            <param name="nstrExt">拡張子を返す</param>
+            <returns>画像拡張子(bmp,jpg,jpeg,png,tiff)の有無</returns>
+        </member>
+        <member name="M:MatroxCS.CLogMatroxCS.Output(System.String,System.String)">
+            <summary>
+            ログを出力する
+            </summary>
+            <param name="nstrKeyName">指定ログキー(Define.LogKeyに定義)</param>
+            <param name="nstrLogContents">出力内容</param>
+        </member>
+        <member name="M:MatroxCS.CParameterIO.ReadParameter(System.String,MatroxCS.Parameter.CCameraGeneral@)">
+            <summary>
+            設定ファイルの内容を設定用オブジェクトに格納
+            </summary>
+            <param name="nstrSettingFilePath">設定ファイルパス</param>
+            <returns>0:正常終了、-1:設定ファイルパスの途中ディレクトリが存在しない、-2:設定ファイル作成・書き込みエラー、-3:設定ファイルなし(新規作成)<br />
+            -4:設定ファイル構文エラー、-5:設定値エラー</returns>
+        </member>
+        <member name="M:MatroxCS.CParameterIO.CreateSettingFile(System.String)">
+            <summary>
+            設定ファイルを作成する
+            </summary>
+            <param name="nstrSettingFilePath">作成ファイルパス</param>
+            <returns>0:正常終了、-1:設定ファイルパスの途中ディレクトリーが存在しない、-2:ファイル作成・書き込みエラー</returns>
+        </member>
+        <member name="M:MatroxCS.CParameterIO.AddDescriptionOfParameter(System.String@)">
+            <summary>
+            作成される設定ファイルにコメントを加える
+            </summary>
+            <param name="nstrJsonContents">json型をシリアライズした文字列</param>
+        </member>
+        <member name="M:MatroxCS.CDisplayImage.OpenDisplay(System.IntPtr,System.Drawing.Size)">
+            <summary>
+            ディスプレイのオープン
+            </summary>
+            <param name="nhDisplayHandle">表示用ハンドル</param>
+            <param name="nDisplaySize">ディスプレイサイズ</param>
+            <returns>0:正常終了、-1:ディスプレイID取得失敗、-2:画像バッファ取得失敗、-3:既にオープンしている、-999:異常終了</returns>
+        </member>
+        <member name="M:MatroxCS.CDisplayImage.GetID">
+            <summary>
+            ディスプレイID取得
+            </summary>
+            <returns>ディスプレイID</returns>
+        </member>
+        <member name="M:MatroxCS.CDisplayImage.GetHandle">
+            <summary>
+            ディスプレイハンドル取得
+            </summary>
+            <returns>ディスプレイハンドル</returns>
+        </member>
+        <member name="M:MatroxCS.CDisplayImage.CreateImage(System.Drawing.Size)">
+            <summary>
+            指定の画像サイズの画像バッファを作成する
+            </summary>
+            <param name="niImageSize">指定画像サイズ</param>
+            <returns>0:正常終了、-1:オーバレイバッファ取得失敗、-999:異常終了</returns>
+        </member>
+        <member name="M:MatroxCS.CDisplayImage.GetShowImage(System.Nullable{System.Int32})">
+            <summary>
+            画面表示用バッファを取得
+            </summary>
+            <returns>表示バッファMIL_ID</returns>
+        </member>
+        <member name="M:MatroxCS.CDisplayImage.GetConnectCameraID">
+            <summary>
+            接続中のカメラID取得
+            </summary>
+            <returns>接続中の場合はカメラID、非接続の場合はnull</returns>
+        </member>
+        <member name="M:MatroxCS.CDisplayImage.GetImageSize">
+            <summary>
+            画像サイズを取得
+            </summary>
+            <returns>画像サイズ</returns>
+        </member>
+        <member name="M:MatroxCS.CDisplayImage.CloseDisplay">
+            <summary>
+            
+            </summary>
+            <param name="nmilShowImage">接続カメラの表示用バッファ、未接続ならばM_NULL</param>
+            <returns>0:正常終了、-999:異常終了</returns>
+        </member>
+        <member name="M:MatroxCS.CDisplayImage.LoadImage(System.String)">
+            <summary>
+            画像ファイルをロードする
+            </summary>
+            <param name="nstrImageFilePath"></param>
+            <returns>0:正常終了、-1:画像バッファ取得失敗、-2:オーバレイバッファ取得失敗、-3:画像拡張子無し、-999:異常終了</returns>
+        </member>
+        <member name="M:MatroxCS.CDisplayImage.SetMagRate(System.Double)">
+            <summary>
+            倍率切替
+            </summary>
+            <param name="ndMagRate">倍率値</param>
+            <returns>0:正常終了、-999:異常終了</returns>
+        </member>
+        <member name="M:MatroxCS.CDisplayImage.GetMagRate">
+            <summary>
+            倍率を取得する
+            </summary>
+            <returns>倍率値</returns>
+        </member>
+        <member name="M:MatroxCS.CDisplayImage.GetOverlay">
+            <summary>
+            オーバーレイバッファを取得する
+            </summary>
+            <returns>オーバーレイバッファID、-1:オーバーレイバッファ取得失敗、-999:異常終了</returns>
+        </member>
+        <member name="M:MatroxCS.CDisplayImage.ClearGraphic">
+            <summary>
+            グラフィックをクリアする
+            </summary>
+            <returns>0:正常終了、-999:異常終了</returns>
+        </member>
+        <member name="M:MatroxCS.CDisplayImage.SaveImage(System.String,System.Boolean)">
+            <summary>
+            画像を保存
+            </summary>
+            <param name="nstrImageFilePath">保存先ファイルパス</param>
+            <param name="nbIncludeGraphic">保存画像にグラフィックを含めるか否か</param>
+            <returns>0:正常終了、-1:画像バッファ取得失敗、-2:拡張子エラー、-3:パス内にファイル名無し、-999:異常終了</returns>
+        </member>
+        <member name="M:MatroxCS.CGraphic.OpenGraphic">
+            <summary>
+            グラフィックバッファ作成
+            </summary>
+            <returns>0:正常終了、-1:グラフィックバッファID取得失敗、-999:異常終了</returns>
+        </member>
+        <member name="M:MatroxCS.CGraphic.CloseGraphic">
+            <summary>
+            グラフィックバッファ開放
+            </summary>
+            <returns>0:正常終了、-999:異常終了</returns>
+        </member>
+        <member name="M:MatroxCS.CGraphic.SetColor(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            色の設定
+            </summary>
+            <returns>0:正常終了、-1:グラフィックバッファ未取得、-999:異常終了</returns>
+        </member>
+        <member name="M:MatroxCS.CGraphic.SetOverlay(Matrox.MatroxImagingLibrary.MIL_ID)">
+            <summary>
+            描画するオーバーレイバッファを設定する
+            </summary>
+            <param name="nmilOverlay"></param>
+            <returns>0:正常終了</returns>
+        </member>
+        <member name="M:MatroxCS.CGraphic.DrawLine(System.Drawing.Point,System.Drawing.Point)">
+            <summary>
+            直線を描画
+            </summary>
+            <param name="nptStartPoint">始点座標</param>
+            <param name="nptEndPoint">終点座標</param>
+            <returns>0:正常終了、-1:グラフィックバッファ未取得、-999:異常終了</returns>
+        </member>
+        <member name="M:MatroxCS.CGraphic.DrawParallelogram(System.Drawing.Point,System.Drawing.Point,System.Drawing.Point)">
+            <summary>
+            平行四辺形を描写(座標系の原点は左下想定)
+            </summary>
+            <param name="nptRightBottom">右下点の座標</param>
+            <param name="nptLeftBottom">左下点の座標</param>
+            <param name="nptLeftTop">左上点の座標</param>
+            <returns>0:正常終了、-1:グラフィックバッファ未取得、-999:異常終了</returns>
+        </member>
+        <member name="M:MatroxCS.CGraphic.DrawRectangle(System.Drawing.Point,System.Drawing.Point)">
+            <summary>
+            矩形を描画
+            </summary>
+            <param name="niDisplayID">指定ディスプレイID</param>
+            <param name="nptDiagonalPoint1">矩形の対角点1座標</param>
+            <param name="nptDiagonalPoint2">矩形の対角点2座標</param>
+            <returns>0:正常終了、-1:グラフィックバッファ未取得、-999:異常終了(内容に関してはDLLError.log参照)</returns>
+        </member>
+        <member name="M:MatroxCS.CGraphic.ClearGraphic">
+            <summary>
+            グラフィックをクリア
+            </summary>
+            <returns>0:正常終了、-1:グラフィックバッファ未取得、-999:異常終了</returns>
+        </member>
+        <member name="M:MatroxCS.CLog.#ctor(System.String,System.String)">
+            <summary>
+            コンストラクタ
+            </summary>
+            <param name="nstrExeFolderPath">アプリケーション実行パス</param>
+            <param name="nstrFileName">作成ログファイル名</param>
+        </member>
+        <member name="M:MatroxCS.CLog.OutputLog(System.String)">
+            <summary>
+            ログを書き出す
+            </summary>
+            <param name="nstrErrorLog">ログ内容</param>
+        </member>
+        <member name="M:MatroxCS.CLog.SetFolderName(System.String,System.String)">
+            <summary>
+            フォルダーパスを作成する
+            </summary>
+            <param name="nstrExeFolderName">アプリケーション実行パス</param>
+            <param name="nstrFolderName">指定フォルダーパス</param>
+            <returns>作成絶対フォルダーパス(末尾は\とする)</returns>
+        </member>
+        <member name="M:MatroxCS.CMatroxMain.InitMatrox(System.String)">
+            <summary>
+            Matrox制御の初期化
+            </summary>
+            <param name="nstrSettingFilePath">設定ファイルパス</param>
+            <returns>
+            0:正常終了、-1:設定ファイルの途中パスディレクトリが存在しない、-2:設定ファイル作成・書き込みエラー、-3:設定ファイルなし(新規作成)、-4:設定ファイル構文エラー、-5:設定値エラー<br />
+            -6:アプリケーションID取得失敗、-7:指定ボードの該当なし、-8:システムID取得失敗、-9:デジタイザー取得失敗、-10:グラブ専用バッファ取得失敗、-11:グラフィックバッファID取得失敗<br />
+            -99:初期化の重複エラー、-999:異常終了(内容に関してはDLLError.log参照)
+            </returns>
+        </member>
+        <member name="M:MatroxCS.CMatroxMain.EndMatrox">
+            <summary>
+            Matrox制御の終了
+            </summary>
+            <returns>0:正常終了、-999:異常終了(内容に関してはDLLError.log参照)</returns>
+        </member>
+        <member name="M:MatroxCS.CMatroxMain.GetCameraNum">
+            <summary>
+            カメラ数取得
+            </summary>
+            <returns>オープン済みカメラ個数、初期化処理未完了の場合はnull</returns>
+        </member>
+        <member name="M:MatroxCS.CMatroxMain.GetCameraID(System.Int32)">
+            <summary>
+            カメラIDを取得
+            </summary>
+            <param name="niCameraIndex">指定カメラインデックス番号</param>
+            <returns>-1:範囲外インデックス番号、-1以外:カメラID</returns>
+        </member>
+        <member name="M:MatroxCS.CMatroxMain.ChangeThroughState(System.Nullable{System.Int32})">
+            <summary>
+            スルーを実行
+            </summary>
+            <param name="niCameraID">指定カメラID</param>
+            <returns>0:正常終了、-1:該当カメラID無し、-100:致命的エラー発生中、-999:異常終了(内容に関してはDLLError.log参照)</returns>
+        </member>
+        <member name="M:MatroxCS.CMatroxMain.SetDiffPicDiscriminationMode(System.Nullable{System.Int32},System.Boolean)">
+            <summary>
+            画像差分モードをオンにする
+            </summary>
+            <param name="niCameraID">指定カメラID</param>
+            <param name="nbShowDiffPic">差分画像を表示するか</param>
+            <returns>0:正常終了、-1:該当カメラID無し、-2:差分元画像バッファ取得失敗、-3:差分結果画像バッファ取得失敗、-999:異常終了(内容に関してはDLLError.log参照)</returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:MatroxCS.CMatroxMain.ResetDiffPicDiscriminationMode(System.Nullable{System.Int32})" -->
+        <member name="M:MatroxCS.CMatroxMain.SetGain(System.Nullable{System.Int32},System.Double@)">
+            <summary>
+            ゲイン値を設定する
+            </summary>
+            <param name="niCameraID">指定カメラID</param>
+            <param name="ndGainValue">ゲイン値(実際に設定されたゲイン値が戻る)</param>
+            <returns>0:正常終了、-1:指定カメラ該当なし、-100:致命的エラー発生中、-999:異常終了(内容に関してはDLLError.log参照)</returns>
+        </member>
+        <member name="M:MatroxCS.CMatroxMain.SetExposureTime(System.Nullable{System.Int32},System.Double@)">
+            <summary>
+            露光時間を設定する
+            </summary>
+            <param name="niCameraID">指定カメラID</param>
+            <param name="ndExposureTimeValue">露光時間(実際に設定された露光時間が戻る)</param>
+            <returns>0:正常終了、-1:指定カメラ該当なし、-100:致命的エラー発生中、-999:異常終了(内容に関してはDLLError.log参照)</returns>
+        </member>
+        <member name="M:MatroxCS.CMatroxMain.OpenDisplay(System.IntPtr,System.Drawing.Size)">
+            <summary>
+            ディスプレイオープン
+            </summary>
+            <param name="nhHandle">指定ディスプレイハンドル</param>
+            <param name="nszDisplaySize">ディスプレイサイズ</param>
+            <returns>新規作成ディスプレイID、-1:ハンドルの多重使用、-2:ディスプレイID取得失敗、-3:画像バッファ取得失敗、-100:致命的エラー発生中<br />
+            -200:初期化未完了、-999:異常終了(内容に関してはDLLError.log参照)</returns>
+        </member>
+        <member name="M:MatroxCS.CMatroxMain.SelectCameraImageDisplay(System.Nullable{System.Int32},System.Nullable{System.Int32})">
+            <summary>
+            カメラ画像を写すディスプレイを選択する
+            </summary>
+            <param name="niCameraID">指定カメラID</param>
+            <param name="niDisplayID">指定ディスプレイID</param>
+            <returns>0:正常終了、-1:該当カメラID・該当ディスプレイID無し、-2:該当カメラID無し、-3:該当ディスプレイID無し、-100:致命的エラー発生中<br />
+            -200:初期化未完了、-999:異常終了(内容に関してはDLLError.log参照)</returns>
+        </member>
+        <member name="M:MatroxCS.CMatroxMain.DeleteDisplay(System.Nullable{System.Int32})">
+            <summary>
+            表示用ディスプレイを削除
+            </summary>
+            <param name="niDisplayID">指定ディスプレイID</param>
+            <returns>0:正常終了、-1:該当ディスプレイID無し、-100:致命的エラー発生中、-999:異常終了(内容に関してはDLLError.log参照)</returns>
+        </member>
+        <member name="M:MatroxCS.CMatroxMain.LoadImage(System.String,System.Nullable{System.Int32})">
+            <summary>
+            画像をロードする
+            </summary>
+            <param name="nstrImageFilePath">ロードするイメージファイルパス</param>
+            <param name="niDisplayID">指定ディスプレイID</param>
+            <returns>0:正常終了、-1:存在しないファイルパス、-2:該当ディスプレイID無し、-3:画像バッファ取得失敗、-4:オーバーレイバッファ取得失敗<br />
+            -5:画像拡張子(bmp,jpg,jpeg,png)なし、-100:致命的エラー発生中、-999:異常終了(内容に関してはDLLError.log参照)</returns>
+        </member>
+        <member name="M:MatroxCS.CMatroxMain.SetGraphicColor(System.Drawing.Color)">
+            <summary>
+            グラフィック色の設定
+            </summary>
+            <param name="nGraphicColor">指定色</param>
+            <returns>0:正常終了、-100:致命的エラー発生中、-200:初期化未完了、-999:異常終了(内容に関してはDLLError.log参照)</returns>
+        </member>
+        <member name="M:MatroxCS.CMatroxMain.GetContrast(System.Nullable{System.Int32},System.Drawing.Point,System.Drawing.Size,System.Double@)">
+            <summary>
+            選択範囲内のコントラストを計測
+            </summary>
+            <param name="niCameraID"></param>
+            <param name="npntOffsest"></param>
+            <param name="nszInoculationArea"></param>
+            <param name="ndResult"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MatroxCS.CMatroxMain.DrawLine(System.Nullable{System.Int32},System.Drawing.Point,System.Drawing.Point)">
+            <summary>
+            直線を描画
+            </summary>
+            <param name="niDisplayID">指定ディスプレイID</param>
+            <param name="nptStartPoint">直線の始点座標</param>
+            <param name="nptEndPoint">直線の終点座標</param>
+            <returns>0:正常終了、-1:該当ディスプレイID無し、-100:致命的エラー発生中、-200:初期化未完了、-999:異常終了(内容に関してはDLLError.log参照)</returns>
+        </member>
+        <member name="M:MatroxCS.CMatroxMain.DrawRectangle(System.Nullable{System.Int32},System.Drawing.Point,System.Drawing.Point)">
+            <summary>
+            矩形を描画
+            </summary>
+            <param name="niDisplayID">指定ディスプレイID</param>
+            <param name="nptDiagonalPoint1">矩形の対角点1座標</param>
+            <param name="nptDiagonalPoint2">矩形の対角点2座標</param>
+            <returns>0:正常終了、-1:該当ディスプレイID無し、-100:致命的エラー発生中、-200:初期化未完了、-999:異常終了(内容に関してはDLLError.log参照)</returns>
+        </member>
+        <member name="M:MatroxCS.CMatroxMain.ClearGraph(System.Nullable{System.Int32})">
+            <summary>
+            ディスプレイ内のグラフィックをクリア
+            </summary>
+            <param name="niDisplayID">指定ディスプレイID</param>
+            <returns>0:正常終了、-1:該当ディスプレイなし、-100:致命的エラー発生中、-200:初期化未完了、-999:異常終了(内容に関してはDLLError.log参照)</returns>
+        </member>
+        <member name="M:MatroxCS.CMatroxMain.SaveImage(System.String,System.Boolean,System.Nullable{System.Int32})">
+            <summary>
+            画像を保存
+            </summary>
+            <param name="nstrImageFilePath"></param>
+            <param name="nstrExt"></param>
+            <param name="nbIncludeGraphic"></param>
+            <param name="niDisplayID">指定ディスプレイID</param>
+            <returns>0:正常終了、-1:該当ディスプレイID無し、-2:拡張子エラー、-3:画像バッファ取得失敗、-4:パス内にファイル名無し、-100:致命的エラー発生中<br />
+            -999:異常終了(内容に関してはDLLError.log参照)</returns>
+        </member>
+        <member name="M:MatroxCS.CMatroxMain.SetAlgorithm(System.String)">
+            <summary>
+            使用する検査アルゴリズムをセット
+            </summary>
+            <param name="nstrAlgorithmName"></param>
+            <returns>0:正常終了、-1:選択されたアルゴリズム名が異常</returns>
+        </member>
+        <member name="M:MatroxCS.CMatroxMain.DoAlgorithm(System.Nullable{System.Int32},System.Nullable{System.Int32},System.Nullable{System.Drawing.Point},System.Nullable{System.Drawing.Size},System.Collections.Generic.List{System.Object})">
+            <summary>
+            検査実行
+            </summary>
+            <param name="niCameraID">検査用の画像を取得するカメラID</param>
+            <param name="niDisplayID">検査結果の画像を表示するディスプレイID</param>
+            <param name="nloValue">その他の検査用パラメーター</param>
+            <returns>
+            先頭の数値はDLLからの戻り値(0:正常終了、-1:検査アルゴリズムが選択されていない、-2:該当カメラ無し、-3該当ディスプレイ無し:、-200:初期化未完了)<br />
+            先頭以降はアルゴリズムプログラムからの戻り値
+            </returns>
+        </member>
+        <member name="M:MatroxCS.CMatroxMain.SearchCameraID(System.Nullable{System.Int32})">
+            <summary>
+            カメラIDに対応するインデックス番号を探す
+            </summary>
+            <param name="niCameraID">指定カメラID</param>
+            <returns>0以上の番号:該当インデックス番号、-1:該当カメラID無し</returns>
+        </member>
+        <member name="M:MatroxCS.CMatroxMain.SearchDisplayID(System.Nullable{System.Int32})">
+            <summary>
+            ディスプレイIDに対応するインデックス番号を探す
+            </summary>
+            <param name="niDisplayID">指定ディスプレイID</param>
+            <returns>0以上の番号:該当インデックス番号、-1:該当カメラID無し</returns>
+        </member>
+        <member name="M:MatroxCS.CMatroxMain.CheckDisplayhandle(System.IntPtr)">
+            <summary>
+            ディスプレイ作成時のハンドルの重複を確認
+            </summary>
+            <param name="nhHandle"></param>
+            <returns>0:重複無し、-1:重複あり</returns>
+        </member>
+        <member name="T:MatroxCS.Parameter.CCameraGeneral">
+            <summary>
+            カメラに関する全般設定項目
+            </summary>
+        </member>
+        <member name="P:MatroxCS.Parameter.CCameraGeneral.Number">
+            <summary>
+            カメラ個数
+            </summary>
+        </member>
+        <member name="P:MatroxCS.Parameter.CCameraGeneral.BoardType">
+            <summary>
+            ボード種類 
+            </summary>
+        </member>
+        <member name="P:MatroxCS.Parameter.CCameraGeneral.HeartBeatTime">
+            <summary>
+            ハートビート時間(単位:s)
+            </summary>
+        </member>
+        <member name="P:MatroxCS.Parameter.CCameraGeneral.CameraInformation">
+            <summary>
+            カメラの詳細情報
+            </summary>
+        </member>
+        <member name="M:MatroxCS.Parameter.CCameraGeneral.CheckVariableValidity">
+            <summary>
+            パラメータの有効性を検査
+            </summary>
+            <returns>0:異常なし、-1:カメラ個数異常、-2:ハートビート時間異常、-3:取得画像幅異常、-4:取得画像高さ異常</returns>
+        </member>
+        <member name="T:MatroxCS.Parameter.CCameraInfo">
+            <summary>
+            個々のカメラに対する設定項目
+            </summary>
+        </member>
+        <member name="P:MatroxCS.Parameter.CCameraInfo.IdentifyName">
+            <summary>
+            識別ネーム
+            </summary>
+        </member>
+        <member name="P:MatroxCS.Parameter.CCameraInfo.CameraType">
+            <summary>
+            現在未使用
+            </summary>
+        </member>
+        <member name="P:MatroxCS.Parameter.CCameraInfo.CameraFile">
+            <summary>
+            DCFファイルパス
+            </summary>
+        </member>
+        <member name="P:MatroxCS.Parameter.CCameraInfo.Width">
+            <summary>
+            取得画像幅
+            </summary>
+        </member>
+        <member name="P:MatroxCS.Parameter.CCameraInfo.Height">
+            <summary>
+            取得画像高さ
+            </summary>
+        </member>
+        <member name="P:MatroxCS.Parameter.CCameraInfo.Color">
+            <summary>
+            現在未使用
+            </summary>
+        </member>
+        <member name="P:MatroxCS.Parameter.CCameraInfo.ImagePose">
+            <summary>
+            現在未使用
+            </summary>
+        </member>
+        <member name="P:MatroxCS.Parameter.CCameraInfo.UseSerialComm">
+            <summary>
+            現在未使用
+            </summary>
+        </member>
+        <member name="P:MatroxCS.Parameter.CCameraInfo.COMNo">
+            <summary>
+            現在未使用
+            </summary>
+        </member>
+        <member name="P:MatroxCS.Parameter.CCameraInfo.IPAddress">
+            <summary>
+            gigeカメラのIPアドレス
+            </summary>
+        </member>
+        <member name="P:MatroxCS.Parameter.CCameraInfo.Manufacturer">
+            <summary>
+            gigeカメラの製造メーカー
+            </summary>
+        </member>
+        <member name="M:MatroxCS.Parameter.CCameraInfo.CheckVariableValidity">
+            <summary>
+            パラメータの有効性を検査
+            </summary>
+            <returns>0:異常なし、-1:取得画像幅異常、-2:取得画像高さ異常</returns>
+        </member>
+        <member name="M:MatroxCS.Parameter.IParameter.CheckVariableValidity">
+            <summary>
+            異常値判定
+            </summary>
+            <returns>0:異常値なし、-1:異常値あり</returns>
+        </member>
+        <member name="M:MatroxCS.Parameter.CJsonIO`1.Load(System.String,`0@)">
+            <summary>
+            Json形式ファイルからパラメータ値を抜き出し、インスタンスに代入する
+            </summary>
+            <param name="nstrFilePath">読み込むファイルのパス</param>
+            <param name="ncParameter">読み込まれたパラメータを代入するインスタンス</param>
+            <returns>0:正常終了、-1:ファイルからの読み込み失敗、-2:json構文エラー、-3:異常値が代入された</returns>
+        </member>
+        <member name="M:MatroxCS.Parameter.CJsonIO`1.Save(System.String,`0)">
+            <summary>
+            インスタンスをシリアライズし、Json形式ファイル書き出す
+            </summary>
+            <param name="nstrFilePath">書き出すファイルのパス</param>
+            <param name="ncParameter">書き出すパラメータを保有するインスタンス</param>
+            <returns>0:正常終了、-1:ファイル作成・書き込みエラー</returns>
+        </member>
+        <member name="M:MatroxCS.Parameter.CJsonIO`1.RemoveComment(System.String)">
+            <summary>
+            "###"ー"改行コード(\r\n)"間の文字を排除する
+            </summary>
+            <param name="n_strJsonfileContents">Jsonファイルから読み込んだstring型データ</param>
+            <returns>コメント削除結果</returns>
+        </member>
+        <member name="M:MatroxCS.Parameter.CJsonIO`1.AddDescriptionOfParameter(System.String@)">
+            <summary>
+            作成される設定ファイルにコメントを加える
+            </summary>
+            <param name="nstrParameterContents">json型をシリアライズした文字列</param>
+        </member>
+    </members>
+</doc>

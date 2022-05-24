@@ -33,8 +33,10 @@ namespace Manege_of_AutoDiscrimation
         public static Parameter m_csParameter;
         static bool m_bInoculationEnable = true; // 判定可能かどうかを示す
         SocketCommunication m_cSocketCommunication; // ソケット通信用のクラス
+        SocketCommunication m_cSocketCommunicationForPython; // pythonとのソケット通信用のクラス
         CBaseCCSLight m_cBaseCCSLight;
-        bool m_server_close = false;
+        FormResultPicture form_result_picture; // 検査中に表示されるフォーム
+        Process myProcess; // pythonを起動するプロセス
         #endregion
 
         #region "   プログラム開始時処理                            "
@@ -88,15 +90,43 @@ namespace Manege_of_AutoDiscrimation
 
                 // ソケットクラスオープン
                 m_cSocketCommunication = new SocketCommunication();
-                int i_port_number = 11021; // 後で決める
-                i_ret = m_cSocketCommunication.Init(this, "", m_csParameter.PortNumber);
+                i_ret = m_cSocketCommunication.Init(this, "", m_csParameter.PortNumber, 1);
                 if (i_ret != 0)
                 {
-                    MessageBox.Show("ソケットオープンに失敗しました");
+                    MessageBox.Show("ソケットオープンAに失敗しました");
                     this.Close();
                 }
                 m_cSocketCommunication.evCommandReceive += CommandReceiveAction;
                 m_cSocketCommunication.evSocketClose += ClosedServer;
+
+                // 検査用pythonを起動
+                // 実行させたいpythonファイルのパス
+                string myPythonApp = "PythonFile\\AutoDiscriminate.py";
+                // プロセスを起動
+                myProcess = new Process
+                {
+                    StartInfo = new ProcessStartInfo("python.exe")
+                    {
+                        CreateNoWindow = true,
+                        UseShellExecute = false,
+                        RedirectStandardOutput = false,
+                        Arguments = $"{myPythonApp} {m_strPythonFolderPath}"
+                    }
+                };
+                myProcess.Start();
+
+                // pythonファイルとのソケット通信を開始
+                m_cSocketCommunicationForPython = new SocketCommunication();
+                int i_port_number = 50000; // 後で決める
+                i_ret = m_cSocketCommunicationForPython.Init(this, "", i_port_number, 0);
+                if (i_ret != 0)
+                {
+                    MessageBox.Show("ソケットオープンBに失敗しました");
+                    this.Close();
+                }
+                m_cSocketCommunicationForPython.evCommandReceive += CommandReceiveActionByPython;
+                m_cSocketCommunicationForPython.evSocketClose += ClosedServer;
+
 
                 m_cBaseCCSLight = new CPODCommand();
 
@@ -131,17 +161,17 @@ namespace Manege_of_AutoDiscrimation
         /// <param name="e"></param>
         private void FormAutoDiscrimation_Shown(object sender, EventArgs e)
         {
-            
+
         }
         #endregion
 
         /// <summary>
-        /// 判定
+        /// 判定処理_前半部分
         /// </summary>
-        private void Inoculation()
+        private void InoculationBefore()
         {
             // 検査中である画面を表示
-            FormResultPicture form_result_picture = new FormResultPicture(null);
+            form_result_picture = new FormResultPicture(null);
             form_result_picture.Show();
             try
             {
@@ -168,30 +198,8 @@ namespace Manege_of_AutoDiscrimation
                     m_cLogExecute.outputLog(str_picturefile_name);
                     if (File.Exists($@"{m_strPythonFolderPath}\img\img.png"))
                     {
-                        GC.Collect();
-                        // 実行させたいpythonファイルのパス
-                        string myPythonApp = "PythonFile\\AutoDiscriminate.py";
-                        // プロセスを起動
-                        Process myProcess = new Process
-                        {
-                            StartInfo = new ProcessStartInfo("python.exe")
-                            {
-                                CreateNoWindow = true,
-                                UseShellExecute = false,
-                                RedirectStandardOutput = false,
-                                Arguments = $"{myPythonApp} {m_strPythonFolderPath}"
-                            }
-                        };
-                        m_cLogExecute.outputLog("Debug");
-                        myProcess.Start();
-                        m_cLogExecute.outputLog("Debug2");
-                        // デバック用に残す
-                        // 処理の終了まで待つ
-                        myProcess.WaitForExit();
-                        m_cLogExecute.outputLog("Debug3");
-                        // プロセスを閉じて終了
-                        myProcess.Close();
-                        m_cLogExecute.outputLog("Debug4");
+                        //GC.Collect();
+                        m_cSocketCommunicationForPython.SendCommand(1);
                     }
                     else
                     {
@@ -200,50 +208,67 @@ namespace Manege_of_AutoDiscrimation
                         form_result_picture.Close();
                         return;
                     }
-                    if (File.Exists($@"{m_strPythonFolderPath}\result\color_radius.csv"))
-                    {
-                        m_cLogExecute.outputLog("Debug5_1");
-                        try
-                        {
-                            // 結果を表示する
-                            UpdataAnalyzeResultAndPicture();
-                            Control c_find_control = FindControl(this, $"lblResult_{m_csParameter.ConditionColor}_{m_csParameter.ConditionSize}");
-
-                            form_result_picture.Close();
-                            form_result_picture = null;
-
-                            if (c_find_control != null)
-                            {
-                                // 勝利条件を満たしているかを渡す
-                                form_result_picture = new FormResultPicture((Int16.Parse(c_find_control.Text) >= m_csParameter.ConditionNumber));
-                                form_result_picture.ShowDialog();
-                            }
-                        }
-                        catch
-                        {
-                            // 例外エラー
-                            FormAutoDiscrimation.m_bInoculationEnable = true;
-                            form_result_picture.Close();
-                            return;
-                        }
-                    }
-                    else
-                    {
-                        m_cLogExecute.outputLog("Debug5_2");
-                        FormAutoDiscrimation.m_bInoculationEnable = true;
-                        form_result_picture.Close();
-                        return;
-                    }
-                    GC.Collect();
-                    form_result_picture.Close();
-                    //Console.WriteLine("timermethod_end");
-
-                    FormAutoDiscrimation.m_bInoculationEnable = true;
                 }
                 else
                 {
                     // フラグが立っていなければ何もせずに終了させる
                 }
+            }
+            catch (System.Exception ex)
+            {
+                m_cLogExecute.outputLog("Debug_all");
+                // 例外エラー
+                FormAutoDiscrimation.m_bInoculationEnable = true;
+                form_result_picture.Close();
+                return;
+            }
+        }
+
+        /// <summary>
+        /// 判定処理_後半
+        /// </summary>
+        private void InoculationAfter()
+        {
+            try
+            {
+                if (File.Exists($@"{m_strPythonFolderPath}\result\color_radius.csv"))
+                {
+                    m_cLogExecute.outputLog("Debug5_1");
+                    try
+                    {
+                        // 結果を表示する
+                        UpdataAnalyzeResultAndPicture();
+                        Control c_find_control = FindControl(this, $"lblResult_{m_csParameter.ConditionColor}_{m_csParameter.ConditionSize}");
+
+                        form_result_picture.Close();
+                        form_result_picture = null;
+
+                        if (c_find_control != null)
+                        {
+                            // 勝利条件を満たしているかを渡す
+                            form_result_picture = new FormResultPicture((Int16.Parse(c_find_control.Text) >= m_csParameter.ConditionNumber));
+                            form_result_picture.ShowDialog();
+                        }
+                    }
+                    catch
+                    {
+                        // 例外エラー
+                        FormAutoDiscrimation.m_bInoculationEnable = true;
+                        form_result_picture.Close();
+                        return;
+                    }
+                }
+                else
+                {
+                    m_cLogExecute.outputLog("Debug5_2");
+                    FormAutoDiscrimation.m_bInoculationEnable = true;
+                    form_result_picture.Close();
+                    return;
+                }
+                GC.Collect();
+                form_result_picture.Close();
+                // 新規検査可能にする
+                FormAutoDiscrimation.m_bInoculationEnable = true;
             }
             catch (System.Exception ex)
             {
@@ -359,9 +384,20 @@ namespace Manege_of_AutoDiscrimation
 
         private void FormAutoDiscrimation_FormClosing(object sender, FormClosingEventArgs e)
         {
+            m_cLogExecute.outputLog("FormClose!");
+            if (myProcess != null)
+            {
+                m_cLogExecute.outputLog("SendCommand_0");
+                m_cSocketCommunicationForPython.SendCommand(0);
+            }
             CParameterIO.SaveParameter(CDefine.PRMFile, m_csParameter);
-            m_server_close = true;
+            m_cLogExecute.outputLog("SocketAClose!");
             m_cSocketCommunication.Close();
+            m_cLogExecute.outputLog("SocketBClose!");
+            m_cSocketCommunicationForPython.Close();
+            m_cLogExecute.outputLog("CameraClose!");
+            m_cCameraControlBase.close();
+            m_cLogExecute.outputLog("LightClose!");
             if (m_cBaseCCSLight != null)
             {
                 m_cBaseCCSLight.openLight(m_csParameter.LightIPAdress, m_csParameter.LightPortNumber);
@@ -473,12 +509,23 @@ namespace Manege_of_AutoDiscrimation
                     break;
                 case 2:
                     // 測定開始
-                    Inoculation();
+                    InoculationBefore();
                     break;
                 case 0:
                     // 終了
                     // ライトを消す
                     ChangeLightState(false);
+                    break;
+            }
+        }
+
+        private void CommandReceiveActionByPython(int niCommand)
+        {
+            switch (niCommand)
+            {
+                case 3:
+                    // 測定終了
+                    InoculationAfter();
                     break;
             }
         }
@@ -557,11 +604,6 @@ namespace Manege_of_AutoDiscrimation
             }
 
             return null;
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            Inoculation();
         }
     }
 }
