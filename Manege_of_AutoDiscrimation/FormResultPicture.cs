@@ -1,30 +1,33 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Manege_of_AutoDiscrimation
 {
     public partial class FormResultPicture : Form
     {
+        public bool m_bIsVisiable = false; // 表示状態
         public FormResultPicture(bool? nbResult)
         {
             InitializeComponent();
             if(nbResult == null)
             {
+                this.Location = new Point((960-215), (540-100-270));
                 picResult.Visible = false;
                 this.Size = new Size(430, 200);
                 timer2.Start();
+
+                // タイマーを設定
+                timer1.Interval = FormAutoDiscrimation.m_csParameter.DiscriminationFormDisplayTime * 1000;
+                // タイマースタート
+                timer1.Start();
             }
             else
             {
                 // 全画面表示する
-                this.WindowState = FormWindowState.Maximized;
+                this.Size = new Size(Screen.PrimaryScreen.Bounds.Width / 2, Screen.PrimaryScreen.Bounds.Height / 2 );
+                picResult.Size = new Size(Screen.PrimaryScreen.Bounds.Width / 2, Screen.PrimaryScreen.Bounds.Height / 2);
+                this.Location = new Point(0, 540);
                 if ((bool)nbResult)
                 {
                     // 成功画像表示
@@ -41,6 +44,7 @@ namespace Manege_of_AutoDiscrimation
                 // タイマースタート
                 timer1.Start();
             }
+            m_bIsVisiable = true;
         }
 
 
@@ -55,21 +59,21 @@ namespace Manege_of_AutoDiscrimation
         {
             Invoke((Action)(() =>
             {
-                if (lblCheck.Text == "検査中")
+                if (lblCheck.Text == "判別中")
                 {
-                    lblCheck.Text = "検査中.";
+                    lblCheck.Text = "判別中.";
                 }
-                else if (lblCheck.Text == "検査中.")
+                else if (lblCheck.Text == "判別中.")
                 {
-                    lblCheck.Text = "検査中..";
+                    lblCheck.Text = "判別中..";
                 }
-                else if (lblCheck.Text == "検査中..")
+                else if (lblCheck.Text == "判別中..")
                 {
-                    lblCheck.Text = "検査中...";
+                    lblCheck.Text = "判別中...";
                 }
-                else if (lblCheck.Text == "検査中...")
+                else if (lblCheck.Text == "判別中...")
                 {
-                    lblCheck.Text = "検査中";
+                    lblCheck.Text = "判別中";
                 }
 
                 // 描画させる
@@ -81,6 +85,7 @@ namespace Manege_of_AutoDiscrimation
         {
             timer1.Stop();
             timer2.Stop();
+            m_bIsVisiable = false;
         }
     }
 }
