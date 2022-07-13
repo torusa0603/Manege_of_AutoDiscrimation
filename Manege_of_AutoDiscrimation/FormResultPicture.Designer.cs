@@ -43,7 +43,7 @@ namespace Manege_of_AutoDiscrimation
             // 
             // picResult
             // 
-            this.picResult.Location = new System.Drawing.Point(0, -1);
+            this.picResult.Location = new System.Drawing.Point(0, 0);
             this.picResult.Name = "picResult";
             this.picResult.Size = new System.Drawing.Size(1904, 1042);
             this.picResult.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -58,7 +58,7 @@ namespace Manege_of_AutoDiscrimation
             this.lblCheck.Name = "lblCheck";
             this.lblCheck.Size = new System.Drawing.Size(323, 76);
             this.lblCheck.TabIndex = 1;
-            this.lblCheck.Text = "検査中";
+            this.lblCheck.Text = "判別中";
             this.lblCheck.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // timer2
@@ -74,6 +74,7 @@ namespace Manege_of_AutoDiscrimation
             this.Controls.Add(this.picResult);
             this.Controls.Add(this.lblCheck);
             this.Name = "FormResultPicture";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "FormResultPicture";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormResultPicture_FormClosed);
             ((System.ComponentModel.ISupportInitialize)(this.picResult)).EndInit();

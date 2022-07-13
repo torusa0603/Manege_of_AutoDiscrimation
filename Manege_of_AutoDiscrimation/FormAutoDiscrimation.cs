@@ -170,7 +170,8 @@ namespace Manege_of_AutoDiscrimation
         /// </summary>
         private void InoculationBefore()
         {
-            // 検査中である画面を表示
+            // 判別中等の表示が行われていない場合のみ実行
+            // 判別中である画面を表示
             form_result_picture = new FormResultPicture(null);
             form_result_picture.Show();
             try
@@ -222,6 +223,10 @@ namespace Manege_of_AutoDiscrimation
                 form_result_picture.Close();
                 return;
             }
+            finally
+            {
+                FormAutoDiscrimation.m_bInoculationEnable = true;
+            }
         }
 
         /// <summary>
@@ -229,54 +234,61 @@ namespace Manege_of_AutoDiscrimation
         /// </summary>
         private void InoculationAfter()
         {
-            try
+            if (form_result_picture.m_bIsVisiable)
             {
-                if (File.Exists($@"{m_strPythonFolderPath}\result\color_radius.csv"))
+                // 判別中が出ているのなら実行
+                try
                 {
-                    m_cLogExecute.outputLog("Debug5_1");
-                    try
+                    if (File.Exists($@"{m_strPythonFolderPath}\result\color_radius.csv"))
                     {
-                        // 結果を表示する
-                        UpdataAnalyzeResultAndPicture();
-                        Control c_find_control = FindControl(this, $"lblResult_{m_csParameter.ConditionColor}_{m_csParameter.ConditionSize}");
-
-                        form_result_picture.Close();
-                        form_result_picture = null;
-
-                        if (c_find_control != null)
+                        m_cLogExecute.outputLog("Debug5_1");
+                        try
                         {
-                            // 勝利条件を満たしているかを渡す
-                            form_result_picture = new FormResultPicture((Int16.Parse(c_find_control.Text) >= m_csParameter.ConditionNumber));
-                            form_result_picture.ShowDialog();
+                            // 結果を表示する
+                            UpdataAnalyzeResultAndPicture();
+                            Control c_find_control = FindControl(this, $"lblResult_{m_csParameter.ConditionColor}_{m_csParameter.ConditionSize}");
+
+                            form_result_picture.Close();
+
+                            if (c_find_control != null)
+                            {
+                                // 勝利条件を満たしているかを渡す
+                                form_result_picture = new FormResultPicture((Int16.Parse(c_find_control.Text) >= m_csParameter.ConditionNumber));
+                                form_result_picture.ShowDialog();
+                            }
+                        }
+                        catch
+                        {
+                            // 例外エラー
+                            FormAutoDiscrimation.m_bInoculationEnable = true;
+                            form_result_picture.Close();
+                            return;
                         }
                     }
-                    catch
+                    else
                     {
-                        // 例外エラー
+                        m_cLogExecute.outputLog("Debug5_2");
                         FormAutoDiscrimation.m_bInoculationEnable = true;
                         form_result_picture.Close();
                         return;
                     }
+                    GC.Collect();
+                    form_result_picture.Close();
+                    // 新規検査可能にする
+                    FormAutoDiscrimation.m_bInoculationEnable = true;
                 }
-                else
+                catch (System.Exception ex)
                 {
-                    m_cLogExecute.outputLog("Debug5_2");
+                    m_cLogExecute.outputLog("Debug_all");
+                    // 例外エラー
                     FormAutoDiscrimation.m_bInoculationEnable = true;
                     form_result_picture.Close();
                     return;
                 }
-                GC.Collect();
-                form_result_picture.Close();
-                // 新規検査可能にする
-                FormAutoDiscrimation.m_bInoculationEnable = true;
             }
-            catch (System.Exception ex)
+            else
             {
-                m_cLogExecute.outputLog("Debug_all");
-                // 例外エラー
-                FormAutoDiscrimation.m_bInoculationEnable = true;
-                form_result_picture.Close();
-                return;
+                m_cLogExecute.outputLog("Flag_off");
             }
         }
 
@@ -486,8 +498,31 @@ namespace Manege_of_AutoDiscrimation
                 lblResult_3_1.Text = int_white_8mm.Sum().ToString();
                 lblResult_3_2.Text = int_white_10mm.Sum().ToString();
 
-                pnlResult.Image = CreateImage($@"{m_strPythonFolderPath}\img\img.png");
+                //pnlResult.Image = CreateImage($@"{m_strPythonFolderPath}\img\img.png");
+                string strParam = $@"{m_strPythonFolderPath}\img\img.png";
+                set_picture_box(pnlResult, strParam);
             }));
+        }
+
+        private void set_picture_box(PictureBox nPic, string nStr)
+        {
+            try
+            {
+                if (nPic.IsDisposed)
+                {
+                    return;
+                }
+                if (nPic.InvokeRequired)
+                {
+                    nPic.Invoke((MethodInvoker)delegate { set_picture_box(nPic, nStr); });
+                }
+                //nPic.Load(nStr);
+                nPic.Image =CreateImage(nStr);
+            }
+            catch(System.Exception ex)
+            {
+                Console.WriteLine(" set pictrure box error. . . " + ex.Message);
+            }
         }
 
         private static Image CreateImage(string n_stFileName)

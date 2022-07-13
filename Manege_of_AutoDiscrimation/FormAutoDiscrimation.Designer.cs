@@ -101,7 +101,7 @@
             this.grbResult.Size = new System.Drawing.Size(680, 444);
             this.grbResult.TabIndex = 29;
             this.grbResult.TabStop = false;
-            this.grbResult.Text = "判定結果";
+            this.grbResult.Text = "判別結果";
             // 
             // lblResult_3_2
             // 

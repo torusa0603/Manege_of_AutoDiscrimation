@@ -16,5 +16,6 @@ namespace Manege_of_AutoDiscrimation.Param
         public string LightIPAdress { get; set; } = "";
         public int LightPortNumber { get; set; } = 0;
         public int ResultFormDisplayTime { get; set; } = 5;
+        public int DiscriminationFormDisplayTime { get; set; } = 3;
     }
 }
