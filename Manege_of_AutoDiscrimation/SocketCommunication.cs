@@ -129,9 +129,19 @@ namespace Manege_of_AutoDiscrimation
                     //  ソケット通信クラスオブジェクト作成(クライアントとして)
                     m_cSocket = new SPCommonSocket.CSocketCommunicationBase(SPCommonSocket.CSocketCommunicationBase.CLIENT);
                 }
+
+                int i_ret=0;
+                if (nstrIPAddress == "")
+                {
+                    //  ソケットオープン
+                    i_ret = m_cSocket.OpenSocket(niPortNo);
+                }
+                else
+                {
+                    //  ソケットオープン
+                    i_ret = m_cSocket.OpenSocket(nstrIPAddress, niPortNo);
+                }
                 
-                //  ソケットオープン
-                int i_ret = m_cSocket.OpenSocket(niPortNo);
                 //  ソケットが正常にオープンされた
                 if (i_ret == 0)
                 {

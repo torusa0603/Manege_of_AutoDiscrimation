@@ -118,7 +118,8 @@ namespace Manege_of_AutoDiscrimation
                 // pythonファイルとのソケット通信を開始
                 m_cSocketCommunicationForPython = new SocketCommunication();
                 int i_port_number = 50000; // 後で決める
-                i_ret = m_cSocketCommunicationForPython.Init(this, "", i_port_number, 0);
+                string str_ip_adress = "127.0.0.1"; 
+                i_ret = m_cSocketCommunicationForPython.Init(this, str_ip_adress, i_port_number, 0);
                 if (i_ret != 0)
                 {
                     MessageBox.Show("ソケットオープンBに失敗しました");
