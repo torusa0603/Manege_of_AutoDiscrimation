@@ -86,7 +86,9 @@ namespace Manege_of_AutoDiscrimation
             if (i_ret != 0)
             {
                 //  コマンドエラーであればエラーを返す
-                SendCommandError(i_ret);
+                //          2022.08.02  サーバーへ嵐のようなNGを返していたため、コメントアウト
+                //                      かつ、Startコマンドの前後に不用意に付加されて送信されてしまっていたため、有無を言わさずコメントアウトに変更！
+                //SendCommandError(i_ret);
             }
             else
             {
