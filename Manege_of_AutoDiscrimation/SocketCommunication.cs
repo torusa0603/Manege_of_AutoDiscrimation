@@ -86,7 +86,9 @@ namespace Manege_of_AutoDiscrimation
             if (i_ret != 0)
             {
                 //  コマンドエラーであればエラーを返す
-                SendCommandError(i_ret);
+                //          2022.08.02  サーバーへ嵐のようなNGを返していたため、コメントアウト
+                //                      かつ、Startコマンドの前後に不用意に付加されて送信されてしまっていたため、有無を言わさずコメントアウトに変更！
+                //SendCommandError(i_ret);
             }
             else
             {
@@ -129,9 +131,19 @@ namespace Manege_of_AutoDiscrimation
                     //  ソケット通信クラスオブジェクト作成(クライアントとして)
                     m_cSocket = new SPCommonSocket.CSocketCommunicationBase(SPCommonSocket.CSocketCommunicationBase.CLIENT);
                 }
+
+                int i_ret=0;
+                if (nstrIPAddress == "")
+                {
+                    //  ソケットオープン
+                    i_ret = m_cSocket.OpenSocket(niPortNo);
+                }
+                else
+                {
+                    //  ソケットオープン
+                    i_ret = m_cSocket.OpenSocket(nstrIPAddress, niPortNo);
+                }
                 
-                //  ソケットオープン
-                int i_ret = m_cSocket.OpenSocket(niPortNo);
                 //  ソケットが正常にオープンされた
                 if (i_ret == 0)
                 {
