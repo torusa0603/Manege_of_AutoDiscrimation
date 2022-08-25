@@ -29,12 +29,17 @@ class Socket(threading.Thread):
 
     # コンストラクタ
     def __init__(self,eMode,Adress):
+        # 
         self.pub = Publisher()
+        # モードを保存する
         self.__meMode = eMode
+        # サーバーモードとしてインスタンスを作成する
         if self.__meMode == self.Mode.tpServer:
             self.__Socket = SocketAsServer(Adress,self.__bind_port,self.__buffersize,self.pub)
+        # クライアントモードとしてインスタンスを作成する
         else:
             self.__Socket = SocketAsClient(Adress,self.__bind_port,self.__buffersize,self.pub)
+        # サーバークラスのコンストラクタを実行
         super(Socket, self).__init__()
     
     # 通信開始メソッド
@@ -174,6 +179,7 @@ class SocketAsClient(AbstractSocket):
             return -1
 
 if __name__ == '__main__':
+    # モード選択
     typeConnect = input("Server? Client? : ")
     if  typeConnect == "S":
         c_socket = Socket(Socket.Mode.tpServer, "")
@@ -182,8 +188,10 @@ if __name__ == '__main__':
         c_socket = Socket(Socket.Mode.tpClient, str_adress)
     else:
         quit
-        
+    
+    # メイン関数が落ちた時に通信スレッドも落とす設定
     c_socket.setDaemon(True)
+    # 通信スタート
     c_socket.start()
 
     while True:
